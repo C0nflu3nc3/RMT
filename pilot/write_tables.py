@@ -51,5 +51,6 @@ table('reproducibility.tex','Observed preliminary-run setup. Training times incl
        ['Preparation and training',f"ResNet {meta['training_including_preparation_seconds']['resnet50']:.2f} s; CLIP {meta['training_including_preparation_seconds']['clip_linear']:.2f} s"],
        ['Prediction median',f"ResNet {meta['forward_median_ms_per_image']['resnet50']:.2f} ms/image; CLIP {meta['forward_median_ms_per_image']['clip_linear']:.2f} ms/image"],
        ['End-to-end pilot',f"{meta['total_seconds']:.2f} s including data access and model loading"],
-       ['Repository',r'\url{https://github.com/C0nflu3nc3/RMT}; scripts, manifest, predictions, versions and training logs']])
+       ['Repository',r'\url{https://github.com/C0nflu3nc3/RMT}'],
+       ['Analysis revision',r'\texttt{3ab956045ae4}; code, manifest, predictions and statistical exports']])
 print('Six measured-result tables written')

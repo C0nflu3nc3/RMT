@@ -8,7 +8,9 @@ At threshold 0.5, original unseen Midjourney F1 was 0.095 for ResNet-50 and 0.27
 
 The article includes six populated tables and two measured figures: F1/FPR by processing condition, and actual confusion matrices with inspected failure images. The figures have labelled axes, score scales and captions. Threshold sensitivity compares 0.5 with thresholds selected from validation predictions.
 
-The final PDF has 14 pages. Results occupies pages 5–12, with approximately 2,050 words of prose and eight figures/tables in total.
+The final PDF has 14 pages. Results occupies pages 5–12, with approximately 2,000 words of prose and eight figures/tables in total.
+
+The compiled report and Overleaf ZIP are in [`exports/`](exports/).
 
 ## Build the article
 
@@ -46,6 +48,7 @@ The main evidence files are:
 | `pilot/software_versions.json` | Exact observed software versions |
 | `pilot/evaluation/` | Per-run metrics, paired tests, robustness changes, group rates and individual errors |
 | `SOURCE_SHA256SUMS.txt` | Hashes of the archived source and evidence files |
+| `SOURCE_REVISION.json` | Repository URL and pinned analysis commit |
 
 The paired statistics resample the same image IDs across both models. The primary comparison is original unseen F1. Other p-values are descriptive and unadjusted. The bootstrap interval and permutation test give different decisions on that primary comparison; both are reported, and the prespecified permutation test governs the statistical conclusion.
 
@@ -67,4 +70,4 @@ The CPU pilot uses BigGAN and GLIDE for development and Midjourney for the unsee
 
 `planned_config.json` separates full-study targets from the completed pilot. `code/audit_release.py` can count and inspect extracted official archives; it was not run on those archives. The nominal published Midjourney test capacity supports feasibility of a 2,000-generated-image target before filtering, but the final matched counts remain conditional on an archive audit.
 
-Repository: [C0nflu3nc3/RMT](https://github.com/C0nflu3nc3/RMT). It contains the article source, code and measured pilot exports. Dataset caches and model weights are excluded. Access follows the repository settings; reviewers need access to this private repository.
+Repository: [C0nflu3nc3/RMT](https://github.com/C0nflu3nc3/RMT). The training/evaluation code and pilot evidence are pinned to analysis commit `3ab956045ae4be547c9d596ed38b30969af43a77`. It contains the article source, code and measured pilot exports. Dataset caches and model weights are excluded. Access follows the repository settings; reviewers need access to this private repository.

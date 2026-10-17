@@ -89,7 +89,7 @@ The ResNet example is a Midjourney-labelled bird image scored 0.000270 for the g
 
 The error export retains IDs, scores, conditions and error types for further inspection. Both models had recall 1.000 on each development generator in the original seen test. Their Midjourney recalls were 0.050 and 0.200. These aggregate rates do not separate native-size effects from content-category effects: the generated-image sizes differ by source in this subset. Dimensions in the manifest allow later grouped checks, but the present pilot supplies no evidence that detection was independent of native size.
 
-We kept the checkpoints and training settings fixed after inspecting these errors. The recorded outcomes include poor unseen detection, ResNet's unchanged JPEG result, CLIP's unchanged validation-selected threshold and the high FPR after resizing. They describe decisions under the tested conditions. Explanations of the failures and comparisons with previous studies belong in Discussion, beyond these observed error counts and examples.
+We kept the checkpoints and training settings fixed after inspecting these errors. The recorded outcomes include poor unseen detection, ResNet's unchanged JPEG result, CLIP's unchanged validation-selected threshold and the high FPR after resizing.
 \FloatBarrier
 
 \subsection{Observed setup and reproducibility}
