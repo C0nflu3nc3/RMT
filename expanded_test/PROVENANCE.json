@@ -1,0 +1,15 @@
+{
+  "base_repository_commit": "dad4fa27d53a05d3fb7745b600096d1a3e7a12b8",
+  "original_analysis_commit": "491a65b7fbf6916e553cb38d7745c535f22ede42",
+  "original_report_unchanged": true,
+  "collection_scope": "Later test-only extension using new images; original training, validation and test evidence preserved.",
+  "selection_seed": 20261017,
+  "threshold": 0.5,
+  "training_seeds": [
+    42,
+    43,
+    44
+  ],
+  "fresh_training": false,
+  "training_and_validation_ids_changed": false
+}

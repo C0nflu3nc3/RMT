@@ -1,0 +1,100 @@
+{
+  "dataset": "TheKernel01/Tiny-GenImage",
+  "dataset_revision": "89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69",
+  "accessed_utc": "2026-10-17T07:56:43Z",
+  "audited_validation_rows": 7000,
+  "full_validation_source_counts": {
+    "0": 3500,
+    "1": 500,
+    "2": 500,
+    "3": 500,
+    "4": 500,
+    "6": 500,
+    "7": 500,
+    "8": 500
+  },
+  "original_pilot_ids_excluded": 480,
+  "original_file_hashes_excluded": 480,
+  "original_decoded_pixel_hashes_excluded": 480,
+  "new_unique_images": 1600,
+  "new_file_hashes": 1600,
+  "new_decoded_pixel_hashes": 1600,
+  "source_counts": {
+    "seen/BigGAN": 200,
+    "seen/GLIDE": 200,
+    "seen/real": 400,
+    "unseen/Midjourney": 400,
+    "unseen/real": 400
+  },
+  "codecs": {
+    "JPEG": 1600
+  },
+  "duplicate_or_overlap_candidates_removed": 0,
+  "failed_candidates": 0,
+  "bytes_selected": 76479847,
+  "collection_seconds": 604.311223144,
+  "limitations": [
+    "A later independent test sample after inspection of the original pilot.",
+    "Exact file and decoded-pixel checks do not establish absence of near-duplicates.",
+    "No category matching or native-size/compression matching."
+  ],
+  "native_size_and_encoding": {
+    "real": {
+      "n": 800,
+      "width_range": [
+        62,
+        2816
+      ],
+      "height_range": [
+        80,
+        2112
+      ],
+      "jpeg_table_counts": {
+        "2670630d69c8ec98e4043046a2a1ea1ff2e460b42b21715f3a7b0f3b798e30bc": 792,
+        "5fe3e571bb5a4a3169720758b86c2ca9bee153672ab1a1b2dab4ceeca6d6aff2": 8
+      }
+    },
+    "BigGAN": {
+      "n": 200,
+      "width_range": [
+        128,
+        128
+      ],
+      "height_range": [
+        128,
+        128
+      ],
+      "jpeg_table_counts": {
+        "2670630d69c8ec98e4043046a2a1ea1ff2e460b42b21715f3a7b0f3b798e30bc": 200
+      }
+    },
+    "GLIDE": {
+      "n": 200,
+      "width_range": [
+        256,
+        256
+      ],
+      "height_range": [
+        256,
+        256
+      ],
+      "jpeg_table_counts": {
+        "2670630d69c8ec98e4043046a2a1ea1ff2e460b42b21715f3a7b0f3b798e30bc": 200
+      }
+    },
+    "Midjourney": {
+      "n": 400,
+      "width_range": [
+        1024,
+        1024
+      ],
+      "height_range": [
+        1024,
+        1024
+      ],
+      "jpeg_table_counts": {
+        "2670630d69c8ec98e4043046a2a1ea1ff2e460b42b21715f3a7b0f3b798e30bc": 400
+      }
+    }
+  }
+}

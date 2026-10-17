@@ -1,0 +1,22 @@
+{
+  "per_run_metrics.csv": {
+    "status": "exact match",
+    "sha256": "49b9a3303aeaab10eb6bf788589215d1be677c30cb1a62756057ccafd7173fc3"
+  },
+  "main_metrics_all_conditions.csv": {
+    "status": "exact match",
+    "sha256": "ee28e7263fa33fe8eed9f70419d8ac416316b376bad09eda68439387709e043e"
+  },
+  "paired_model_differences.csv": {
+    "status": "exact match",
+    "sha256": "005bcba221a0609383d3958b71c6574f7c2c26b8d386011e73ac6c4e31a7bf1e"
+  },
+  "robustness_changes.csv": {
+    "status": "exact match",
+    "sha256": "bb4693ddcfb0edfc66629fa2c8d58ea41ac868f339d36d6566ebd67a6e7f12a9"
+  },
+  "source_group_errors.csv": {
+    "status": "exact match",
+    "sha256": "936fff06e6cf1eeeebba0388ad2cd172d217b95297bc0e03a55fe4fe707dd2ea"
+  }
+}

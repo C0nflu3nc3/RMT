@@ -10,6 +10,12 @@ The report includes six tables and two figures. Table 2 has mean/SD metrics and 
 
 The final PDF and Overleaf ZIP are in [`exports/`](exports/). Repository: [C0nflu3nc3/RMT](https://github.com/C0nflu3nc3/RMT). The repository is public. **The source ZIP also contains everything needed to reproduce Tables 2–5 from saved scores, without GitHub or dataset access**. The analysis commit is recorded in `SOURCE_REVISION.json` and Table 6.
 
+## Later test with more images
+
+A separate [held-out test extension](expanded_test/) contains **1,600 new images**, disjoint from all 480 original pilot images by ID, file hash and decoded-pixel hash. Each new test has 400 real and 400 generated images. Seen generators are BigGAN and GLIDE; Midjourney remains unseen. The same six fitted checkpoints are evaluated without retraining or test-selected thresholds. Original-image unseen mean F1 is 0.157 for ResNet and 0.640 for CLIP; mean FPR is 0.034 and 0.255. The paired F1 difference is 0.483 (95% CI 0.437 to 0.527). Both models remain below the unseen F1 target, and CLIP exceeds the FPR target.
+
+The [expanded-test report](exports/Expanded_Test_Samples_and_Results.pdf) and [score-reproduction ZIP](exports/Expanded_Test_Evidence.zip) are separate from the original article and its source archive. The original article retains its 80-image tests; the extension records the later larger tests. Native-size, compression and category matching remain unresolved. The full samples and fitted-checkpoint bundles are supplied separately because they are too large for this repository.
+
 ## Reproduce Tables 2–5
 
 Use Python 3.12 in a separate environment:

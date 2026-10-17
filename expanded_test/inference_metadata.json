@@ -1,0 +1,47 @@
+{
+  "started_utc": "2026-10-17T07:56:47Z",
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "conditions": [
+    "original",
+    "jpeg65",
+    "resize112"
+  ],
+  "threshold": 0.5,
+  "training_performed": false,
+  "validation_used_for_this_sample": false,
+  "python": "3.12.14",
+  "torch": "2.14.1+cpu",
+  "torchvision": "0.29.1+cpu",
+  "numpy": "2.5.2",
+  "pillow": "12.3.0",
+  "cpu_threads": 6,
+  "batch_size": 8,
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "manifest_sha256": "6fc155f1fda4e5f35542c569ff5e0147fc29fa1976a55e65c898c9170b2d6963",
+  "checkpoint_sha256": {
+    "resnet50_seed42_best.pt": "faff83017e7a8c42b9ab851f4f324e0ec84af18c6064fe7c082e19cc8897f3c1",
+    "resnet50_seed43_best.pt": "763249a4de115c01c22e3a2112fa0e51df55b277d641b1a3ad48a4154a706980",
+    "resnet50_seed44_best.pt": "b5a925883a99a65982986b528a1326fce9f5d94354c1ae0612d6cbbb672b6582",
+    "clip_linear_seed42_best.pt": "d7435196b3f2d5526693827f67aac2cc02e4aa6b04987ca00e5444b625764072",
+    "clip_linear_seed43_best.pt": "c595259e4312bb4b706c99124f6e3f3bcd342ae59cbed3686db92d5cbe7bcba1",
+    "clip_linear_seed44_best.pt": "9df566aa0426a5ef409038581dcfec042695d104545982828d44e2dee551fd67"
+  },
+  "checkpoint_probe_max_absolute_error": {
+    "resnet50_42": 0.0,
+    "resnet50_43": 0.0,
+    "resnet50_44": 0.0,
+    "clip_linear_42": 0.0,
+    "clip_linear_43": 0.0,
+    "clip_linear_44": 0.0
+  },
+  "resnet50_evaluation_seconds": 574.973184422,
+  "clip_linear_evaluation_seconds": 181.45615443399993,
+  "completed_utc": "2026-10-17T08:09:23Z",
+  "new_unique_test_images": 1600,
+  "prediction_rows": 28800,
+  "elapsed_seconds": 756.4294242439996
+}
