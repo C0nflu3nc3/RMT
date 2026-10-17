@@ -8,7 +8,7 @@ Original unseen mean F1 was 0.047 (sample SD 0.047) for ResNet-50 and 0.225 (SD 
 
 The report includes six tables and two figures. Table 2 has mean/SD metrics and individual unseen confusion counts. Table 4 shows paired 95% intervals for every processing change. The figures show F1/FPR by condition and illustrative seed-42 confusion matrices with actual errors. Results occupies eight pages and about 2,000 words of prose.
 
-The final PDF and Overleaf ZIP are in [`exports/`](exports/). Repository: [C0nflu3nc3/RMT](https://github.com/C0nflu3nc3/RMT). The repository is private; **the source ZIP contains everything needed to reproduce Tables 2–5 from saved scores, without GitHub or dataset access**. The analysis commit is recorded in `SOURCE_REVISION.json` and Table 6.
+The final PDF and Overleaf ZIP are in [`exports/`](exports/). Repository: [C0nflu3nc3/RMT](https://github.com/C0nflu3nc3/RMT). The repository is public. **The source ZIP also contains everything needed to reproduce Tables 2–5 from saved scores, without GitHub or dataset access**. The analysis commit is recorded in `SOURCE_REVISION.json` and Table 6.
 
 ## Reproduce Tables 2–5
 
@@ -45,7 +45,9 @@ Use `--reuse-metrics` on `analyze_pilot.py` only when redrawing figures from exi
 | `pilot/legacy_seed42_intel/` | Earlier Intel feasibility run, excluded from current aggregates |
 | `SOURCE_SHA256SUMS.txt` | Hashes of the archived source and evidence files |
 
-The same 80 image IDs are used in each test run. Three seeds provide a sample SD across training runs; they do not triple the number of independent test images. Bootstrap intervals concern image sampling conditional on the fitted models. The original unseen comparison is primary; secondary p-values are unadjusted.
+The same 80 image IDs are used in each test run. The earlier Intel seed-42 ResNet run had three seen and zero unseen false positives, compared with four and one in the reported AMD seed-42 run. The cause was not isolated. The archived Intel run is excluded from the reported aggregates.
+
+Three seeds provide a sample SD across training runs; they do not triple the number of independent test images. Bootstrap intervals concern image sampling conditional on the fitted models. The original unseen comparison is primary; secondary p-values are unadjusted.
 
 ## Build the article
 

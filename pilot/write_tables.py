@@ -55,9 +55,11 @@ for model in ['resnet50','clip_linear']:
         for setting in ['Fixed','Validation']:
             group=sorted([x for x in sens if x['model']==model and x['split']==split and x['setting']==setting],key=lambda x:int(x['seed']))
             ts=', '.join(f"{float(x['threshold']):.2f}" for x in group)
-            rows.append([name(model),split.title(),setting,ts,mean_sd([x['f1'] for x in group]),mean_sd([x['fpr'] for x in group])])
-table('sensitivity.tex','Original-image threshold sensitivity. Thresholds are listed for seeds 42, 43 and 44, in that order. F1 and FPR show mean with sample SD in parentheses. Each validation threshold is selected independently using only validation predictions. Each run evaluates the same 80 images per test.','tab:sensitivity','llYccc',
-      ['Model','Test','Rule','$t_{42},t_{43},t_{44}$','F1','FPR'],rows,small=False)
+            values=[[float(x[k]) for x in group] for k in ['f1','fpr']]
+            stats=[fmt(z) for v in values for z in (statistics.mean(v),statistics.stdev(v))]
+            rows.append([name(model),split.title(),setting,ts]+stats)
+table('sensitivity.tex','Original-image threshold sensitivity. Thresholds are listed for seeds 42, 43 and 44, in that order. F1 and FPR averages and sample SDs occupy separate columns. Each validation threshold is selected independently using only validation predictions. Each run evaluates the same 80 images per test.','tab:sensitivity','llYccccc',
+      ['Model','Test','Rule','$t_{42},t_{43},t_{44}$','F1','SD','FPR','SD'],rows,small=False)
 v=json.loads((P/'software_versions.json').read_text());runs=meta['per_seed']
 mean_time=lambda field,model:statistics.mean([runs[str(s)][field][model] for s in seeds])
 revision=json.loads((P.parent/'SOURCE_REVISION.json').read_text())['analysis_commit'][:12]
@@ -72,6 +74,6 @@ table('reproducibility.tex','Observed three-seed setup. Preparation/training tim
        ['Preparation and training',f"ResNet {mean_time('training_including_preparation_seconds','resnet50'):.2f} s; CLIP {mean_time('training_including_preparation_seconds','clip_linear'):.2f} s"],
        ['Prediction median',"; ".join(("ResNet" if model=="resnet50" else "CLIP")+f" {min(runs[str(s)]['forward_median_ms_per_image'][model] for s in seeds):.2f} to {max(runs[str(s)]['forward_median_ms_per_image'][model] for s in seeds):.2f} ms/image" for model in ["resnet50","clip_linear"])],
        ['Pilot elapsed by seed','; '.join(f"{s}: {runs[str(s)]['total_seconds']:.2f} s" for s in seeds)],
-       ['Repository',r'\url{https://github.com/C0nflu3nc3/RMT} (private); complete score-reproduction files in ZIP'],
+       ['Repository',r'\url{https://github.com/C0nflu3nc3/RMT} (public); complete source and score files also in ZIP'],
        ['Analysis revision',r'\texttt{'+revision+'}; code, manifest, predictions and statistical exports']])
 print('Six measured-result tables written')
