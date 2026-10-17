@@ -1,23 +1,23 @@
 \begin{table}[!htbp]
-\caption{Observed preliminary-run setup. Training times include tensor preparation and, for CLIP, development feature extraction. Prediction times are warmed model-only medians for one image. No GPU was used.}
+\caption{Observed three-seed setup. Preparation/training times are averaged across runs; prediction medians show the observed range. CLIP preparation includes development feature extraction. All three reported runs reuse the hash-verified image cache on the same CPU type. Times are descriptive shared-host observations; no GPU was used.}
 \label{tab:reproducibility}
 \centering
 \small
-\setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
 \begin{tabularx}{\linewidth}{@{}lY@{}}
 \toprule
 Item & Observed setting\\
 \midrule
 Source and revision & \texttt{TheKernel01/Tiny-GenImage}, revision \texttt{89c4fe9efd0e}\\
-Device & Intel Xeon Platinum 8573C; six PyTorch threads; 8 GiB container\\
-Python and core libraries & 3.12.14; PyTorch 2.14.1+cpu; torchvision 0.29.1+cpu\\
-Other libraries & CLIP 1.0.1; NumPy 2.5.2; Pillow 12.3.0; scikit-learn 1.8.0; SciPy 1.17.0\\
-Seed and optimizers & Global seed 42; Adam; learning rates $10^{-4}$ (ResNet), $10^{-3}$ (head)\\
-Epochs and batch sizes & ResNet: 1 epoch, batch 8; CLIP head: 40 epochs, batch 32\\
-Preparation and training & ResNet 43.76 s; CLIP 30.50 s\\
-Prediction median & ResNet 63.01 ms/image; CLIP 158.09 ms/image\\
-End-to-end pilot & 386.06 s including data access and model loading\\
-Repository & \url{https://github.com/C0nflu3nc3/RMT}\\
+Device & AMD EPYC 9V74; six PyTorch threads; 8 GiB container\\
+Python and libraries & 3.12.14; PyTorch 2.14.1+cpu; torchvision 0.29.1+cpu; CLIP 1.0.1\\
+Analysis libraries & NumPy 2.5.2; Pillow 12.3.0; scikit-learn 1.8.0; SciPy 1.17.0\\
+Seeds and optimizers & Sampling 42; training 42, 43, 44; Adam; learning rates $10^{-4}$ (ResNet), $10^{-3}$ (head)\\
+Epochs and batches & ResNet: 1 epoch, batch 8; CLIP head: 40 epochs, batch 32\\
+Preparation and training & ResNet 41.79 s; CLIP 11.21 s\\
+Prediction median & ResNet 36.43 to 46.29 ms/image; CLIP 45.91 to 370.78 ms/image\\
+Pilot elapsed by seed & 42: 130.93 s; 43: 94.17 s; 44: 151.10 s\\
+Repository & \url{https://github.com/C0nflu3nc3/RMT} (private); complete score-reproduction files in ZIP\\
 Analysis revision & \texttt{3ab956045ae4}; code, manifest, predictions and statistical exports\\
 \bottomrule
 \end{tabularx}

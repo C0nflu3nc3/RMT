@@ -5,7 +5,9 @@
   "resamples": 1000,
   "permutations": 9999,
   "seeds": [
-    42
+    42,
+    43,
+    44
   ],
   "threshold": 0.5,
   "interval_scope": "image sampling conditional on trained models; not joint seed uncertainty"

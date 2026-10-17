@@ -1,0 +1,21 @@
+{
+  "method": "Regenerated from saved prediction/validation CSVs in an isolated temporary copy; no dataset or GitHub calls",
+  "tables": {
+    "2": {
+      "status": "exact match",
+      "sha256": "a3bbaa489f581a1ec3f114395bac39a7638c83789b1f4db2ab82dea30b0de14a"
+    },
+    "3": {
+      "status": "exact match",
+      "sha256": "49cc014a40d353650ac030a3c544d5806dc69dd74d4f269443ca69d13ee00c2b"
+    },
+    "4": {
+      "status": "exact match",
+      "sha256": "3c80995b67628698c03e8230b4fb305d196697f3bce52c751319515542efc11d"
+    },
+    "5": {
+      "status": "exact match",
+      "sha256": "f64b367167f89ae148deb788a19538820e8bb80d9b5cc65ab5976fffbb7ab682"
+    }
+  }
+}

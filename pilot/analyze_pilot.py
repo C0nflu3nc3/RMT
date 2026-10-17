@@ -12,11 +12,11 @@ PROJECT=ROOT.parent
 WORK=Path(os.environ.get('PILOT_WORK', str(ROOT/'cache')))
 spec=importlib.util.spec_from_file_location('report_results',PROJECT/'code/report_results.py')
 r=importlib.util.module_from_spec(spec);spec.loader.exec_module(r)
-r.SEEDS=(42,)
-if '--reuse-metrics' not in sys.argv:
-    r.report(ROOT/'predictions.csv',ROOT/'evaluation',resamples=1000,permutations=9999)
 read=lambda p:list(csv.DictReader(p.open()))
 pred=read(ROOT/'predictions.csv');val=read(ROOT/'validation_predictions.csv')
+r.SEEDS=tuple(sorted({int(x['seed']) for x in pred}))
+if '--reuse-metrics' not in sys.argv:
+    r.report(ROOT/'predictions.csv',ROOT/'evaluation',resamples=1000,permutations=9999)
 manifest=read(ROOT/'manifest.csv');meta=json.loads((ROOT/'run_metadata.json').read_text())
 groups,identity=r.load_predictions(ROOT/'predictions.csv')
 
@@ -26,15 +26,17 @@ def at_threshold(rows,threshold):
 sensitivity=[]
 thresholds={}
 for model in r.MODELS:
-    vr=[x for x in val if x['model']==model]
-    ranked=[(at_threshold(vr,t)['f1'],t) for t in np.round(np.arange(.05,1,.05),2)]
-    best,t=max(ranked);thresholds[model]=float(t)
-    for split in ['seen','unseen']:
-        rows=[x for x in pred if x['model']==model and x['split']==split and x['condition']=='original']
-        for setting,threshold in [('Fixed',.5),('Validation',t)]:
-            m=at_threshold(rows,threshold)
-            sensitivity.append(dict(model=model,split=split,setting=setting,threshold=float(threshold),
-                                    f1=m['f1'],fpr=m['fpr'],accuracy=m['accuracy'],n=m['n']))
+    thresholds[model]={}
+    for seed in r.SEEDS:
+        vr=[x for x in val if x['model']==model and int(x['seed'])==seed]
+        ranked=[(at_threshold(vr,t)['f1'],t) for t in np.round(np.arange(.05,1,.05),2)]
+        best,t=max(ranked);thresholds[model][str(seed)]=float(t)
+        for split in ['seen','unseen']:
+            rows=[x for x in pred if x['model']==model and int(x['seed'])==seed and x['split']==split and x['condition']=='original']
+            for setting,threshold in [('Fixed',.5),('Validation',t)]:
+                m=at_threshold(rows,threshold)
+                sensitivity.append(dict(model=model,seed=seed,split=split,setting=setting,threshold=float(threshold),
+                                        f1=m['f1'],fpr=m['fpr'],accuracy=m['accuracy'],n=m['n']))
 r.write_csv(ROOT/'evaluation/threshold_sensitivity.csv',sensitivity)
 (ROOT/'validation_thresholds.json').write_text(json.dumps(thresholds,indent=2))
 
@@ -68,7 +70,7 @@ fig.tight_layout(rect=(0,0,1,.93));fig.savefig(figdir/'pilot_condition_compariso
 
 fig,axes=plt.subplots(2,2,figsize=(6.0,5.0),gridspec_kw={'height_ratios':[1,1.4]})
 for j,model in enumerate(r.MODELS):
-    rows=[x for x in pred if x['model']==model and x['split']=='unseen' and x['condition']=='original']
+    rows=[x for x in pred if x['model']==model and int(x['seed'])==42 and x['split']=='unseen' and x['condition']=='original']
     m=r.measures([int(x['label']) for x in rows],[float(x['score']) for x in rows])
     cm=np.array([[m['tn'],m['fp']],[m['fn'],m['tp']]])
     axes[0,j].imshow(cm,cmap='Blues',vmin=0,vmax=max(m['n']//2,1))

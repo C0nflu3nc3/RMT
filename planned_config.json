@@ -1,5 +1,5 @@
 {
-  "status": "full matched study planned; separate small CPU pilot in pilot/",
+  "status": "full matched study planned; completed three-seed CPU pilot in pilot/",
   "sampling_seed": 42,
   "training_seeds": [
     42,
@@ -71,5 +71,11 @@
     "validation_grid_stop": 0.95,
     "step": 0.05,
     "selection": "maximum validation F1; larger threshold breaks ties"
-  }
+  },
+  "pilot_training_seeds": [
+    42,
+    43,
+    44
+  ],
+  "pilot_fixed_image_count": 480
 }

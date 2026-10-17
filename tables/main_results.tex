@@ -1,17 +1,30 @@
 \begin{table}[!htbp]
-\caption{Preliminary original-image metrics at threshold 0.5, seed 42. Each test contains 80 images, half generated. P and R are precision and recall; AUC is AUROC. Scores are on a 0--1 scale. There is one run per model, so no across-seed standard deviation is estimated.}
+\caption{Original-image metrics at threshold 0.5. Upper cells show mean with sample SD in parentheses over training seeds 42, 43 and 44; lower rows show unseen confusion counts for each run. Each test has 40 real and 40 generated images, reused across seeds. P and R are precision and recall; AUC is AUROC.}
 \label{tab:main-results}
 \centering
 \fontsize{8.5}{10.5}\selectfont
-\setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
 \begin{tabularx}{\linewidth}{@{}llCCCCCCC@{}}
 \toprule
 Model & Test & Acc. & P & R & F1 & FPR & AUC & AP\\
 \midrule
-ResNet-50 & Seen & 0.963 & 0.930 & 1.000 & 0.964 & 0.075 & 1.000 & 1.000\\
-CLIP linear & Seen & 0.875 & 0.800 & 1.000 & 0.889 & 0.250 & 0.948 & 0.948\\
-ResNet-50 & Unseen & 0.525 & 1.000 & 0.050 & 0.095 & 0.000 & 0.414 & 0.484\\
-CLIP linear & Unseen & 0.475 & 0.444 & 0.200 & 0.276 & 0.250 & 0.524 & 0.531\\
+ResNet-50 & Seen & \shortstack{0.971\\{(0.019)}} & \shortstack{0.946\\{(0.034)}} & \shortstack{1.000\\{(0.000)}} & \shortstack{0.972\\{(0.018)}} & \shortstack{0.058\\{(0.038)}} & \shortstack{0.999\\{(0.002)}} & \shortstack{0.999\\{(0.002)}}\\
+CLIP linear & Seen & \shortstack{0.854\\{(0.019)}} & \shortstack{0.785\\{(0.018)}} & \shortstack{0.975\\{(0.025)}} & \shortstack{0.870\\{(0.017)}} & \shortstack{0.267\\{(0.029)}} & \shortstack{0.946\\{(0.005)}} & \shortstack{0.946\\{(0.005)}}\\
+ResNet-50 & Unseen & \shortstack{0.504\\{(0.014)}} & \shortstack{0.556\\{(0.509)}} & \shortstack{0.025\\{(0.025)}} & \shortstack{0.047\\{(0.047)}} & \shortstack{0.017\\{(0.014)}} & \shortstack{0.487\\{(0.088)}} & \shortstack{0.527\\{(0.061)}}\\
+CLIP linear & Unseen & \shortstack{0.458\\{(0.014)}} & \shortstack{0.392\\{(0.046)}} & \shortstack{0.158\\{(0.038)}} & \shortstack{0.225\\{(0.046)}} & \shortstack{0.242\\{(0.014)}} & \shortstack{0.518\\{(0.010)}} & \shortstack{0.519\\{(0.011)}}\\
+\bottomrule
+\end{tabularx}
+\medskip
+\begin{tabularx}{\linewidth}{@{}Yrrrrr@{}}
+\toprule
+Unseen counts: model & Seed & TP & FP & TN & FN\\
+\midrule
+ResNet-50 & 42 & 2 & 1 & 39 & 38\\
+ResNet-50 & 43 & 0 & 1 & 39 & 40\\
+ResNet-50 & 44 & 1 & 0 & 40 & 39\\
+CLIP linear & 42 & 8 & 10 & 30 & 32\\
+CLIP linear & 43 & 6 & 10 & 30 & 34\\
+CLIP linear & 44 & 5 & 9 & 31 & 35\\
 \bottomrule
 \end{tabularx}
 \end{table}
