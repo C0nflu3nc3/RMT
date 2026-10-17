@@ -1,96 +1,28 @@
-# Current integrated Results reproduction
+# AI-generated image detection
 
-Run `python reproduce_tables.py` after installing `requirements-analysis.txt`. The command verifies Tables 1-5 and all 11 numerical exports in `article/evaluation/`, including absolute intervals, per-seed ranges, per-generator misses and processing transitions. It uses saved scores and validation history without images, weights, PyTorch or network access.
+Afanasyev Kirill and Amangeldi Beksultan · AITU, BDA-2403.
 
-`prose_details.json` collects the ranges, source misses and checkpoint selection outcomes. `article/report_error_transitions.py` and `article/report_prose_details.py` are included in the unified command. The current article source is supplied in the accompanying Overleaf ZIP. Existing PDFs and the earlier article files below remain historical versions.
+ResNet-50 and a frozen CLIP encoder with a linear head, evaluated over seeds 42, 43 and 44. The later tests contain 400 real and 400 generated images each; Midjourney is held out. These exploratory tests were selected after the smaller pilot.
 
-## Earlier pilot documentation
+## Reproduce the results
 
-# AI-generated image detection: Assignment 3
-
-This article continues Assignments 1 and 2 in the original Springer Nature single-column template. It reports a **480-image CPU pilot with training seeds 42, 43 and 44**. All three reported runs use the same AMD CPU type and the same image manifest. The matched 20,000-image study remains planned.
-
-## Results and files
-
-Original unseen mean F1 was 0.047 (sample SD 0.047) for ResNet-50 and 0.225 (SD 0.046) for a frozen CLIP encoder with a trained linear head. Mean unseen FPR was 0.017 and 0.242. The primary paired permutation p-value was 0.0261. CLIP exceeded the practical FPR target, and neither detector met all project success goals. These are preliminary results on 80 unseen test images, reused across training seeds.
-
-The report includes six tables and two figures. Table 2 has mean/SD metrics and individual unseen confusion counts. Table 4 shows paired 95% intervals for every processing change. The figures show F1/FPR by condition and illustrative seed-42 confusion matrices with actual errors. Results occupies eight pages and about 2,000 words of prose.
-
-The final PDF and Overleaf ZIP are in [`exports/`](exports/). Repository: [C0nflu3nc3/RMT](https://github.com/C0nflu3nc3/RMT). The repository is public. **The source ZIP also contains everything needed to reproduce Tables 2–5 from saved scores, without GitHub or dataset access**. The analysis commit is recorded in `SOURCE_REVISION.json` and Table 6.
-
-## Later test with more images
-
-A separate [held-out test extension](expanded_test/) contains **1,600 new images**, disjoint from all 480 original pilot images by ID, file hash and decoded-pixel hash. Each new test has 400 real and 400 generated images. Seen generators are BigGAN and GLIDE; Midjourney remains unseen. The same six fitted checkpoints are evaluated without retraining or test-selected thresholds. Original-image unseen mean F1 is 0.157 for ResNet and 0.640 for CLIP; mean FPR is 0.034 and 0.255. The paired F1 difference is 0.483 (95% CI 0.437 to 0.527). Both models remain below the unseen F1 target, and CLIP exceeds the FPR target.
-
-The [expanded-test report](exports/Expanded_Test_Samples_and_Results.pdf) and [score-reproduction ZIP](exports/Expanded_Test_Evidence.zip) are separate from the original article and its source archive. The original article retains its 80-image tests; the extension records the later larger tests. Native-size, compression and category matching remain unresolved. The full samples and fitted-checkpoint bundles are supplied separately because they are too large for this repository.
-
-## Reproduce Tables 2–5
-
-Use Python 3.12 in a separate environment:
+Use Python 3.12:
 
 ```bash
 python -m pip install -r requirements-analysis.txt
 python reproduce_tables.py
 ```
 
-This command copies the project to a temporary directory, recalculates the metrics, 1,000 paired bootstrap resamples, 9,999 paired permutations, validation-selected thresholds and LaTeX tables. It checks Tables 2–5 against the supplied tables byte for byte, prints each match and writes `pilot/reproduction_check.json`. It leaves the original predictions, figures and tables unchanged. No images, model weights, PyTorch, dataset service or GitHub connection are needed for this score-only check; package installation requires access to a package index unless the dependencies are already installed.
+This verifies Tables 1–5 and all 11 numerical exports byte for byte from saved scores. No images or model weights are needed.
 
-To regenerate the analysis in place:
-
-```bash
-python pilot/analyze_pilot.py
-python pilot/write_tables.py
-```
-
-Use `--reuse-metrics` on `analyze_pilot.py` only when redrawing figures from existing statistical exports. Existing attributed example JPEGs support the illustrative figure without downloading the image sample.
-
-## Evidence in the archive
-
-| File | Contents |
+| Folder | Contents |
 | --- | --- |
-| `pilot/manifest.csv` | All 480 IDs, source labels, mirror rows, dimensions, codecs and original-byte SHA256 hashes |
-| `pilot/predictions.csv` | 2,880 model/condition/seed predictions on 160 distinct reserved images |
-| `pilot/validation_predictions.csv` | Validation scores for independent per-run threshold decisions |
-| `pilot/runs/seed42/`, `seed43/`, `seed44/` | Individual predictions, metadata and training histories |
-| `pilot/run_metadata.json` | Combined configuration and original per-run hardware/timing records |
-| `pilot/training_history.json` | Actual loss and validation F1 by epoch and seed |
-| `pilot/evaluation/` | Metrics, paired differences, processing intervals, group rates and individual errors |
-| `pilot/reproduction_check.json` | Successful table matches and table SHA256 hashes |
-| `pilot/legacy_seed42_intel/` | Earlier Intel feasibility run, excluded from current aggregates |
-| `SOURCE_SHA256SUMS.txt` | Hashes of the archived source and evidence files |
+| `article/` | Current analysis, numerical exports and verification record |
+| `tables/` | Current LaTeX tables |
+| `pilot/` | Initial predictions, validation scores, training history and training scripts |
+| `expanded_test/` | Later predictions, manifests, sampling audit and collection/inference scripts |
+| `code/` | Shared metric calculations |
 
-The same 80 image IDs are used in each test run. The earlier Intel seed-42 ResNet run had three seen and zero unseen false positives, compared with four and one in the reported AMD seed-42 run. The cause was not isolated. The archived Intel run is excluded from the reported aggregates.
+Images and fitted checkpoints are supplied separately. Retraining requires `requirements-pilot.txt` and the image cache; `pilot/run_pilot.py` writes per-seed runs, which `pilot/aggregate_runs.py` combines. The current article PDF and Overleaf source are delivered separately. Earlier reports remain in Git history.
 
-Three seeds provide a sample SD across training runs; they do not triple the number of independent test images. Bootstrap intervals concern image sampling conditional on the fitted models. The original unseen comparison is primary; secondary p-values are unadjusted.
-
-## Build the article
-
-Upload the ZIP to Overleaf, select `main.tex` and pdfLaTeX. The archive includes `sn-jnl.cls`, the bibliography, all six tables and both vector figures. DOI and URL wrapping uses `xurl`. For a local build:
-
-```bash
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
-bibtex main
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
-```
-
-## Repeat training
-
-Install `requirements-pilot.txt` for training. With the provided manifest and original image cache, run sequentially:
-
-```bash
-python pilot/run_pilot.py --offline --seed 42
-python pilot/run_pilot.py --offline --seed 43
-python pilot/run_pilot.py --offline --seed 44
-python pilot/aggregate_runs.py
-python pilot/analyze_pilot.py
-python pilot/write_tables.py
-```
-
-`--offline` skips dataset API calls and verifies every cached image against the manifest. The shared default cache is `pilot/cache/`; set `PILOT_WORK` to use another directory. Training still needs pretrained model weights, which may require downloading if absent. Without `--offline`, the script queries the original sampling frame and downloads image assets into the cache. Re-running training overwrites that seed's exports, so preserve the supplied evidence first. Dataset images and model weights are excluded from the ZIP.
-
-The source is [TheKernel01/Tiny-GenImage](https://huggingface.co/datasets/TheKernel01/Tiny-GenImage), observed revision `89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69`, accessed 17 October 2026. The frame was the first 1,200 training and 600 validation metadata rows, followed by within-source selection with sampling seed 42. The row API can change. Compare the revision and all retrieved byte hashes with the supplied manifest before treating a new download as a reproduction. Figure captions attribute the two display examples; upstream data and original-image terms still apply. No new license is assigned here to third-party data, model weights or the journal class.
-
-The current pilot has no native-size/JPEG-table or category matching and no perceptual duplicate audit. All retrieved assets were JPEG. BigGAN, GLIDE and Midjourney differ in native size. The pilot does not establish size-independent detection or performance on the official release. The ResNet budget is one epoch and the CLIP head budget is 40 epochs; this is not a tuned, compute-matched ranking.
-
-`planned_config.json` records full-study targets. `code/audit_release.py` supports a later audit of extracted official archives. Nominal published Midjourney capacity makes the planned test count plausible before filtering; actual matched counts still require that audit.
+Source: [Tiny-GenImage](https://huggingface.co/datasets/TheKernel01/Tiny-GenImage). `SOURCE_REVISION.json` records the evidence revisions. Native resolution, compression history and category were not matched; intervals condition on the fitted checkpoints. Neither model met every success target.
