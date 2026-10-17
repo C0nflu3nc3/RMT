@@ -1,0 +1,433 @@
+{
+  "per_seed_ranges": [
+    {
+      "split": "seen",
+      "condition": "jpeg65",
+      "model": "clip_linear",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.8743047830923248,
+          0.8848758465011287
+        ],
+        "fpr": [
+          0.235,
+          0.265
+        ]
+      }
+    },
+    {
+      "split": "seen",
+      "condition": "jpeg65",
+      "model": "resnet50",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.927916120576671,
+          0.9776674937965261
+        ],
+        "fpr": [
+          0.02,
+          0.03
+        ]
+      }
+    },
+    {
+      "split": "seen",
+      "condition": "original",
+      "model": "clip_linear",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.8797327394209354,
+          0.8888888888888888
+        ],
+        "fpr": [
+          0.2375,
+          0.2575
+        ]
+      }
+    },
+    {
+      "split": "seen",
+      "condition": "original",
+      "model": "resnet50",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.9367741935483871,
+          0.9717791411042945
+        ],
+        "fpr": [
+          0.02,
+          0.0475
+        ]
+      }
+    },
+    {
+      "split": "seen",
+      "condition": "resize112",
+      "model": "clip_linear",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.6666666666666666,
+          0.6666666666666666
+        ],
+        "fpr": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "split": "seen",
+      "condition": "resize112",
+      "model": "resnet50",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.6688963210702341,
+          0.7099644128113879
+        ],
+        "fpr": [
+          0.805,
+          0.99
+        ]
+      }
+    },
+    {
+      "split": "unseen",
+      "condition": "jpeg65",
+      "model": "clip_linear",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.5820256776034237,
+          0.6061452513966481
+        ],
+        "fpr": [
+          0.2425,
+          0.255
+        ]
+      }
+    },
+    {
+      "split": "unseen",
+      "condition": "jpeg65",
+      "model": "resnet50",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.07547169811320754,
+          0.2389937106918239
+        ],
+        "fpr": [
+          0.02,
+          0.05
+        ]
+      }
+    },
+    {
+      "split": "unseen",
+      "condition": "original",
+      "model": "clip_linear",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.6356164383561644,
+          0.6460296096904441
+        ],
+        "fpr": [
+          0.245,
+          0.2625
+        ]
+      }
+    },
+    {
+      "split": "unseen",
+      "condition": "original",
+      "model": "resnet50",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.07565011820330969,
+          0.2764227642276423
+        ],
+        "fpr": [
+          0.0175,
+          0.06
+        ]
+      }
+    },
+    {
+      "split": "unseen",
+      "condition": "resize112",
+      "model": "clip_linear",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.6666666666666666,
+          0.6672226855713094
+        ],
+        "fpr": [
+          0.9975,
+          1.0
+        ]
+      }
+    },
+    {
+      "split": "unseen",
+      "condition": "resize112",
+      "model": "resnet50",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "ranges": {
+        "f1": [
+          0.6531365313653137,
+          0.6677852348993288
+        ],
+        "fpr": [
+          0.825,
+          0.985
+        ]
+      }
+    }
+  ],
+  "original_per_generator_misses": [
+    {
+      "split": "seen",
+      "model": "resnet50",
+      "seed": 42,
+      "generator": "BigGAN",
+      "n": 200,
+      "misses": 0
+    },
+    {
+      "split": "seen",
+      "model": "resnet50",
+      "seed": 42,
+      "generator": "GLIDE",
+      "n": 200,
+      "misses": 4
+    },
+    {
+      "split": "seen",
+      "model": "resnet50",
+      "seed": 43,
+      "generator": "BigGAN",
+      "n": 200,
+      "misses": 3
+    },
+    {
+      "split": "seen",
+      "model": "resnet50",
+      "seed": 43,
+      "generator": "GLIDE",
+      "n": 200,
+      "misses": 34
+    },
+    {
+      "split": "seen",
+      "model": "resnet50",
+      "seed": 44,
+      "generator": "BigGAN",
+      "n": 200,
+      "misses": 0
+    },
+    {
+      "split": "seen",
+      "model": "resnet50",
+      "seed": 44,
+      "generator": "GLIDE",
+      "n": 200,
+      "misses": 26
+    },
+    {
+      "split": "seen",
+      "model": "clip_linear",
+      "seed": 42,
+      "generator": "BigGAN",
+      "n": 200,
+      "misses": 0
+    },
+    {
+      "split": "seen",
+      "model": "clip_linear",
+      "seed": 42,
+      "generator": "GLIDE",
+      "n": 200,
+      "misses": 3
+    },
+    {
+      "split": "seen",
+      "model": "clip_linear",
+      "seed": 43,
+      "generator": "BigGAN",
+      "n": 200,
+      "misses": 0
+    },
+    {
+      "split": "seen",
+      "model": "clip_linear",
+      "seed": 43,
+      "generator": "GLIDE",
+      "n": 200,
+      "misses": 5
+    },
+    {
+      "split": "seen",
+      "model": "clip_linear",
+      "seed": 44,
+      "generator": "BigGAN",
+      "n": 200,
+      "misses": 0
+    },
+    {
+      "split": "seen",
+      "model": "clip_linear",
+      "seed": 44,
+      "generator": "GLIDE",
+      "n": 200,
+      "misses": 4
+    },
+    {
+      "split": "unseen",
+      "model": "resnet50",
+      "seed": 42,
+      "generator": "Midjourney",
+      "n": 400,
+      "misses": 332
+    },
+    {
+      "split": "unseen",
+      "model": "resnet50",
+      "seed": 43,
+      "generator": "Midjourney",
+      "n": 400,
+      "misses": 374
+    },
+    {
+      "split": "unseen",
+      "model": "resnet50",
+      "seed": 44,
+      "generator": "Midjourney",
+      "n": 400,
+      "misses": 384
+    },
+    {
+      "split": "unseen",
+      "model": "clip_linear",
+      "seed": 42,
+      "generator": "Midjourney",
+      "n": 400,
+      "misses": 163
+    },
+    {
+      "split": "unseen",
+      "model": "clip_linear",
+      "seed": 43,
+      "generator": "Midjourney",
+      "n": 400,
+      "misses": 160
+    },
+    {
+      "split": "unseen",
+      "model": "clip_linear",
+      "seed": 44,
+      "generator": "Midjourney",
+      "n": 400,
+      "misses": 168
+    }
+  ],
+  "selected_checkpoints": [
+    {
+      "seed": 42,
+      "model": "clip_linear",
+      "epoch": 40,
+      "validation_f1": 0.963855421686747
+    },
+    {
+      "seed": 42,
+      "model": "resnet50",
+      "epoch": 1,
+      "validation_f1": 0.963855421686747
+    },
+    {
+      "seed": 43,
+      "model": "clip_linear",
+      "epoch": 21,
+      "validation_f1": 0.9523809523809523
+    },
+    {
+      "seed": 43,
+      "model": "resnet50",
+      "epoch": 1,
+      "validation_f1": 1.0
+    },
+    {
+      "seed": 44,
+      "model": "clip_linear",
+      "epoch": 34,
+      "validation_f1": 0.975609756097561
+    },
+    {
+      "seed": 44,
+      "model": "resnet50",
+      "epoch": 1,
+      "validation_f1": 0.9487179487179487
+    }
+  ],
+  "real_image_cohorts": {
+    "seen": 400,
+    "unseen": 400,
+    "shared_ids": 0
+  }
+}

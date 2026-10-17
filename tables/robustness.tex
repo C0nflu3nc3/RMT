@@ -1,5 +1,5 @@
 \begin{table}[!htbp]
-\caption{Processing changes: mean across training seeds, with paired image-bootstrap 95\% CI below each value. Both changes are processed minus original; negative $\Delta F_1$ and positive $\Delta\mathrm{FPR}$ indicate deterioration. Each comparison uses the same 80 image IDs per test. Intervals condition on the three trained checkpoints.}
+\caption{Changes from original to processed images, averaged across seeds. Paired image-bootstrap 95\% intervals appear below the estimates. Negative $\Delta F_1$ and positive $\Delta\mathrm{FPR}$ indicate deterioration. Each comparison uses the same 800 IDs per test and conditions on the three fitted checkpoint pairs.}
 \label{tab:robustness}
 \centering
 \fontsize{8.5}{10.5}\selectfont
@@ -8,10 +8,10 @@
 \toprule
 Model & Test & JPEG $\Delta F_1$ & JPEG $\Delta$FPR & 112 $\Delta F_1$ & 112 $\Delta$FPR\\
 \midrule
-ResNet-50 & Seen & \shortstack{0.008\\{[-0.009, 0.022]}} & \shortstack{-0.025\\{[-0.050, 0.000]}} & \shortstack{-0.278\\{[-0.306, -0.245]}} & \shortstack{0.825\\{[0.733, 0.908]}}\\
-CLIP linear & Seen & \shortstack{-0.011\\{[-0.046, 0.019]}} & \shortstack{0.008\\{[-0.067, 0.083]}} & \shortstack{-0.203\\{[-0.260, -0.150]}} & \shortstack{0.733\\{[0.591, 0.858]}}\\
-ResNet-50 & Unseen & \shortstack{0.000\\{[0.000, 0.000]}} & \shortstack{-0.008\\{[-0.025, 0.000]}} & \shortstack{0.608\\{[0.534, 0.667]}} & \shortstack{0.883\\{[0.808, 0.950]}}\\
-CLIP linear & Unseen & \shortstack{-0.007\\{[-0.074, 0.069]}} & \shortstack{-0.017\\{[-0.075, 0.025]}} & \shortstack{0.442\\{[0.314, 0.568]}} & \shortstack{0.758\\{[0.625, 0.883]}}\\
+ResNet-50 & Seen & \shortstack{-0.008\\{[-0.013, -0.003]}} & \shortstack{-0.008\\{[-0.015, -0.003]}} & \shortstack{-0.261\\{[-0.272, -0.249]}} & \shortstack{0.837\\{[0.809, 0.863]}}\\
+CLIP linear & Seen & \shortstack{-0.004\\{[-0.013, 0.005]}} & \shortstack{0.001\\{[-0.021, 0.022]}} & \shortstack{-0.217\\{[-0.233, -0.200]}} & \shortstack{0.749\\{[0.706, 0.788]}}\\
+ResNet-50 & Unseen & \shortstack{-0.021\\{[-0.034, -0.011]}} & \shortstack{-0.004\\{[-0.009, 0.001]}} & \shortstack{0.504\\{[0.470, 0.538]}} & \shortstack{0.844\\{[0.820, 0.868]}}\\
+CLIP linear & Unseen & \shortstack{-0.046\\{[-0.065, -0.030]}} & \shortstack{-0.007\\{[-0.028, 0.014]}} & \shortstack{0.027\\{[-0.010, 0.062]}} & \shortstack{0.744\\{[0.705, 0.782]}}\\
 \bottomrule
 \end{tabularx}
 \end{table}

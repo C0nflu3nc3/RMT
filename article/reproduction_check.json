@@ -1,0 +1,71 @@
+{
+  "method": "Regenerated from saved scores, manifests and validation history in an isolated temporary copy; no images, weights or network",
+  "tables": {
+    "1": {
+      "status": "exact match",
+      "sha256": "132646d60ff53f48c4a8761e45f8f2e21992de8065a2183320fe941d436b390d"
+    },
+    "2": {
+      "status": "exact match",
+      "sha256": "db756736130f0d9cdec458e8df4046d5435580b473ebb0618cd011b5f13f76e5"
+    },
+    "3": {
+      "status": "exact match",
+      "sha256": "1786d46708d654577b1b6f4051208b5120d2a535aa8dc1239cdcc02f61393172"
+    },
+    "4": {
+      "status": "exact match",
+      "sha256": "dcd4e010fd9d9a86706c315dbcfb422db783abcb1b22f2ce09a9360da0b2413c"
+    },
+    "5": {
+      "status": "exact match",
+      "sha256": "c6bf9ae7ae092bf0e6f7f6922c9e654e6847fa7c5d2c2b31a4b521d9507abccb"
+    }
+  },
+  "numerical_exports": {
+    "absolute_metric_intervals.json": {
+      "status": "exact match",
+      "sha256": "711583fda3378253816c9617f11f13b997dfc63aec1cdd2b7e22b1a30ba16497"
+    },
+    "cohort_comparison.csv": {
+      "status": "exact match",
+      "sha256": "7ae0c63f276d96b615f56ea5b494c91a9a17a9ad4a2202dacf080d99d1727181"
+    },
+    "main_metrics_all_conditions.csv": {
+      "status": "exact match",
+      "sha256": "ee28e7263fa33fe8eed9f70419d8ac416316b376bad09eda68439387709e043e"
+    },
+    "paired_model_differences.csv": {
+      "status": "exact match",
+      "sha256": "005bcba221a0609383d3958b71c6574f7c2c26b8d386011e73ac6c4e31a7bf1e"
+    },
+    "per_run_metrics.csv": {
+      "status": "exact match",
+      "sha256": "49b9a3303aeaab10eb6bf788589215d1be677c30cb1a62756057ccafd7173fc3"
+    },
+    "robustness_changes.csv": {
+      "status": "exact match",
+      "sha256": "bb4693ddcfb0edfc66629fa2c8d58ea41ac868f339d36d6566ebd67a6e7f12a9"
+    },
+    "source_group_errors.csv": {
+      "status": "exact match",
+      "sha256": "936fff06e6cf1eeeebba0388ad2cd172d217b95297bc0e03a55fe4fe707dd2ea"
+    },
+    "threshold_sensitivity.csv": {
+      "status": "exact match",
+      "sha256": "c86544cf9bceefd11e20dfd9896f2fc4dc472cc2f4d70ca9cb55db935a3a0ea9"
+    },
+    "unseen_confusion_counts.csv": {
+      "status": "exact match",
+      "sha256": "3d824bc30e8913e4bdc6bb8453187cd7244fc47bd504c936fa50bac4aa5539a3"
+    },
+    "processing_transitions.csv": {
+      "status": "exact match",
+      "sha256": "b3e25ce2fe4b01681e64e78b0f3f2051489c8527c084bbf38393c26d98afd7bb"
+    },
+    "prose_details.json": {
+      "status": "exact match",
+      "sha256": "dd5c1802f8676dc012a071e2e61d34a370ef4f3f985ac2f627e87e89b50da435"
+    }
+  }
+}

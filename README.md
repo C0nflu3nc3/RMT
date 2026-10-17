@@ -1,3 +1,11 @@
+# Current integrated Results reproduction
+
+Run `python reproduce_tables.py` after installing `requirements-analysis.txt`. The command verifies Tables 1-5 and all 11 numerical exports in `article/evaluation/`, including absolute intervals, per-seed ranges, per-generator misses and processing transitions. It uses saved scores and validation history without images, weights, PyTorch or network access.
+
+`prose_details.json` collects the ranges, source misses and checkpoint selection outcomes. `article/report_error_transitions.py` and `article/report_prose_details.py` are included in the unified command. The current article source is supplied in the accompanying Overleaf ZIP. Existing PDFs and the earlier article files below remain historical versions.
+
+## Earlier pilot documentation
+
 # AI-generated image detection: Assignment 3
 
 This article continues Assignments 1 and 2 in the original Springer Nature single-column template. It reports a **480-image CPU pilot with training seeds 42, 43 and 44**. All three reported runs use the same AMD CPU type and the same image manifest. The matched 20,000-image study remains planned.

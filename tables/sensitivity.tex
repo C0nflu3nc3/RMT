@@ -1,5 +1,5 @@
 \begin{table}[!htbp]
-\caption{Original-image threshold sensitivity. Thresholds are listed for seeds 42, 43 and 44, in that order. F1 and FPR averages and sample SDs occupy separate columns. Each validation threshold is selected independently using only validation predictions. Each run evaluates the same 80 images per test.}
+\caption{Threshold comparison on the later original images. Thresholds are listed for seeds 42, 43 and 44 in that order, with separate columns for means and sample SDs. Validation thresholds were chosen on the original 80-image validation set and kept for the later tests.}
 \label{tab:sensitivity}
 \centering
 \fontsize{8.5}{10.5}\selectfont
@@ -8,14 +8,14 @@
 \toprule
 Model & Test & Rule & $t_{42},t_{43},t_{44}$ & F1 & SD & FPR & SD\\
 \midrule
-ResNet-50 & Seen & Fixed & 0.50, 0.50, 0.50 & 0.972 & 0.018 & 0.058 & 0.038\\
-ResNet-50 & Seen & Validation & 0.85, 0.60, 0.30 & 0.980 & 0.007 & 0.042 & 0.014\\
-ResNet-50 & Unseen & Fixed & 0.50, 0.50, 0.50 & 0.047 & 0.047 & 0.017 & 0.014\\
-ResNet-50 & Unseen & Validation & 0.85, 0.60, 0.30 & 0.033 & 0.028 & 0.000 & 0.000\\
-CLIP linear & Seen & Fixed & 0.50, 0.50, 0.50 & 0.870 & 0.017 & 0.267 & 0.029\\
-CLIP linear & Seen & Validation & 0.50, 0.50, 0.50 & 0.870 & 0.017 & 0.267 & 0.029\\
-CLIP linear & Unseen & Fixed & 0.50, 0.50, 0.50 & 0.225 & 0.046 & 0.242 & 0.014\\
-CLIP linear & Unseen & Validation & 0.50, 0.50, 0.50 & 0.225 & 0.046 & 0.242 & 0.014\\
+ResNet-50 & Seen & Fixed & 0.50, 0.50, 0.50 & 0.955 & 0.018 & 0.033 & 0.014\\
+ResNet-50 & Seen & Validation & 0.85, 0.60, 0.30 & 0.951 & 0.024 & 0.019 & 0.008\\
+ResNet-50 & Unseen & Fixed & 0.50, 0.50, 0.50 & 0.157 & 0.106 & 0.034 & 0.023\\
+ResNet-50 & Unseen & Validation & 0.85, 0.60, 0.30 & 0.097 & 0.025 & 0.023 & 0.015\\
+CLIP linear & Seen & Fixed & 0.50, 0.50, 0.50 & 0.884 & 0.005 & 0.251 & 0.012\\
+CLIP linear & Seen & Validation & 0.50, 0.50, 0.50 & 0.884 & 0.005 & 0.251 & 0.012\\
+CLIP linear & Unseen & Fixed & 0.50, 0.50, 0.50 & 0.640 & 0.005 & 0.255 & 0.009\\
+CLIP linear & Unseen & Validation & 0.50, 0.50, 0.50 & 0.640 & 0.005 & 0.255 & 0.009\\
 \bottomrule
 \end{tabularx}
 \end{table}

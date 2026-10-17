@@ -1,5 +1,5 @@
 \begin{table}[!htbp]
-\caption{Paired differences in mean F1, CLIP minus ResNet, across three fixed training runs. Intervals use 1,000 paired image resamples; p-values use 9,999 paired permutations. Original unseen images are primary; other p-values are descriptive and unadjusted.}
+\caption{Mean F1 differences (CLIP minus ResNet), with paired 95\% intervals. The original-unseen test is the main exploratory comparison; secondary p-values are unadjusted.}
 \label{tab:paired}
 \centering
 \small
@@ -8,12 +8,12 @@
 \toprule
 Test & Condition & $\Delta F_1$ & 95\% CI & $p$\\
 \midrule
-Seen & Original & -0.102 & [-0.159, -0.047] & 0.0004\\
-Seen & JPEG 65 & -0.121 & [-0.183, -0.066] & 0.0003\\
-Seen & Resize 112 & -0.027 & [-0.046, -0.011] & 0.0016\\
-Unseen & Original & 0.178 & [0.052, 0.316] & 0.0261\\
-Unseen & JPEG 65 & 0.171 & [0.043, 0.308] & 0.0405\\
-Unseen & Resize 112 & 0.012 & [-0.018, 0.044] & 0.4139\\
+Seen & Original & -0.071 & [-0.090, -0.053] & 0.0001\\
+Seen & JPEG 65 & -0.067 & [-0.088, -0.048] & 0.0001\\
+Seen & Resize 112 & -0.028 & [-0.033, -0.021] & 0.0001\\
+Unseen & Original & 0.483 & [0.437, 0.527] & 0.0001\\
+Unseen & JPEG 65 & 0.458 & [0.409, 0.505] & 0.0001\\
+Unseen & Resize 112 & 0.006 & [-0.004, 0.016] & 0.2829\\
 \bottomrule
 \end{tabularx}
 \end{table}

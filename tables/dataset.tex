@@ -1,18 +1,30 @@
 \begin{table}[!htbp]
-\caption{Preliminary sample actually used. Full-study targets are separate. The same 480 readable, exactly deduplicated images are reused for all three training seeds. Source: Tiny-GenImage mirror, accessed 17 October 2026.}
+\caption{Panel A compares full-study targets with the images used for training and later testing, excluding the initial 160 test images. Panel B gives mean F1 and FPR for the initial and later tests over seeds 42, 43 and 44 at threshold 0.5. Each initial test contains 40 real and 40 generated images; each later test contains 400 of each. The cohorts are disjoint and use different sampling frames.}
 \label{tab:dataset}
 \centering
 \small
 \setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
 \begin{tabularx}{\linewidth}{@{}Yrrrr@{}}
 \toprule
-Partition & Full target & Pilot $n$ & Real & Generated\\
+\multicolumn{5}{l}{\textbf{A. Full-study targets and observed counts}}\\
+Partition & Full target & Observed $n$ & Real & Generated\\
 \midrule
 Training & 12,000 & 240 & 120 & 120\\
 Validation & 2,000 & 80 & 40 & 40\\
-Seen test & 2,000 & 80 & 40 & 40\\
-Unseen test & 4,000 & 80 & 40 & 40\\
-Total & 20,000 & 480 & 240 & 240\\
+Later seen test & 2,000 & 800 & 400 & 400\\
+Later unseen test & 4,000 & 800 & 400 & 400\\
+Total & 20,000 & 1,920 & 960 & 960\\
+\bottomrule
+\end{tabularx}
+\par\medskip\small\noindent\textbf{B. Initial and later tests: original-image scores}\par\smallskip
+\begin{tabularx}{\linewidth}{@{}llCCCC@{}}
+\toprule
+Model & Test & Initial F1 & Initial FPR & Later F1 & Later FPR\\
+\midrule
+ResNet-50 & Seen & 0.972 & 0.058 & 0.955 & 0.033\\
+CLIP linear & Seen & 0.870 & 0.267 & 0.884 & 0.251\\
+ResNet-50 & Unseen & 0.047 & 0.017 & 0.157 & 0.034\\
+CLIP linear & Unseen & 0.225 & 0.242 & 0.640 & 0.255\\
 \bottomrule
 \end{tabularx}
 \end{table}

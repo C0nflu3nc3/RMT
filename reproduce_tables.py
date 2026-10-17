@@ -1,19 +1,45 @@
-"""Recreate Tables 2-5 from saved scores without GitHub, images or model weights."""
-import hashlib,json,os,shutil,subprocess,sys,tempfile
+"""Reproduce article Tables 1-5 and every numerical export used in Results."""
+import hashlib, json, os, shutil, subprocess, sys, tempfile
 from pathlib import Path
-PROJECT=Path(__file__).resolve().parent
-with tempfile.TemporaryDirectory(prefix='rmt-reproduce-') as directory:
-    copy=Path(directory)/'project'
-    shutil.copytree(PROJECT,copy,ignore=shutil.ignore_patterns('.git','cache','__pycache__','*.pt','*.pth','main.pdf','exports'))
-    # Existing example JPEGs are sufficient for the illustrative figure.
-    environment=os.environ.copy();environment.pop('PILOT_WORK',None)
-    subprocess.run([sys.executable,str(copy/'pilot/analyze_pilot.py')],env=environment,check=True,stdout=subprocess.DEVNULL)
-    subprocess.run([sys.executable,str(copy/'pilot/write_tables.py')],env=environment,check=True,stdout=subprocess.DEVNULL)
-    results={}
-    for number,filename in [(2,'main_results.tex'),(3,'paired.tex'),(4,'robustness.tex'),(5,'sensitivity.tex')]:
-        expected=(PROJECT/'tables'/filename).read_bytes();actual=(copy/'tables'/filename).read_bytes()
-        if actual!=expected:raise SystemExit(f'Table {number}: reproduction mismatch')
-        results[str(number)]={'status':'exact match','sha256':hashlib.sha256(actual).hexdigest()}
-        print(f'Table {number}: exact match')
-    (PROJECT/'pilot/reproduction_check.json').write_text(json.dumps({'method':'Regenerated from saved prediction/validation CSVs in an isolated temporary copy; no dataset or GitHub calls','tables':results},indent=2)+'\n')
-print('Tables 2-5 reproduced successfully. Original exports were left unchanged.')
+
+PROJECT = Path(__file__).resolve().parent
+EXPORTS = [
+    "absolute_metric_intervals.json", "cohort_comparison.csv",
+    "main_metrics_all_conditions.csv", "paired_model_differences.csv",
+    "per_run_metrics.csv", "robustness_changes.csv", "source_group_errors.csv",
+    "threshold_sensitivity.csv", "unseen_confusion_counts.csv",
+    "processing_transitions.csv", "prose_details.json",
+]
+with tempfile.TemporaryDirectory(prefix="rmt-reproduce-") as directory:
+    copy = Path(directory) / "project"
+    shutil.copytree(PROJECT, copy, ignore=shutil.ignore_patterns(
+        ".git", "cache", "__pycache__", "*.pt", "*.pth", "main.pdf", "exports"))
+    environment = os.environ.copy()
+    for variable in ("PILOT_WORK", "ARTICLE_IMAGE_DIR"):
+        environment.pop(variable, None)
+    environment["ARTICLE_SCORES_ONLY"] = "1"
+    for script in ("analyze.py", "report_error_transitions.py",
+                   "report_prose_details.py", "write_tables.py"):
+        subprocess.run([sys.executable, str(copy / "article" / script)],
+                       env=environment, check=True, stdout=subprocess.DEVNULL)
+    tables, exports = {}, {}
+    def compare(relative):
+        expected = (PROJECT / relative).read_bytes()
+        actual = (copy / relative).read_bytes()
+        if expected != actual:
+            raise SystemExit(f"Reproduction mismatch: {relative}")
+        return dict(status="exact match", sha256=hashlib.sha256(actual).hexdigest())
+    for number, filename in [(1, "dataset.tex"), (2, "main_results.tex"),
+                             (3, "paired.tex"), (4, "robustness.tex"),
+                             (5, "sensitivity.tex")]:
+        tables[str(number)] = compare(Path("tables") / filename)
+        print(f"Table {number}: exact match")
+    for filename in EXPORTS:
+        exports[filename] = compare(Path("article/evaluation") / filename)
+        print(f"Export {filename}: exact match")
+    record = dict(method="Regenerated from saved scores, manifests and validation history "
+                         "in an isolated temporary copy; no images, weights or network",
+                  tables=tables, numerical_exports=exports)
+    (PROJECT / "article/reproduction_check.json").write_text(
+        json.dumps(record, indent=2) + "\n")
+print("Tables 1-5 and all 11 numerical exports reproduced exactly.")

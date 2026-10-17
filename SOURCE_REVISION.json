@@ -2,5 +2,7 @@
   "repository_url": "https://github.com/C0nflu3nc3/RMT",
   "analysis_commit": "491a65b7fbf6916e553cb38d7745c535f22ede42",
   "analysis_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/491a65b7fbf6916e553cb38d7745c535f22ede42",
-  "scope": "Three reported AMD-CPU training runs, fixed manifest, predictions, statistical exports and table-reproduction code. The earlier Intel run is retained separately and excluded from aggregates."
+  "scope": "The original pilot analysis remains recorded in analysis_commit. The main paper now reports the later 1,600-image held-out evaluation from evidence_commit, with unchanged training and validation data and fixed checkpoints.",
+  "evidence_commit": "6dc0d1027d606b43c8c50af20d7db4a7303d042a",
+  "evidence_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/6dc0d1027d606b43c8c50af20d7db4a7303d042a"
 }

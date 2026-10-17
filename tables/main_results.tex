@@ -1,30 +1,29 @@
 \begin{table}[!htbp]
-\caption{Original-image metrics at threshold 0.5. Upper cells show mean with sample SD in parentheses over training seeds 42, 43 and 44; lower rows show unseen confusion counts for each run. Each test has 40 real and 40 generated images, reused across seeds. P and R are precision and recall; AUC is AUROC.}
+\caption{Results on later original images at threshold 0.5. Panel A gives means and sample SDs (in parentheses) across seeds 42, 43 and 44. P denotes precision, R recall and AUC AUROC. Panel B gives unseen confusion counts per seed, with generated images as positive. Each test contains 400 real and 400 generated images; the same images are reused across seeds.}
 \label{tab:main-results}
 \centering
 \fontsize{8.5}{10.5}\selectfont
 \setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
 \begin{tabularx}{\linewidth}{@{}llCCCCCCC@{}}
 \toprule
+\multicolumn{9}{l}{\textbf{A. Mean metrics and variation across training seeds}}\\
 Model & Test & Acc. & P & R & F1 & FPR & AUC & AP\\
 \midrule
-ResNet-50 & Seen & \shortstack{0.971\\{(0.019)}} & \shortstack{0.946\\{(0.034)}} & \shortstack{1.000\\{(0.000)}} & \shortstack{0.972\\{(0.018)}} & \shortstack{0.058\\{(0.038)}} & \shortstack{0.999\\{(0.002)}} & \shortstack{0.999\\{(0.002)}}\\
-CLIP linear & Seen & \shortstack{0.854\\{(0.019)}} & \shortstack{0.785\\{(0.018)}} & \shortstack{0.975\\{(0.025)}} & \shortstack{0.870\\{(0.017)}} & \shortstack{0.267\\{(0.029)}} & \shortstack{0.946\\{(0.005)}} & \shortstack{0.946\\{(0.005)}}\\
-ResNet-50 & Unseen & \shortstack{0.504\\{(0.014)}} & \shortstack{0.556\\{(0.509)}} & \shortstack{0.025\\{(0.025)}} & \shortstack{0.047\\{(0.047)}} & \shortstack{0.017\\{(0.014)}} & \shortstack{0.487\\{(0.088)}} & \shortstack{0.527\\{(0.061)}}\\
-CLIP linear & Unseen & \shortstack{0.458\\{(0.014)}} & \shortstack{0.392\\{(0.046)}} & \shortstack{0.158\\{(0.038)}} & \shortstack{0.225\\{(0.046)}} & \shortstack{0.242\\{(0.014)}} & \shortstack{0.518\\{(0.010)}} & \shortstack{0.519\\{(0.011)}}\\
+ResNet-50 & Seen & \shortstack{0.956\\{(0.016)}} & \shortstack{0.967\\{(0.012)}} & \shortstack{0.944\\{(0.042)}} & \shortstack{0.955\\{(0.018)}} & \shortstack{0.033\\{(0.014)}} & \shortstack{0.991\\{(0.003)}} & \shortstack{0.986\\{(0.004)}}\\
+CLIP linear & Seen & \shortstack{0.870\\{(0.006)}} & \shortstack{0.798\\{(0.007)}} & \shortstack{0.990\\{(0.003)}} & \shortstack{0.884\\{(0.005)}} & \shortstack{0.251\\{(0.012)}} & \shortstack{0.977\\{(0.002)}} & \shortstack{0.971\\{(0.002)}}\\
+ResNet-50 & Unseen & \shortstack{0.529\\{(0.023)}} & \shortstack{0.719\\{(0.022)}} & \shortstack{0.092\\{(0.069)}} & \shortstack{0.157\\{(0.106)}} & \shortstack{0.034\\{(0.023)}} & \shortstack{0.670\\{(0.029)}} & \shortstack{0.652\\{(0.017)}}\\
+CLIP linear & Unseen & \shortstack{0.668\\{(0.003)}} & \shortstack{0.699\\{(0.005)}} & \shortstack{0.591\\{(0.010)}} & \shortstack{0.640\\{(0.005)}} & \shortstack{0.255\\{(0.009)}} & \shortstack{0.738\\{(0.007)}} & \shortstack{0.694\\{(0.005)}}\\
 \bottomrule
 \end{tabularx}
-\medskip
-\begin{tabularx}{\linewidth}{@{}Yrrrrr@{}}
+\par\medskip\small\noindent\textbf{B. Later unseen test: individual confusion counts}\par\smallskip
+\begin{tabularx}{\linewidth}{@{}CCCCCCCCC@{}}
 \toprule
-Unseen counts: model & Seed & TP & FP & TN & FN\\
+Seed & \multicolumn{4}{c}{ResNet-50} & \multicolumn{4}{c}{CLIP linear}\\
+ & TP & FP & TN & FN & TP & FP & TN & FN\\
 \midrule
-ResNet-50 & 42 & 2 & 1 & 39 & 38\\
-ResNet-50 & 43 & 0 & 1 & 39 & 40\\
-ResNet-50 & 44 & 1 & 0 & 40 & 39\\
-CLIP linear & 42 & 8 & 10 & 30 & 32\\
-CLIP linear & 43 & 6 & 10 & 30 & 34\\
-CLIP linear & 44 & 5 & 9 & 31 & 35\\
+42 & 68 & 24 & 376 & 332 & 237 & 105 & 295 & 163\\
+43 & 26 & 10 & 390 & 374 & 240 & 103 & 297 & 160\\
+44 & 16 & 7 & 393 & 384 & 232 & 98 & 302 & 168\\
 \bottomrule
 \end{tabularx}
 \end{table}
