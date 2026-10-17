@@ -1,0 +1,75 @@
+{
+  "status": "full matched study planned; separate small CPU pilot in pilot/",
+  "sampling_seed": 42,
+  "training_seeds": [
+    42,
+    43,
+    44
+  ],
+  "models": {
+    "resnet50": "torchvision ResNet50_Weights.IMAGENET1K_V1 with fine-tuning",
+    "clip_linear": "OpenAI CLIP ViT-B/32 frozen image encoder and trained linear head"
+  },
+  "threshold": 0.5,
+  "optimizer": "Adam",
+  "learning_rates": null,
+  "batch_size": null,
+  "epochs_and_stopping_rule": null,
+  "checkpoint_rule": "maximum validation F1",
+  "development_generators": [
+    "Stable Diffusion 1.4",
+    "GLIDE",
+    "BigGAN"
+  ],
+  "primary_holdout": "Midjourney",
+  "target_counts": {
+    "train": 12000,
+    "validation": 2000,
+    "seen_test": 2000,
+    "unseen_test": 4000
+  },
+  "target_generated_fraction": 0.5,
+  "input_size": [
+    224,
+    224
+  ],
+  "robustness_conditions": {
+    "jpeg_quality": 65,
+    "downsample_size": [
+      112,
+      112
+    ]
+  },
+  "bootstrap": {
+    "resamples": 1000,
+    "confidence": 0.95,
+    "seed": 42,
+    "paired": true,
+    "strata": "label by generator/source"
+  },
+  "success_original_sets_mean_over_seeds": {
+    "unseen_f1_min": 0.8,
+    "seen_fpr_max": 0.1,
+    "unseen_fpr_max": 0.1,
+    "seen_to_unseen_f1_drop_max": 0.1
+  },
+  "practical_model_gap_min": 0.03,
+  "repository_url": "https://github.com/C0nflu3nc3/RMT",
+  "actual_hardware": null,
+  "actual_software_versions": null,
+  "actual_runtime": null,
+  "permutation_test": {
+    "permutations": 9999,
+    "two_sided": true,
+    "alpha": 0.05,
+    "statistic": "paired mean F1 difference",
+    "exchange_unit": "whole model score vector per image across seeds"
+  },
+  "sensitivity": {
+    "fixed_threshold": 0.5,
+    "validation_grid_start": 0.05,
+    "validation_grid_stop": 0.95,
+    "step": 0.05,
+    "selection": "maximum validation F1; larger threshold breaks ties"
+  }
+}

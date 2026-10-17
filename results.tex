@@ -1,0 +1,104 @@
+\section{Results}
+\label{sec:results}
+Both detectors lost substantial F1 when tested on Midjourney images after training on familiar generators. This preliminary CPU experiment used 480 images and one seed. Neither model met all the project success targets, and their original unseen F1 difference fell short of the prespecified permutation-test significance level. RQ1 concerns this transfer and the false positives on real images; RQ2 concerns changes after JPEG compression and resizing. The larger matched 20,000-image study remains planned.
+
+\subsection{Data actually used and departures from the full study}
+\label{sec:results-data}
+We accessed the Tiny-GenImage mirror \citep{tinygen2026} on 17 October 2026, recording revision \texttt{89c4fe9efd0e}. The sampling frame contained the first 1,200 metadata rows of its training partition and the first 600 rows of its validation partition. The fixed sampling seed selected 480 images from this frame. The remaining 1,320 rows were outside the selected sample, so they do not count as cleaning removals. All selected assets downloaded and decoded successfully. SHA256 checks found no exact duplicate group, leaving 480 records in the manifest.
+
+Training used 120 real images, 60 BigGAN images and 60 GLIDE images. Validation used 40 real images and 20 from each development generator. The seen test had the same source counts as validation, with different IDs. For the unseen test, we used 40 real images and 40 Midjourney images. Midjourney was absent from training and validation. There were 160 distinct test images in total; compression and resizing produced repeated versions of those images. Table~\ref{tab:dataset} records the pilot partitions and the separate full-study targets.
+
+\input{tables/dataset}
+
+The pilot precedes the full study with matched data. It used a public mirror, omitted SD 1.4 from development and ran one global seed. We did not complete perceptual duplicate screening, category matching or the planned matching of native size and JPEG tables. The observed scores consequently describe this subset before those controls. The manifest records these departures from Assignment 2.
+
+Every downloaded asset decoded as JPEG, including the generated images. Real-image widths ranged from 139 to 2,048 pixels and heights from 127 to 1,536. BigGAN images were $128\times128$, GLIDE images $256\times256$ and Midjourney images $1024\times1024$. The original compression histories and category balance remain unresolved. These measurements concern the retrieved mirror assets. We still need to inspect the official GenImage archives before confirming the 20,000-image target in Table~\ref{tab:dataset}, including how many files survive the matching and cleaning described in Methods.
+\FloatBarrier
+
+\subsection{RQ1 original-image detection and transfer}
+\label{sec:results-rq1}
+At threshold 0.5, ResNet-50 achieved F1 0.964 on familiar generators and CLIP linear achieved 0.889 (Table~\ref{tab:main-results}). Both detected all 40 generated images. ResNet flagged three of the 40 real images and CLIP flagged ten, giving FPRs of 0.075 and 0.250. The difference in false positives accounts for their different precision despite equal recall. ResNet's seen-test AUROC and AP were both 1.000. For CLIP, both values rounded to 0.948. All these comparisons use the same test IDs.
+
+\input{tables/main_results}
+
+ResNet detected only two Midjourney images in the original unseen test, missing 38. Its recall was 0.050 and F1 was 0.095. It correctly classified all 40 real images, giving precision 1.000 from just two positive predictions. CLIP detected eight Midjourney images and missed 32, but also flagged ten real images. Its recall was 0.200, F1 was 0.276 and FPR was 0.250. Thus its higher F1 came with increases in both true-positive and false-positive counts. Neither model detected most of the unseen generated images.
+
+The ranking metrics also fell on the unseen set. ResNet's AUROC was 0.414 and AP was 0.484; CLIP's values were 0.524 and 0.531. These measures use the continuous scores, which is useful when few scores exceed the fixed decision threshold. They supplement the confusion counts at 0.5. Accuracy on this balanced unseen test was 0.525 for ResNet and 0.475 for CLIP, so the model with higher F1 had lower accuracy.
+
+ResNet's seen-to-unseen F1 drop was 0.869 and CLIP's was 0.613. Both exceeded the full-study limit of 0.10, and both unseen F1 values were below the 0.80 target. ResNet met the 0.10 FPR limit on both original tests. CLIP exceeded that limit on both. Neither detector therefore met all three goals in this single-run check. The full assessment will use matched data and three training seeds; the pilot provides one observed result for each baseline under the smaller training budget.
+\FloatBarrier
+
+\subsection{Paired uncertainty and statistical testing}
+\label{sec:results-uncertainty}
+On original unseen images, the primary CLIP-minus-ResNet F1 difference was 0.181, with a percentile bootstrap 95\% interval of [0.011, 0.355]. The paired permutation p-value was 0.0662 (Table~\ref{tab:paired}), using the procedures in Section~\ref{sec:methods}. Although the bootstrap interval excluded zero, the permutation test did not reach $p<0.05$, so the primary difference was not statistically significant under the prespecified test. The interval and p-value describe the same paired predictions.
+
+\input{tables/paired}
+
+CLIP's unseen FPR of 0.250 also exceeded the 0.10 practical target. This comparison would fail the FPR requirement even if its F1 difference passed the statistical test. On familiar original images, the CLIP-minus-ResNet difference was $-0.075$, with interval [$-0.137$, $-0.022$] and p-value 0.0380. The latter result favors ResNet in this sample. It is a secondary, descriptive comparison: the original unseen test was designated primary, and the other condition-specific p-values have no multiple-comparison adjustment.
+
+For JPEG-compressed unseen images, the difference was 0.123 and the interval crossed zero. For resized unseen images, it was 0.011, below the practical minimum of 0.03. Their permutation p-values were 0.2135 and 1.0000 respectively. Neither processing condition established an unseen-generator advantage under the declared criteria. The condition-specific estimates consequently give weaker evidence of a model gap on unseen images than the comparisons on familiar generators.
+
+The intervals describe image sampling for two fixed checkpoints. Only seed 42 was run, leaving the across-seed standard deviation undefined. It is not estimated as zero. With 40 real images in each test, one extra false positive changes FPR by 0.025. The generated class is equally small. Three-decimal metric values should therefore be read alongside the confusion counts and intervals, particularly when comparing gaps close to the 0.03 practical threshold.
+\FloatBarrier
+
+\subsection{RQ2 processing changes}
+\label{sec:results-rq2}
+All 160 reserved images produced both processed versions, with no exclusions from the paired comparisons. Changes in Table~\ref{tab:robustness} are processed minus original for both $\Delta F_1$ and $\Delta\mathrm{FPR}$. Figure~\ref{fig:conditions} shows the absolute unseen scores and their image-bootstrap intervals. The full-study reference levels are F1 at least 0.80 and FPR at most 0.10. Separate axes keep the two metrics visible alongside the changes, since a rise in F1 can accompany more false positives.
+
+\input{tables/robustness}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pilot_condition_comparison.pdf}
+\caption{Preliminary performance on the 80-image unseen set, seed 42. Bars show F1 and FPR on a 0--1 scale; error bars are percentile 95\% image-bootstrap intervals. Dashed lines mark the full-study F1 minimum 0.80 and FPR maximum 0.10. Each processing condition transforms the same original images separately.}
+\label{fig:conditions}
+\end{figure}
+
+JPEG quality 65 left ResNet's unseen F1 and FPR at 0.095 and 0.000. For CLIP, unseen F1 fell from 0.276 to 0.218 and FPR fell from 0.250 to 0.225. Its paired F1 change of $-0.058$ had an interval of [$-0.183$, 0.061], crossing zero. The familiar-generator results were also small changes: ResNet gained 0.012 F1 and its FPR fell by 0.025. CLIP lost 0.012 F1 with unchanged FPR. JPEG compression therefore produced both gains and losses in this run.
+
+After downsampling, unseen ResNet F1 rose by 0.560 to 0.655 and CLIP F1 rose by 0.391 to 0.667. Both FPRs, however, reached 1.000. Every real image in the unseen test was labelled generated. ResNet detected 39 of the 40 generated images, and CLIP detected all 40. The apparent F1 improvement came with complete failure on the real-image class. Neither resized result met the false-positive requirement, even though its F1 was higher than on the original images.
+
+Resizing had the opposite effect on familiar-generator F1, reducing it by 0.292 for ResNet and 0.222 for CLIP. Their FPR increases were 0.900 and 0.750. Across both test sets, false positives rose after resizing, while the direction of the F1 change depended on the test set. RQ2 therefore needs the absolute metrics as well as their paired changes to describe this outcome. The experiment covered JPEG quality 65 and downsampling to 112 pixels; we did not run a wider JPEG-quality sweep.
+\FloatBarrier
+
+\subsection{Sensitivity to the decision threshold}
+\label{sec:results-sensitivity}
+The validation rule selected threshold 0.85 for ResNet and 0.50 for CLIP. Both choices came from validation predictions alone. Table~\ref{tab:sensitivity} compares these choices with the primary threshold of 0.50 on the same original test IDs. The fixed-threshold rows reproduce the main results. This comparison measures the effect of the decision threshold while holding the trained models and their score outputs fixed.
+
+\input{tables/sensitivity}
+
+Raising ResNet's threshold reduced familiar-generator false positives from three to one, while all 40 generated images remained detected. Seen F1 rose from 0.964 to 0.988 and FPR fell from 0.075 to 0.025. On Midjourney, the same change reduced true positives from two to one. Unseen F1 fell to 0.049 and FPR stayed zero. The validation-selected threshold improved ResNet's familiar-generator result but reduced its already low detection rate on the held-out generator.
+
+CLIP's selected threshold equalled the fixed threshold, so its seen and unseen test metrics stayed the same. The sensitivity analysis retained that unchanged outcome; no replacement threshold was chosen from unseen performance. AUROC and AP also stayed the same for both models because changing the decision threshold leaves their continuous scores unchanged. There was no retraining in this analysis.
+
+The validation set contained 80 images from the development sources. The selected thresholds describe that small validation sample. For the future matched-data run, each model will receive a new validation-selected threshold under the same rule. We have not adopted 0.85 as an established optimum for the full ResNet experiment or revised the primary 0.50 threshold after inspecting the tests. The pilot thus records a validation improvement that did not carry over to Midjourney.
+\FloatBarrier
+
+\subsection{Observed errors}
+\label{sec:results-errors}
+ResNet's original unseen errors were dominated by 38 generated images classified as real. CLIP made 32 false negatives and ten false positives, for 42 errors in total against ResNet's 38. Figure~\ref{fig:errors} shows the confusion counts and two inspected failures. CLIP had higher F1 despite making more errors overall. F1 excludes true negatives, which accuracy includes, so it emphasizes the generated-class detections differently. Here CLIP detected more Midjourney images while making more mistakes across the complete test set.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.94\linewidth]{figures/pilot_errors.pdf}
+\caption{Original-unseen errors in the pilot, seed 42, threshold 0.5. Upper panels show counts in images, with actual class on rows and predicted class on columns. Lower panels show the most confident ResNet false negative and CLIP false positive within those error types. Scores are generated-class sigmoid outputs. Images and labels are from the Tiny-GenImage mirror \citep{tinygen2026}; IDs identify records in the saved manifest.}
+\label{fig:errors}
+\end{figure}
+
+The ResNet example is a Midjourney-labelled bird image scored 0.000270 for the generated class, far below the decision threshold. The CLIP example is a real-labelled image scored above the threshold, illustrating the other error type. Each example has the largest distance from 0.5 among that model's indicated errors. Selection therefore shows confident failures, while the matrices count every original unseen image. The source labels define these error types; inspecting the examples is not an independent check of their authenticity.
+
+The error export retains IDs, scores, conditions and error types for further inspection. Both models had recall 1.000 on each development generator in the original seen test. Their Midjourney recalls were 0.050 and 0.200. These aggregate rates do not separate native-size effects from content-category effects: the generated-image sizes differ by source in this subset. Dimensions in the manifest allow later grouped checks, but the present pilot supplies no evidence that detection was independent of native size.
+
+We kept the checkpoints and training settings fixed after inspecting these errors. The recorded outcomes include poor unseen detection, ResNet's unchanged JPEG result, CLIP's unchanged validation-selected threshold and the high FPR after resizing. They describe decisions under the tested conditions. Explanations of the failures and comparisons with previous studies belong in Discussion, beyond these observed error counts and examples.
+\FloatBarrier
+
+\subsection{Observed setup and reproducibility}
+\label{sec:results-reproducibility}
+ResNet completed one fine-tuning epoch, with validation F1 0.964 and mean training loss 0.383. The CLIP head trained for 40 epochs; its loss changed from 0.693 to 0.531 and validation F1 from 0.130 to 0.964. Checkpoint selection retained epochs one and 40 respectively. The CLIP image encoder stayed frozen. Table~\ref{tab:reproducibility} records the CPU environment and timings for these different training workloads, which should be considered when comparing the elapsed times.
+
+\input{tables/reproducibility}
+
+Preparation and training took 43.76 seconds for ResNet and 30.50 seconds for CLIP. The latter includes development feature extraction. Warmed model-only median prediction times were 63.01 and 158.09 milliseconds per image. The complete pilot took 386.06 seconds, including data access and model loading. Software installation and the later statistical analysis were outside that total. Both models used six PyTorch threads on the same CPU host, with no GPU.
+
+The source archive includes the pilot script, exact versions, selected-row manifest, training history, validation scores and 960 test predictions. These rows cover two models and repeated conditions on 160 underlying test images. Saved scores support regeneration of the numeric tables and vector figures. The archive preserves the dataset revision and source hashes to trace the report to its inputs. It also includes an audit script for the official archives; that counting task and the full matched-data experiment remain to be carried out.
+\FloatBarrier

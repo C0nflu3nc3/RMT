@@ -1,0 +1,17 @@
+\begin{table}[!htbp]
+\caption{Preliminary original-image metrics at threshold 0.5, seed 42. Each test contains 80 images, half generated. P and R are precision and recall; AUC is AUROC. Scores are on a 0--1 scale. There is one run per model, so no across-seed standard deviation is estimated.}
+\label{tab:main-results}
+\centering
+\fontsize{8.5}{10.5}\selectfont
+\setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}llCCCCCCC@{}}
+\toprule
+Model & Test & Acc. & P & R & F1 & FPR & AUC & AP\\
+\midrule
+ResNet-50 & Seen & 0.963 & 0.930 & 1.000 & 0.964 & 0.075 & 1.000 & 1.000\\
+CLIP linear & Seen & 0.875 & 0.800 & 1.000 & 0.889 & 0.250 & 0.948 & 0.948\\
+ResNet-50 & Unseen & 0.525 & 1.000 & 0.050 & 0.095 & 0.000 & 0.414 & 0.484\\
+CLIP linear & Unseen & 0.475 & 0.444 & 0.200 & 0.276 & 0.250 & 0.524 & 0.531\\
+\bottomrule
+\end{tabularx}
+\end{table}

@@ -1,0 +1,21 @@
+\begin{table}[!htbp]
+\caption{Preliminary threshold sensitivity on original images. Validation-selected thresholds are frozen before test scoring; the selection rule is in Methods. Fixed-threshold rows reproduce the primary results. Each row evaluates 80 images.}
+\label{tab:sensitivity}
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}llYccc@{}}
+\toprule
+Model & Test & Threshold rule & $t$ & F1 & FPR\\
+\midrule
+ResNet-50 & Seen & Fixed & 0.50 & 0.964 & 0.075\\
+ResNet-50 & Seen & Validation & 0.85 & 0.988 & 0.025\\
+ResNet-50 & Unseen & Fixed & 0.50 & 0.095 & 0.000\\
+ResNet-50 & Unseen & Validation & 0.85 & 0.049 & 0.000\\
+CLIP linear & Seen & Fixed & 0.50 & 0.889 & 0.250\\
+CLIP linear & Seen & Validation & 0.50 & 0.889 & 0.250\\
+CLIP linear & Unseen & Fixed & 0.50 & 0.276 & 0.250\\
+CLIP linear & Unseen & Validation & 0.50 & 0.276 & 0.250\\
+\bottomrule
+\end{tabularx}
+\end{table}

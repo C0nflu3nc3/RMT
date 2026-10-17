@@ -1,0 +1,9 @@
+model,split,setting,threshold,f1,fpr,accuracy,n
+resnet50,seen,Fixed,0.5,0.963855421686747,0.075,0.9625,80
+resnet50,seen,Validation,0.85,0.9876543209876543,0.025,0.9875,80
+resnet50,unseen,Fixed,0.5,0.09523809523809523,0.0,0.525,80
+resnet50,unseen,Validation,0.85,0.04878048780487805,0.0,0.5125,80
+clip_linear,seen,Fixed,0.5,0.8888888888888888,0.25,0.875,80
+clip_linear,seen,Validation,0.5,0.8888888888888888,0.25,0.875,80
+clip_linear,unseen,Fixed,0.5,0.27586206896551724,0.25,0.475,80
+clip_linear,unseen,Validation,0.5,0.27586206896551724,0.25,0.475,80

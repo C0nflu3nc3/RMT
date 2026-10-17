@@ -1,0 +1,17 @@
+\begin{table}[!htbp]
+\caption{Preliminary robustness changes, processed minus original. Negative $\Delta F_1$ and positive $\Delta\mathrm{FPR}$ indicate deterioration. All comparisons contain the same 80 image IDs per test. Full paired intervals are in the evaluation export; values use score units on a 0--1 scale.}
+\label{tab:robustness}
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}llCCCC@{}}
+\toprule
+Model & Test & JPEG $\Delta F_1$ & JPEG $\Delta$FPR & 112 $\Delta F_1$ & 112 $\Delta$FPR\\
+\midrule
+ResNet-50 & Seen & 0.012 & -0.025 & -0.292 & 0.900\\
+CLIP linear & Seen & -0.012 & 0.000 & -0.222 & 0.750\\
+ResNet-50 & Unseen & 0.000 & 0.000 & 0.560 & 1.000\\
+CLIP linear & Unseen & -0.058 & -0.025 & 0.391 & 0.750\\
+\bottomrule
+\end{tabularx}
+\end{table}

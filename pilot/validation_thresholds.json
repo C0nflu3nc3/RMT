@@ -1,0 +1,4 @@
+{
+  "resnet50": 0.85,
+  "clip_linear": 0.5
+}

@@ -1,0 +1,23 @@
+\begin{table}[!htbp]
+\caption{Observed preliminary-run setup. Training times include tensor preparation and, for CLIP, development feature extraction. Prediction times are warmed model-only medians for one image. No GPU was used.}
+\label{tab:reproducibility}
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}lY@{}}
+\toprule
+Item & Observed setting\\
+\midrule
+Source and revision & \texttt{TheKernel01/Tiny-GenImage}, revision \texttt{89c4fe9efd0e}\\
+Device & Intel Xeon Platinum 8573C; six PyTorch threads; 8 GiB container\\
+Python and core libraries & 3.12.14; PyTorch 2.14.1+cpu; torchvision 0.29.1+cpu\\
+Other libraries & CLIP 1.0.1; NumPy 2.5.2; Pillow 12.3.0; scikit-learn 1.8.0; SciPy 1.17.0\\
+Seed and optimizers & Global seed 42; Adam; learning rates $10^{-4}$ (ResNet), $10^{-3}$ (head)\\
+Epochs and batch sizes & ResNet: 1 epoch, batch 8; CLIP head: 40 epochs, batch 32\\
+Preparation and training & ResNet 43.76 s; CLIP 30.50 s\\
+Prediction median & ResNet 63.01 ms/image; CLIP 158.09 ms/image\\
+End-to-end pilot & 386.06 s including data access and model loading\\
+Repository & \url{https://github.com/C0nflu3nc3/RMT}; scripts, manifest, predictions, versions and training logs\\
+\bottomrule
+\end{tabularx}
+\end{table}

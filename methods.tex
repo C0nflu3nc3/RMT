@@ -1,0 +1,37 @@
+\section{Methods and Materials}
+\label{sec:methods}
+\subsection{Questions and comparison}
+RQ1 asks how well the two detectors identify images from an unseen generator while limiting false positives on real images. RQ2 asks how JPEG compression and resizing change F1 and false-positive rate. We compare a fine-tuned ResNet-50 with a frozen CLIP image encoder and a trained linear classifier on the same image IDs. Mahara and Rishe \citep{mahara2026} inform the choice of spatial and vision-language representations. Xu et al.\ \citep{xu2026} distinguish transfer from processing robustness, while the external tests in Coccomini et al.\ \citep{coccomini2024} and Bayram \citep{bayram2026} motivate reserving an unfamiliar source.
+
+\subsection{Data and leakage controls}
+The full study will use GenImage \citep{genimage2023}. SD 1.4, GLIDE and BigGAN will supply development images, with Midjourney held out. The targets are 12,000 training, 2,000 validation, 2,000 seen-test and 4,000 unseen-test images, each half real. The release description reports approximately 162 training and six test generated images per class for these sources across 1,000 classes. Our unseen target thus needs 2,000 generated images from a nominal 6,000-image Midjourney test pool. We still need to audit the downloaded archives and establish the counts after readability checks, deduplication and matching. Training and validation will come from official training folders; reserved tests will use official validation folders.
+
+The manifest will record source, label, category, original partition, dimensions, actual codec, JPEG tables, chroma subsampling and split. We will use exact hashes and perceptual checks to screen duplicates across splits, then balance real and generated records within available category and size bins. Following Grommelt et al.\ \citep{grommelt2025}, we will select real JPEGs with common compression settings and encode generated images with those settings before the shared RGB preparation. Real files will not receive that extra pass. A development-only before/after encoding check will measure class-specific score changes. This checks sensitivity to the encoding step; earlier compression history can still supply shortcuts after matching. Final inputs will be $224\times224$ pixels, stored losslessly after preparation.
+
+\subsection{Training and the preliminary run}
+ResNet-50 will use torchvision ImageNet1K V1 weights and a binary output, following He et al.\ \citep{he2016} and Wang et al.\ \citep{wang2020}. CLIP ViT-B/32 will use published OpenAI weights with its image encoder frozen \citep{radford2021,ojha2023}. Both classifiers use binary cross-entropy and Adam. We select the checkpoint with the best validation F1. Test preparation is deterministic, with model-specific normalization after the shared image preparation. Development work will establish the full-study learning rates, batch size and stopping rules.
+
+The full comparison will use sampling seed 42 and training seeds 42, 43 and 44, retaining individual runs as well as their means and sample standard deviations. Colab is the planned platform. Results reports the smaller CPU feasibility run, including its actual data source, settings and departures from the matched 20,000-image design.
+
+\subsection{Metrics and paired testing}
+Generated images are the positive class. A false positive is a real image labelled generated. At the primary threshold of 0.5 we calculate
+\begin{align}
+\mathrm{Accuracy}&=\frac{TP+TN}{TP+TN+FP+FN}, &
+\mathrm{Precision}&=\frac{TP}{TP+FP},\\
+\mathrm{Recall}&=\frac{TP}{TP+FN}, &
+F_1&=\frac{2TP}{2TP+FP+FN},\\
+\mathrm{FPR}&=\frac{FP}{FP+TN}.&&
+\end{align}
+Undefined precision or F1 is assigned zero. We also calculate AUROC and average precision from continuous scores. Full-study success requires mean original unseen F1 $\geq0.80$, mean FPR $\leq0.10$ on both original tests, and a seen-to-unseen F1 drop $\leq0.10$. We will report how many seeds meet all the goals.
+
+A paired, label-by-source stratified bootstrap with 1,000 resamples gives percentile 95\% intervals. Each resample uses the same image IDs for both models and all seeds. Metrics are calculated per seed before averaging. The intervals describe image sampling conditional on the trained models; variation between training runs is reported separately. A meaningful model gap requires at least 0.03 F1, an interval excluding zero and an FPR within the target for the model with higher F1.
+
+For the primary original-unseen F1 comparison, we also use a two-sided paired permutation test. Within each image, model outputs are exchanged together across seeds. We recalculate the mean F1 difference for 9,999 permutations. The Monte Carlo p-value is $(1+k)/(1+9,999)$, where $k$ counts absolute permuted differences at least as large as observed. The statistical significance level is $p<0.05$. Other condition-specific tests are descriptive. Images are the paired units in this test; the three seeds are repeated training runs.
+
+\subsection{Robustness and threshold sensitivity}
+We will test fixed checkpoints on original images, JPEG quality 65 and independent downsampling to $112\times112$ pixels \citep{wang2020,genimage2023}. For RQ2, $\Delta F_1=F_1(\mathrm{processed})-F_1(\mathrm{original})$ and $\Delta\mathrm{FPR}=\mathrm{FPR}(\mathrm{processed})-\mathrm{FPR}(\mathrm{original})$. Less negative F1 change and a smaller FPR increase indicate greater robustness. We consider both measures when they disagree. Paired intervals use the common evaluable IDs.
+
+The prespecified sensitivity analysis compares threshold 0.5 with a validation-selected threshold. Each model is evaluated on validation F1 at thresholds 0.05 to 0.95 in steps of 0.05; ties select the larger threshold. We freeze the choice before evaluating unseen labels. The primary comparison retains threshold 0.5. This analysis changes the decision threshold without retraining or selecting it from test data.
+
+\subsection{Reproducibility and scope}
+Prediction exports contain stable IDs, labels, sources, conditions, models, seeds and scores. The archive includes training and evaluation code, the pilot manifest and run metadata. Prediction timing measures model responsiveness at batch size one after warm-up, excluding loading and image decoding. Results gives the actual pilot software, hardware and elapsed times. Native-size matching, three-seed training and rotated generator holdouts remain full-study work. One held-out generator and uncertain pretraining exposure limit the transfer claims. Video, partial edits and authenticity certification are outside scope.
