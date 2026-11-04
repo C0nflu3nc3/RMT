@@ -1,0 +1,33 @@
+{
+  "title": "Unseen-Generator Detection and Processing Robustness of ResNet-50 and CLIP Classifiers: A Pilot Study",
+  "version": "1.0",
+  "upload_type": "software",
+  "description": "Python code and saved-score records for an exploratory comparison of ResNet-50 and a frozen CLIP encoder with a linear classifier. The pilot uses three training seeds and common test IDs for original images, JPEG quality 65, and downsampling to 112 x 112 pixels. The later tests were selected after the initial results were inspected. The archive includes manifests, prediction scores, sampling audits, numerical exports, and analysis scripts, but no source images or fitted checkpoints. Code is MIT licensed. Source images remain at the third-party Tiny-GenImage mirror, which declares CC BY-NC-SA 4.0; that dataset licence is separate from the code licence.",
+  "creators": [
+    {
+      "name": "Afanasyev, Kirill",
+      "affiliation": "Astana IT University"
+    },
+    {
+      "name": "Amangeldi, Beksultan",
+      "affiliation": "Astana IT University"
+    }
+  ],
+  "license": "mit",
+  "access_right": "open",
+  "keywords": [
+    "AI-generated image detection",
+    "ResNet-50",
+    "CLIP",
+    "false-positive rate",
+    "reproducibility"
+  ],
+  "language": "eng",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/C0nflu3nc3/RMT",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

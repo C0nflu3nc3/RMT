@@ -26,3 +26,9 @@ This verifies Tables 1–5 and all 11 numerical exports byte for byte from saved
 Images and fitted checkpoints are supplied separately. Retraining requires `requirements-pilot.txt` and the image cache; `pilot/run_pilot.py` writes per-seed runs, which `pilot/aggregate_runs.py` combines. The current article PDF and Overleaf source are delivered separately. Earlier reports remain in Git history.
 
 Source: [Tiny-GenImage](https://huggingface.co/datasets/TheKernel01/Tiny-GenImage). `SOURCE_REVISION.json` records the evidence revisions. Native resolution, compression history and category were not matched; intervals condition on the fitted checkpoints. Neither model met every success target.
+
+## Licence and citation
+
+The code is released under the [MIT licence](LICENSE). Source images are not redistributed here; the Tiny-GenImage mirror declares CC BY-NC-SA 4.0 for its dataset. The code licence does not replace dataset or pretrained-model licences.
+
+[CITATION.cff](CITATION.cff) records the authors and software version. The prepared v1.0 archive has no assigned DOI yet; one must be obtained by enabling the repository in Zenodo and publishing the GitHub release. Saved scores and manifests accompany the code, so the resulting archive DOI can identify both code and derived evaluation records.

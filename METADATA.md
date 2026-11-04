@@ -2,7 +2,7 @@
 
 | Field | Details |
 | --- | --- |
-| Project/research title | Development of a System for Detecting AI-Generated Images Using Deep Learning Methods |
+| Project/research title | Unseen-Generator Detection and Processing Robustness of ResNet-50 and CLIP Classifiers: A Pilot Study |
 | Research team | Afanasyev Kirill and Amangeldi Beksultan; Big Data Analytics, BDA-2403 |
 | Date of data collection | The report records access to the dataset mirror. Image creation dates are unavailable; |
 | Place of data collection | Online, from the [Tiny-GenImage mirror on Hugging Face](https://huggingface.co/datasets/TheKernel01/Tiny-GenImage), revision `89c4fe9efd0e`. |
