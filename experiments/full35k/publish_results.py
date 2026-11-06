@@ -159,15 +159,33 @@ def build(out, tables_dir, figures_dir):
                    success_checks=successes, absolute_intervals=absolute)
     (out / "paper_details.json").write_text(json.dumps(details, indent=2) + "\n")
 
+    render_publication(out, tables_dir, figures_dir)
+
+
+def render_publication(out, tables_dir, figures_dir):
+    """Render current tables and figures without recalculating the saved statistics."""
+    out.mkdir(parents=True, exist_ok=True)
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    audit = json.loads((HERE / "sample_audit.json").read_text())
+    config = json.loads((HERE / "config.json").read_text())
+    summaries = read_csv(out / "main_metrics_all_conditions.csv")
+    summary = {(r["split"], r["condition"], r["model"]): r for r in summaries}
+    original = lambda split, model: summary[(split, "original", model)]
+    absolute = read_csv(out / "absolute_metric_intervals.csv")
+    abs_lookup = {(r["split"], r["condition"], r["model"]):
+                  {k: (float(v) if k.endswith(("_low", "_high")) else v) for k, v in r.items()}
+                  for r in absolute}
+    sensitivities = read_csv(out / "threshold_sensitivity.csv")
+    confusion = read_csv(out / "unseen_confusion_counts.csv")
     dataset_rows = []
     for split, label in (("train", "Training"), ("validation", "Validation"), ("seen", "Seen test"), ("unseen", "Unseen test")):
-        selected = [r for r in manifest if r["split"] == split]
-        n = len(selected)
+        n = audit["counts"][split]
         dataset_rows.append([label, f"{config['target_counts'][split]:,}", f"{n:,}",
-                             f"{sum(r['label'] == '0' for r in selected):,}", f"{sum(r['label'] == '1' for r in selected):,}"])
+                             f"{audit['groups'][split + '/0']:,}", f"{audit['groups'][split + '/1']:,}"])
     dataset_rows.append(["Total", "35,000", "34,998", "17,498", "17,500"])
     texts = {}
-    texts["dataset.tex"] = table("Full-mirror allocation before and after exact-file, decoded-RGB and common-encoding duplicate screening.",
+    texts["dataset.tex"] = table("Study partitions before and after exact-file, decoded-RGB and common-encoding duplicate screening.",
         "tab:dataset", "Yrrrr", ["Partition", "Nominal", "Retained", "Real", "Generated"], dataset_rows,
         "Two duplicate photographs were removed before splitting. Midjourney occurs only in the unseen test; six other generators supply development and seen-test images. The cohort includes previously inspected pilot images.")
     metric_rows = []
@@ -177,82 +195,122 @@ def build(out, tables_dir, figures_dir):
             a = abs_lookup[(split, "original", model)]
             metric_rows.append([NAMES[model], split.title(), pm(r,"accuracy"), pm(r,"precision"), pm(r,"recall"), pm(r,"f1")])
     first = table("Original-image metrics at threshold 0.5. Values are means $\\pm$ sample SD over seeds 42, 43 and 44. P is precision and R is recall.",
-        "tab:main", "Ylrrrr", ["Model", "Test", "Accuracy", "P", "R", "F1"], metric_rows)
+        "tab:main", "llCCCC", ["Model", "Test", "Accuracy", "P", "R", "F1"], metric_rows)
     extra = []
     for split in ("seen", "unseen"):
         for model in MODELS:
             r, a = original(split, model), abs_lookup[(split,"original",model)]
-            extra.append([NAMES[model], split.title(), pm(r,"fpr"), pm(r,"auroc"), ci(a["f1_low"],a["f1_high"])])
+            extra.append([NAMES[model], split.title(), pm(r,"fpr"), pm(r,"auroc"), ci(a["f1_low"],a["f1_high"]), ci(a["fpr_low"],a["fpr_high"])])
     body = "\n".join(" & ".join(row) + r"\\" for row in extra)
-    panel = (r"\par\medskip\begin{tabularx}{\linewidth}{@{}Ylrrr@{}}\toprule" + "\n"
-             + r"Model & Test & FPR & AUROC & F1 95\% CI\\\midrule" + "\n" + body + "\n"
+    panel = (r"\par\medskip\begin{tabularx}{\linewidth}{@{}llCCCC@{}}\toprule" + "\n"
+             + r"Model & Test & FPR & AUROC & F1 95\% CI & FPR 95\% CI\\\midrule" + "\n" + body + "\n"
              + r"\bottomrule\end{tabularx}" + "\n"
              + r"\par\smallskip\parbox{\linewidth}{\footnotesize Seen test: 3,000 images per class. Unseen test: 2,500 per class. Confidence intervals resample images within label/source strata and condition on fitted checkpoints.}" + "\n")
     texts["main_results.tex"] = first.replace("\\end{table}\n", panel + "\\end{table}\n")
     paired = read_csv(out / "paired_model_differences.csv")
     texts["paired.tex"] = table("Paired F1 differences (CLIP minus ResNet-50), with image-bootstrap 95\\% intervals. The original-unseen comparison is primary; other p-values are exploratory and unadjusted.",
-        "tab:paired", "lYrrr", ["Test", "Condition", r"$\Delta$F1", "95\\% CI", "$p$"],
+        "tab:paired", "llrCr", ["Test", "Condition", r"$\Delta$F1", "95\\% CI", "$p$"],
         [[r["split"].title(), CONDITION_NAMES[r["condition"]], f(r["delta_f1"]), ci(r["ci_low"],r["ci_high"]), f"{float(r['permutation_p']):.4f}"] for r in paired],
         "The Monte Carlo permutation resolution is 0.0001 (9,999 swaps plus the observed sample). An F1 advantage also needs an acceptable false-positive rate to meet the practical comparison rule.")
     robust = read_csv(out / "robustness_changes.csv")
-    texts["robustness.tex"] = table("Processing minus original metrics on identical image IDs, averaged over seeds. Intervals are paired 95\\% image-bootstrap intervals.",
-        "tab:robustness", "Yllrr", ["Model", "Test", "Condition", r"$\Delta$F1 [95\% CI]", r"$\Delta$FPR [95\% CI]"],
-        [[NAMES[r["model"]],r["split"].title(),CONDITION_NAMES[r["condition"]],
-          f(r["delta_f1"])+" "+ci(r["f1_ci_low"],r["f1_ci_high"]), f(r["fpr_increase"])+" "+ci(r["fpr_ci_low"],r["fpr_ci_high"])] for r in robust],
-        "Compression and downsampling are applied independently to common JPEG quality-75 inputs. Higher F1 does not imply robustness if false positives also increase.")
+    panels = []
+    for condition, title in (("jpeg65", "JPEG recompression, quality 65"),
+                             ("resize112", r"Downsampling to $112\times112$ pixels")):
+        body = []
+        for r in robust:
+            if r["condition"] != condition:
+                continue
+            values = [NAMES[r["model"]], r["split"].title(),
+                      f"{float(r['delta_f1']):+.3f} " + ci(r["f1_ci_low"], r["f1_ci_high"]),
+                      f"{float(r['fpr_increase']):+.3f} " + ci(r["fpr_ci_low"], r["fpr_ci_high"])]
+            body.append(" & ".join(values) + r"\\")
+        panels.append(r"\par\smallskip\noindent\textbf{" + title + r"}\par\smallskip" + "\n"
+            + r"\begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule" + "\n"
+            + r"Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule" + "\n"
+            + "\n".join(body) + "\n" + r"\bottomrule\end{tabularx}\par\medskip" + "\n")
+    texts["robustness.tex"] = (r"\begin{table}[!htbp]\centering\resulttable" + "\n"
+        + r"\caption{Paired processing minus original changes, averaged over seeds, with 95\% image-bootstrap intervals. Compression and downsampling are applied independently to the common quality-75 baseline.}\label{tab:robustness}" + "\n"
+        + "".join(panels)
+        + r"\parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. An F1 rise does not establish robustness when false positives increase.}\end{table}" + "\n")
     sensitivity_rows = []
     for model in MODELS:
         for split in ("seen", "unseen"):
             for rule in ("fixed", "validation"):
                 selected = [r for r in sensitivities if r["model"] == model and r["split"] == split and r["rule"] == rule]
-                values = {m + "_mean":float(np.mean([r[m] for r in selected])) for m in ("f1","fpr")}
-                values.update({m + "_sd":float(np.std([r[m] for r in selected],ddof=1)) for m in ("f1","fpr")})
+                values = {m + "_mean":float(np.mean([float(r[m]) for r in selected])) for m in ("f1","fpr")}
+                values.update({m + "_sd":float(np.std([float(r[m]) for r in selected],ddof=1)) for m in ("f1","fpr")})
                 sensitivity_rows.append([NAMES[model],split.title(),rule.title(),pm(values,"f1"),pm(values,"fpr")])
     texts["sensitivity.tex"] = table("Threshold sensitivity on original images: fixed threshold 0.5 versus the threshold maximizing F1 on the 4,000-image validation split. Values are means $\\pm$ sample SD.",
-        "tab:sensitivity", "Yllrr", ["Model","Test","Rule","F1","FPR"], sensitivity_rows,
+        "tab:sensitivity", "lllCC", ["Model","Test","Rule","F1","FPR"], sensitivity_rows,
         "Thresholds are selected separately per model/seed from 0.05 to 0.95 in steps of 0.05, with the larger threshold winning ties. Test labels never select the threshold.")
     for name, text in texts.items():
         (tables_dir / name).write_text(text)
 
-    plt.rcParams.update({"font.size":11,"axes.spines.top":False,"axes.spines.right":False,
-                         "pdf.fonttype":42,"ps.fonttype":42})
-    fig, axes = plt.subplots(1,2,figsize=(10.8,3.5),layout="constrained")
-    for ax, metric, target, label in zip(axes,("f1","fpr"),(.8,.1),("F1 score","False-positive rate")):
+    plt.rcParams.update({"font.size": 14, "axes.spines.top": False,
+        "axes.spines.right": False, "pdf.fonttype": 42, "ps.fonttype": 42,
+        "figure.facecolor": "white", "savefig.facecolor": "white"})
+    fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.0))
+    fig.subplots_adjust(left=.07, right=.985, bottom=.18, top=.82, wspace=.28)
+    for ax, metric, target, label in zip(axes, ("f1", "fpr"), (.8, .1),
+                                       ("F1 score", "False-positive rate")):
         x = np.arange(3)
         for j, model in enumerate(MODELS):
-            means = np.array([float(summary[("unseen",c,model)][metric+"_mean"]) for c in CONDITIONS])
-            lows = np.array([abs_lookup[("unseen",c,model)][metric+"_low"] for c in CONDITIONS])
-            highs = np.array([abs_lookup[("unseen",c,model)][metric+"_high"] for c in CONDITIONS])
-            ax.errorbar(x+(j-.5)*.12, means,yerr=np.maximum(0,np.array([means-lows,highs-means])),
-                        fmt="o-",capsize=3,color=COLORS[model],label=NAMES[model],linewidth=1.6)
-        ax.axhline(target,color="#555555",linestyle="--",linewidth=1,label=f"Target {target:.2f}")
-        ax.set(xticks=x,xticklabels=[CONDITION_NAMES[c] for c in CONDITIONS],ylim=(-.02,1.04),ylabel=label,xlabel="Image condition")
-        ax.grid(axis="y",alpha=.2)
-        ax.legend(loc="best",frameon=False,fontsize=9)
-    for suffix in ("png","pdf"):
-        fig.savefig(figures_dir/("unseen_robustness."+suffix),dpi=220, **({"metadata":{"CreationDate":None,"ModDate":None}} if suffix=="pdf" else {}))
+            means = np.array([float(summary[("unseen", c, model)][metric + "_mean"]) for c in CONDITIONS])
+            lows = np.array([abs_lookup[("unseen", c, model)][metric + "_low"] for c in CONDITIONS])
+            highs = np.array([abs_lookup[("unseen", c, model)][metric + "_high"] for c in CONDITIONS])
+            positions = x + (j - .5) * .13
+            ax.errorbar(positions, means,
+                yerr=np.maximum(0, np.array([means-lows, highs-means])),
+                fmt="o-", capsize=4, markersize=5, color=COLORS[model],
+                label=NAMES[model], linewidth=1.8)
+            offset = (-17 if j == 0 else 10) if metric == "f1" else (11 if j == 0 else -18)
+            for xx, yy in zip(positions, means):
+                ax.annotate(f"{yy:.3f}", (xx, yy), xytext=(0, offset),
+                    textcoords="offset points", ha="center", fontsize=11, color=COLORS[model])
+        ax.axhline(target, color="#666666", linestyle="--", linewidth=1)
+        ax.set_title(f"Target {target:.2f}", loc="left", fontsize=11,
+                     color="#555555", pad=9)
+        ax.set(xticks=x, xticklabels=[CONDITION_NAMES[c] for c in CONDITIONS],
+               ylim=(-.12, 1.07), xlim=(-.3, 2.3), yticks=np.arange(0,1.01,.2), ylabel=label, xlabel="Image condition")
+        ax.grid(axis="y", alpha=.2)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(.5, 1.01),
+               ncol=2, frameon=False, fontsize=14)
+    for suffix in ("png", "pdf"):
+        fig.savefig(figures_dir / ("unseen_robustness." + suffix), dpi=240,
+            **({"metadata": {"CreationDate": None, "ModDate": None}} if suffix == "pdf" else {}))
     plt.close(fig)
 
-    fig, axes = plt.subplots(1,2,figsize=(8.6,3.4),layout="constrained")
-    for ax, model in zip(axes,MODELS):
-        r=next(r for r in confusion if r["model"]==model and int(r["seed"])==42)
-        matrix=np.array([[int(r["tn"]),int(r["fp"])],[int(r["fn"]),int(r["tp"])]])
-        ax.imshow(matrix,cmap="Blues",vmin=0,vmax=2500)
-        for (i,j),v in np.ndenumerate(matrix):
-            ax.text(j,i,f"{v:,}",ha="center",va="center",fontsize=15,color="white" if v>1250 else "#111111")
-        ax.set(title=NAMES[model],xticks=[0,1],yticks=[0,1],xticklabels=["Real","Generated"],
-               yticklabels=["Real","Generated"],xlabel="Predicted class",ylabel="Actual class")
-        ax.tick_params(length=0)
-        for spine in ax.spines.values(): spine.set_visible(False)
-    for suffix in ("png","pdf"):
-        fig.savefig(figures_dir/("unseen_confusion_seed42."+suffix),dpi=220, **({"metadata":{"CreationDate":None,"ModDate":None}} if suffix=="pdf" else {}))
+    fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.8))
+    fig.subplots_adjust(left=.10, right=.98, bottom=.20, top=.88, wspace=.55)
+    for ax, model in zip(axes, MODELS):
+        r = next(r for r in confusion if r["model"] == model and int(r["seed"]) == 42)
+        matrix = np.array([[int(r["tn"]), int(r["fp"])], [int(r["fn"]), int(r["tp"])]])
+        ax.imshow(matrix, cmap="Blues", vmin=0, vmax=2500)
+        for (i, j), value in np.ndenumerate(matrix):
+            color = "white" if value > 1250 else "#111111"
+            ax.text(j, i, f"{value:,}", ha="center", va="center", fontsize=17, color=color)
+        ax.set(title=NAMES[model], xticks=[0, 1], yticks=[0, 1],
+            xticklabels=["Real", "Generated"], yticklabels=["Real", "Generated"],
+            xlabel="Predicted class", ylabel="Actual class")
+        ax.tick_params(length=0, pad=7)
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+    for suffix in ("png", "pdf"):
+        fig.savefig(figures_dir / ("unseen_confusion_seed42." + suffix), dpi=240,
+            **({"metadata": {"CreationDate": None, "ModDate": None}} if suffix == "pdf" else {}))
     plt.close(fig)
 
-    outputs=[p for p in out.iterdir() if p.is_file() and p.name!="publication_checksums.json"]
-    outputs += [tables_dir/name for name in texts] + list(figures_dir.glob("*.png")) + list(figures_dir.glob("*.pdf"))
-    hashes={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(outputs)}
-    (out/"publication_checksums.json").write_text(json.dumps(hashes,indent=2)+"\n")
-    print(f"Validated {len(identity):,} test images, {details['prediction_rows']:,} scores; wrote five tables and two figures.")
+    # Preserve checksums for exports not materialized during a render-only run.
+    checksum_path = out / "publication_checksums.json"
+    hashes = json.loads(checksum_path.read_text()) if checksum_path.exists() else {}
+    outputs = [p for p in out.iterdir() if p.is_file() and p.name != "publication_checksums.json"]
+    outputs += [tables_dir / name for name in texts]
+    outputs += list(figures_dir.glob("*.png")) + list(figures_dir.glob("*.pdf"))
+    hashes.update({str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+                   for p in outputs})
+    checksum_path.write_text(json.dumps(dict(sorted(hashes.items())), indent=2) + "\n")
+    print("Rendered five tables and two PNG/PDF figure pairs from archived numerical exports.")
 
 
 if __name__ == "__main__":
@@ -260,5 +318,9 @@ if __name__ == "__main__":
     parser.add_argument("--out",type=Path,default=HERE/"evaluation")
     parser.add_argument("--tables",type=Path,default=ROOT/"tables")
     parser.add_argument("--figures",type=Path,default=HERE/"figures")
+    parser.add_argument("--render-only", action="store_true", help="Refresh tables and figures from archived numerical exports, without images or weights")
     args=parser.parse_args()
-    build(args.out,args.tables,args.figures)
+    if args.render_only:
+        render_publication(args.out,args.tables,args.figures)
+    else:
+        build(args.out,args.tables,args.figures)

@@ -2,7 +2,9 @@
 
 Afanasyev Kirill and Amangeldi Beksultan · AITU, BDA-2403.
 
-The completed 6 November 2026 experiment refits ResNet-50 and a linear classifier on frozen CLIP ViT-B/32 features using the entire Tiny-GenImage mirror. Two exact duplicates were removed, leaving **34,998 images**. Each model has three fitted variants, seeds 42, 43 and 44.
+[Current paper (PDF)](article/manuscript.pdf) · [LaTeX source](article/manuscript.tex)
+
+The completed 6 November 2026 experiment refits ResNet-50 and a linear classifier on frozen CLIP ViT-B/32 features. Exact deduplication of the entire Tiny-GenImage mirror leaves **34,998 images**.
 
 | Partition | Real | Generated | Total |
 |---|---:|---:|---:|
@@ -11,60 +13,53 @@ The completed 6 November 2026 experiment refits ResNet-50 and a linear classifie
 | Seen test | 3,000 | 3,000 | 6,000 |
 | Unseen test | 2,500 | 2,500 | 5,000 |
 
-Midjourney is absent from training and validation. Development generators are ADM, BigGAN, GLIDE, SD15, VQDM and Wukong. Splits have disjoint IDs and exact file/pixel hashes. Previous pilot content can be included in this new full-mirror split.
-
-## Completed results
-
-Original images, decision threshold 0.5; values are means over three fitted variants.
+Midjourney is excluded from training and validation. Development uses ADM, BigGAN, GLIDE, SD15, VQDM and Wukong. Both models use seeds 42, 43 and 44.
 
 | Model | Seen F1 | Unseen F1 | Seen FPR | Unseen FPR |
 |---|---:|---:|---:|---:|
 | ResNet-50 | 0.910 | 0.310 | 0.098 | 0.096 |
 | Frozen CLIP + linear head | 0.949 | 0.746 | 0.059 | 0.061 |
 
-Neither model reached the unseen-F1 target of 0.80. CLIP's unseen F1 is 0.687 after JPEG quality-65 recompression and 0.733 after downsampling to 112×112. Downsampling also raises its unseen FPR to about 0.56; ResNet's FPR approaches 0.97. F1 alone therefore does not establish processing robustness.
+Values are means across three fitted variants at threshold 0.5. Neither model meets the unseen-F1 target of 0.80. Downsampling increases unseen FPR to 0.971 for ResNet and 0.561 for CLIP.
 
-![Unseen-generator F1 and false-positive rates](experiments/full35k/figures/unseen_robustness.png)
+![Unseen F1 and false-positive rates](experiments/full35k/figures/unseen_robustness.png)
 
 ![Unseen confusion matrices, seed 42](experiments/full35k/figures/unseen_confusion_seed42.png)
 
-## Reproduce without training
+## Reproduce
 
-Use Python 3.12:
+On Python 3.12:
 
 ```bash
 python -m pip install -r requirements-analysis.txt
 python reproduce_tables.py
 ```
 
-This regenerates metrics and uncertainty estimates from the saved scores in an isolated temporary project, then compares numerical exports, five LaTeX result tables and both PNG/PDF figures. No images, fitted weights, GPU or network are needed for the check.
+The score-based check rebuilds numerical exports, five tables and both PNG/PDF figure pairs without images, weights or a GPU. To refresh only the presentation from archived numerical exports:
 
-The **198,000 prediction rows** evaluate the same **11,000 test images** across two models, three seeds and three processing conditions. Validation predictions contain a further 24,000 scores over 4,000 validation images. These score counts are not counts of unique images.
+```bash
+python experiments/full35k/publish_results.py --render-only
+```
 
-## Manuscript
+Current table and figure rendering was repeated in separate directories and matched byte for byte. The earlier complete score-based numerical check is retained in `experiments/full35k/reproduction_check.json`.
 
-The [updated paper (PDF)](article/manuscript.pdf) reports the completed 34,998-image experiment. The [self-contained LaTeX source](article/manuscript.tex) includes all text, five tables, two figures and 39 references; compile it twice with pdfLaTeX, including in Overleaf. The manuscript uses evidence snapshot `f9624d9cce60` and replaces the earlier 1,920-image paper as the current report.
-
-## Files
+## Files and paper source
 
 | Path | Contents |
 |---|---|
-| `experiments/full35k/` | Completed protocol, manifest, audit, training/evaluation code and saved scores |
-| `experiments/full35k/evaluation/` | Metrics, confusion counts, bootstrap intervals, paired comparisons, threshold sensitivity and success checks |
-| `experiments/full35k/figures/` | Current publication figures in PNG and PDF |
-| `tables/` | Current five LaTeX result tables |
-| `experiments/full35k/checkpoints.json` | Selected epochs and SHA256 digests of all six fitted checkpoints |
-| `article/manuscript.tex`, `article/manuscript.pdf` | Current full-mirror paper, source and compiled PDF |
-| `pilot/`, `expanded_test/`, `article/evaluation/`, `visualizations/` | Historical pilot data, analysis and visuals; these are not the current 35k results |
+| `article/manuscript.pdf`, `article/manuscript.tex` | Current paper and one LaTeX source containing all prose, tables and references |
+| `tables/` | Five current LaTeX tables, including F1/FPR confidence intervals |
+| `experiments/full35k/figures/` | The exact two figures used by the paper, in PDF and PNG |
+| `experiments/full35k/evaluation/` | Metrics, intervals, error counts, paired comparisons and threshold checks |
+| `experiments/full35k/` | Protocol, manifest, saved scores, model histories and training/evaluation code |
+| `pilot/`, `expanded_test/`, `article/evaluation/` | Historical pilot evidence, separate from the current results |
 
-Training used a CPU. ResNet-50 was fine-tuned for one epoch; the CLIP encoder was frozen and its linear head trained for 40 epochs. The highest validation F1 selected each checkpoint, with the earliest epoch winning ties. The two architectures had unequal fitting budgets. Encoders used CPU bfloat16 autocast, with float32 parameters, optimizer state, CLIP-head training and stored features/scores. Separate metadata files record parallel preprocessing and fitting stages.
+Compile `manuscript.tex` twice with pdfLaTeX from `article/`. Its two figure PDFs are resolved from `experiments/full35k/figures/`. For Overleaf, upload the source and the two PDFs in a `figures/` folder. The source tables match `tables/` exactly.
 
-To repeat training from source, install `experiments/full35k/requirements.txt`, run `collect.py`, then `train.py` in that directory. These commands download pinned source data and pretrained weights and perform a new fit. `train_cuda.py --require-cuda --workers 0` is a Windows-compatible CUDA entry point; the CUDA path has not been executed in this CPU environment. Install CUDA-enabled torch/torchvision separately, then `requirements_cuda_extra.txt`.
+## Training and scope
 
-Source photographs, image caches, CLIP feature caches and large fitted weights are kept outside Git. The fitted weights and feature caches were delivered separately; `checkpoints.json` identifies the selected weights. Exact metric reproduction from the committed scores does not require them.
+Install `experiments/full35k/requirements.txt`, then run `collect.py` and `train.py` there. These download pinned source data and pretrained weights. Training used a CPU: one ResNet epoch and 40 CLIP-head epochs, with the highest validation F1 selecting each checkpoint. Encoder computation used bfloat16 autocast; parameters, Adam state, CLIP-head fitting and stored features/scores used float32. CUDA support is in `train_cuda.py`; it was not used for the reported results.
 
-## Scope and citation
+The source is [Tiny-GenImage](https://huggingface.co/datasets/TheKernel01/Tiny-GenImage), revision `89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69`. The new split can include previously inspected pilot content. Native size, categories and prior compression remain unmatched; intervals condition on fitted checkpoints. The 198,000 test scores are repeated evaluations of 11,000 test images. Source images, feature caches and large fitted weights stay outside Git; `checkpoints.json` records the selected weight digests.
 
-The source is the [Tiny-GenImage mirror](https://huggingface.co/datasets/TheKernel01/Tiny-GenImage) pinned at `89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69`. Native size, content category and previous compression were audited but not matched. Image-bootstrap intervals condition on the fitted checkpoints. Exact deduplication does not establish absence of perceptual near-duplicates. This is a new full-mirror split and refit, not an independent cohort excluding previously inspected pilot content.
-
-The code uses the [MIT licence](LICENSE). Dataset and pretrained-model licences remain separate. [CITATION.cff](CITATION.cff) records the authors and this version. No DOI has been assigned. The previous 1,920-image study remains in the Git history, including commit `02ca9ae7cc01aae8dae1040964a0e75c32a48010`.
+Code: [MIT licence](LICENSE). Dataset and pretrained-model licences are separate. Authors and version are in [CITATION.cff](CITATION.cff).

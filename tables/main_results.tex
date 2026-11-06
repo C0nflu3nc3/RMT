@@ -1,18 +1,18 @@
 \begin{table}[!htbp]\centering\resulttable
 \caption{Original-image metrics at threshold 0.5. Values are means $\pm$ sample SD over seeds 42, 43 and 44. P is precision and R is recall.}\label{tab:main}
-\begin{tabularx}{\linewidth}{@{}Ylrrrr@{}}\toprule
+\begin{tabularx}{\linewidth}{@{}llCCCC@{}}\toprule
 Model & Test & Accuracy & P & R & F1\\\midrule
 ResNet-50 & Seen & $0.909\pm 0.002$ & $0.904\pm 0.024$ & $0.916\pm 0.031$ & $0.910\pm 0.004$\\
 CLIP linear & Seen & $0.949\pm 0.001$ & $0.942\pm 0.001$ & $0.957\pm 0.002$ & $0.949\pm 0.001$\\
 ResNet-50 & Unseen & $0.555\pm 0.025$ & $0.680\pm 0.026$ & $0.206\pm 0.084$ & $0.310\pm 0.106$\\
 CLIP linear & Unseen & $0.785\pm 0.002$ & $0.911\pm 0.002$ & $0.632\pm 0.007$ & $0.746\pm 0.004$\\
 \bottomrule\end{tabularx}
-\par\medskip\begin{tabularx}{\linewidth}{@{}Ylrrr@{}}\toprule
-Model & Test & FPR & AUROC & F1 95\% CI\\\midrule
-ResNet-50 & Seen & $0.098\pm 0.029$ & $0.971\pm 0.002$ & [0.904, 0.916]\\
-CLIP linear & Seen & $0.059\pm 0.001$ & $0.988\pm 0.000$ & [0.944, 0.955]\\
-ResNet-50 & Unseen & $0.096\pm 0.038$ & $0.652\pm 0.022$ & [0.296, 0.326]\\
-CLIP linear & Unseen & $0.061\pm 0.002$ & $0.925\pm 0.000$ & [0.732, 0.759]\\
+\par\medskip\begin{tabularx}{\linewidth}{@{}llCCCC@{}}\toprule
+Model & Test & FPR & AUROC & F1 95\% CI & FPR 95\% CI\\\midrule
+ResNet-50 & Seen & $0.098\pm 0.029$ & $0.971\pm 0.002$ & [0.904, 0.916] & [0.089, 0.107]\\
+CLIP linear & Seen & $0.059\pm 0.001$ & $0.988\pm 0.000$ & [0.944, 0.955] & [0.050, 0.068]\\
+ResNet-50 & Unseen & $0.096\pm 0.038$ & $0.652\pm 0.022$ & [0.296, 0.326] & [0.088, 0.105]\\
+CLIP linear & Unseen & $0.061\pm 0.002$ & $0.925\pm 0.000$ & [0.732, 0.759] & [0.052, 0.071]\\
 \bottomrule\end{tabularx}
 \par\smallskip\parbox{\linewidth}{\footnotesize Seen test: 3,000 images per class. Unseen test: 2,500 per class. Confidence intervals resample images within label/source strata and condition on fitted checkpoints.}
 \end{table}
