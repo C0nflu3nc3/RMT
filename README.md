@@ -41,6 +41,10 @@ This regenerates metrics and uncertainty estimates from the saved scores in an i
 
 The **198,000 prediction rows** evaluate the same **11,000 test images** across two models, three seeds and three processing conditions. Validation predictions contain a further 24,000 scores over 4,000 validation images. These score counts are not counts of unique images.
 
+## Manuscript
+
+The [updated paper (PDF)](article/manuscript.pdf) reports the completed 34,998-image experiment. The [self-contained LaTeX source](article/manuscript.tex) includes all text, five tables, two figures and 39 references; compile it twice with pdfLaTeX, including in Overleaf. The manuscript uses evidence snapshot `f9624d9cce60` and replaces the earlier 1,920-image paper as the current report.
+
 ## Files
 
 | Path | Contents |
@@ -50,7 +54,8 @@ The **198,000 prediction rows** evaluate the same **11,000 test images** across 
 | `experiments/full35k/figures/` | Current publication figures in PNG and PDF |
 | `tables/` | Current five LaTeX result tables |
 | `experiments/full35k/checkpoints.json` | Selected epochs and SHA256 digests of all six fitted checkpoints |
-| `pilot/`, `expanded_test/`, `article/`, `visualizations/` | Historical pilot data, analysis and visuals; these are not the current 35k results |
+| `article/manuscript.tex`, `article/manuscript.pdf` | Current full-mirror paper, source and compiled PDF |
+| `pilot/`, `expanded_test/`, `article/evaluation/`, `visualizations/` | Historical pilot data, analysis and visuals; these are not the current 35k results |
 
 Training used a CPU. ResNet-50 was fine-tuned for one epoch; the CLIP encoder was frozen and its linear head trained for 40 epochs. The highest validation F1 selected each checkpoint, with the earliest epoch winning ties. The two architectures had unequal fitting budgets. Encoders used CPU bfloat16 autocast, with float32 parameters, optimizer state, CLIP-head training and stored features/scores. Separate metadata files record parallel preprocessing and fitting stages.
 
