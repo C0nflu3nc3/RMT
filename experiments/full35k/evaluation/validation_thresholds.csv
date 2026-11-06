@@ -1,0 +1,7 @@
+model,seed,threshold
+resnet50,42,0.25
+resnet50,43,0.55
+resnet50,44,0.55
+clip_linear,42,0.5
+clip_linear,43,0.55
+clip_linear,44,0.5

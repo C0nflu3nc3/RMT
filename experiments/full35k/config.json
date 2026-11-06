@@ -1,0 +1,75 @@
+{
+  "dataset": "TheKernel01/Tiny-GenImage",
+  "dataset_revision": "89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69",
+  "sampling_seed": 20261106,
+  "training_seeds": [
+    42,
+    43,
+    44
+  ],
+  "target_counts": {
+    "train": 20000,
+    "validation": 4000,
+    "seen": 6000,
+    "unseen": 5000
+  },
+  "generated_fraction": 0.5,
+  "development_generators": [
+    "ADM",
+    "BigGAN",
+    "GLIDE",
+    "SD15",
+    "VQDM",
+    "Wukong"
+  ],
+  "held_out_generator": "Midjourney",
+  "models": {
+    "resnet50": {
+      "weights": "IMAGENET1K_V1",
+      "epochs": 1,
+      "batch_size": 16,
+      "learning_rate": 0.0001
+    },
+    "clip_linear": {
+      "weights": "OpenAI ViT-B/32",
+      "epochs": 40,
+      "batch_size": 32,
+      "learning_rate": 0.001
+    }
+  },
+  "optimizer": "Adam",
+  "loss": "BCEWithLogitsLoss; pos_weight=training real/generated if deduplication creates imbalance",
+  "input_size": [
+    224,
+    224
+  ],
+  "resize": "bicubic, exact 224x224; no crop",
+  "augmentation": "none",
+  "precision": "CPU autocast bfloat16 for ResNet and CLIP encoder; float32 parameters, Adam states, linear-head training and stored scores",
+  "checkpoint_selection": "highest validation F1 at threshold 0.5; earliest epoch wins ties",
+  "primary_threshold": 0.5,
+  "conditions": [
+    "original",
+    "jpeg65",
+    "resize112"
+  ],
+  "success": {
+    "unseen_f1_min": 0.8,
+    "seen_fpr_max": 0.1,
+    "unseen_fpr_max": 0.1,
+    "seen_to_unseen_f1_drop_max": 0.1
+  },
+  "bootstrap_resamples": 1000,
+  "permutations": 9999,
+  "limitations": [
+    "Native size, content category and prior compression are audited but not matched.",
+    "One ResNet epoch and 40 linear-head epochs are unequal fitting budgets inherited from the CPU baseline."
+  ],
+  "scope": "Entire 35,000-row mirror, deduplicated before splitting; includes previously used pilot rows.",
+  "common_baseline_encoding": {
+    "codec": "JPEG",
+    "quality": 75,
+    "subsampling": 2,
+    "before_robustness_conditions": true
+  }
+}

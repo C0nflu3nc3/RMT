@@ -1,19 +1,13 @@
-\begin{table}[!htbp]
-\caption{Mean F1 differences (CLIP minus ResNet), with paired 95\% intervals. The original-unseen test is the main exploratory comparison; secondary p-values are unadjusted.}
-\label{tab:paired}
-\centering
-\small
-\setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
-\begin{tabularx}{\linewidth}{@{}lYccc@{}}
-\toprule
-Test & Condition & $\Delta F_1$ & 95\% CI & $p$\\
-\midrule
-Seen & Original & -0.071 & [-0.090, -0.053] & 0.0001\\
-Seen & JPEG 65 & -0.067 & [-0.088, -0.048] & 0.0001\\
-Seen & Resize 112 & -0.028 & [-0.033, -0.021] & 0.0001\\
-Unseen & Original & 0.483 & [0.437, 0.527] & 0.0001\\
-Unseen & JPEG 65 & 0.458 & [0.409, 0.505] & 0.0001\\
-Unseen & Resize 112 & 0.006 & [-0.004, 0.016] & 0.2829\\
-\bottomrule
-\end{tabularx}
+\begin{table}[!htbp]\centering\resulttable
+\caption{Paired F1 differences (CLIP minus ResNet-50), with image-bootstrap 95\% intervals. The original-unseen comparison is primary; other p-values are exploratory and unadjusted.}\label{tab:paired}
+\begin{tabularx}{\linewidth}{@{}lYrrr@{}}\toprule
+Test & Condition & $\Delta$F1 & 95\% CI & $p$\\\midrule
+Seen & Original & 0.040 & [0.033, 0.046] & 0.0001\\
+Seen & JPEG 65 & 0.021 & [0.013, 0.030] & 0.0001\\
+Seen & Resize 112 & 0.082 & [0.076, 0.089] & 0.0001\\
+Unseen & Original & 0.436 & [0.415, 0.456] & 0.0001\\
+Unseen & JPEG 65 & 0.398 & [0.377, 0.419] & 0.0001\\
+Unseen & Resize 112 & 0.067 & [0.059, 0.075] & 0.0001\\
+\bottomrule\end{tabularx}
+\par\smallskip\parbox{\linewidth}{\footnotesize The Monte Carlo permutation resolution is 0.0001 (9,999 swaps plus the observed sample). An F1 advantage also needs an acceptable false-positive rate to meet the practical comparison rule.}
 \end{table}

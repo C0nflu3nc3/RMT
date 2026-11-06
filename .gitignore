@@ -13,3 +13,9 @@ weights/
 data/
 pilot/cache/
 main.pdf
+
+.venv/
+experiments/full35k/cache/
+experiments/full35k/*.log
+experiments/full35k/precomputed_predictions/
+experiments/full35k/artifacts/**/*.csv

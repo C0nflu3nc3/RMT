@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "Please cite this software and its saved-score evaluation records when reusing the analysis."
 type: software
-title: "Unseen-Generator Detection and Processing Robustness of ResNet-50 and CLIP Classifiers: A Pilot Study"
+title: "Unseen-Generator Detection and Processing Robustness of ResNet-50 and CLIP Classifiers: Full-Mirror Refit"
 authors:
   - family-names: Afanasyev
     given-names: Kirill
@@ -9,7 +9,8 @@ authors:
   - family-names: Amangeldi
     given-names: Beksultan
     affiliation: Astana IT University
-version: "1.0"
+version: "2.0.0"
+date-released: "2026-11-06"
 repository-code: "https://github.com/C0nflu3nc3/RMT"
 license: MIT
 keywords:

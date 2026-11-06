@@ -1,30 +1,12 @@
-\begin{table}[!htbp]
-\caption{Panel A compares full-study targets with the images used for training and later testing, excluding the initial 160 test images. Panel B gives mean F1 and FPR for the initial and later tests over seeds 42, 43 and 44 at threshold 0.5. Each initial test contains 40 real and 40 generated images; each later test contains 400 of each. The cohorts are disjoint and use different sampling frames.}
-\label{tab:dataset}
-\centering
-\small
-\setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
-\begin{tabularx}{\linewidth}{@{}Yrrrr@{}}
-\toprule
-\multicolumn{5}{l}{\textbf{A. Full-study targets and observed counts}}\\
-Partition & Full target & Observed $n$ & Real & Generated\\
-\midrule
-Training & 12,000 & 240 & 120 & 120\\
-Validation & 2,000 & 80 & 40 & 40\\
-Later seen test & 2,000 & 800 & 400 & 400\\
-Later unseen test & 4,000 & 800 & 400 & 400\\
-Total & 20,000 & 1,920 & 960 & 960\\
-\bottomrule
-\end{tabularx}
-\par\medskip\small\noindent\textbf{B. Initial and later tests: original-image scores}\par\smallskip
-\begin{tabularx}{\linewidth}{@{}llCCCC@{}}
-\toprule
-Model & Test & Initial F1 & Initial FPR & Later F1 & Later FPR\\
-\midrule
-ResNet-50 & Seen & 0.972 & 0.058 & 0.955 & 0.033\\
-CLIP linear & Seen & 0.870 & 0.267 & 0.884 & 0.251\\
-ResNet-50 & Unseen & 0.047 & 0.017 & 0.157 & 0.034\\
-CLIP linear & Unseen & 0.225 & 0.242 & 0.640 & 0.255\\
-\bottomrule
-\end{tabularx}
+\begin{table}[!htbp]\centering\resulttable
+\caption{Full-mirror allocation before and after exact-file, decoded-RGB and common-encoding duplicate screening.}\label{tab:dataset}
+\begin{tabularx}{\linewidth}{@{}Yrrrr@{}}\toprule
+Partition & Nominal & Retained & Real & Generated\\\midrule
+Training & 20,000 & 19,998 & 9,998 & 10,000\\
+Validation & 4,000 & 4,000 & 2,000 & 2,000\\
+Seen test & 6,000 & 6,000 & 3,000 & 3,000\\
+Unseen test & 5,000 & 5,000 & 2,500 & 2,500\\
+Total & 35,000 & 34,998 & 17,498 & 17,500\\
+\bottomrule\end{tabularx}
+\par\smallskip\parbox{\linewidth}{\footnotesize Two duplicate photographs were removed before splitting. Midjourney occurs only in the unseen test; six other generators supply development and seen-test images. The cohort includes previously inspected pilot images.}
 \end{table}

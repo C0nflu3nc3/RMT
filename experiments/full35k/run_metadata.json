@@ -1,0 +1,28 @@
+{
+  "started_utc": "2026-11-06T05:21:47Z",
+  "dataset_revision": "89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69",
+  "manifest_sha256": "1d8fb1ab8e174d31802e6b904b4730f69930214abf100dc5aea992e6241b941e",
+  "config_sha256": "9805291b5315a0a8032f362a3c48dcedec0e01c87b697c6aff46a6de67698adb",
+  "python": "3.12.14",
+  "torch": "2.14.1+cpu",
+  "torchvision": "0.29.1+cpu",
+  "numpy": "2.3.5",
+  "pillow": "13.0.0",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "device": "cpu",
+  "threads": 6,
+  "workers": 0,
+  "amp_bfloat16": true,
+  "counts": {
+    "train": 19998,
+    "validation": 4000,
+    "seen": 6000,
+    "unseen": 5000
+  },
+  "training_seeds": [
+    42,
+    43,
+    44
+  ]
+}

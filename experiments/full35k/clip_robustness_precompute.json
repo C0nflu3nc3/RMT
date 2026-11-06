@@ -1,0 +1,40 @@
+{
+  "device": "cpu",
+  "threads": 2,
+  "amp_bfloat16": true,
+  "torch": "2.14.1+cpu",
+  "manifest_sha256": "1d8fb1ab8e174d31802e6b904b4730f69930214abf100dc5aea992e6241b941e",
+  "config_sha256": "9805291b5315a0a8032f362a3c48dcedec0e01c87b697c6aff46a6de67698adb",
+  "batch_size": 16,
+  "groups": [
+    {
+      "split": "seen",
+      "condition": "jpeg65",
+      "images": 6000,
+      "feature_file": "c5acc02b85d725cfcdafb9c6d18669f8633413af6c0d291e830b126d5a02e77e.npy",
+      "feature_sha256": "dde2f7417059900f5b2c1361f72fb452df16579516b7fa3796a21a7255c03c98"
+    },
+    {
+      "split": "seen",
+      "condition": "resize112",
+      "images": 6000,
+      "feature_file": "ed93053f5d0b3f4e6a7936d8ebf5498a91ab5324a262457cdc393d17b5d85e94.npy",
+      "feature_sha256": "d971c6aac50dd7aea8b6cdc7c27cbfdc232973006d1343917569846b7813e0bb"
+    },
+    {
+      "split": "unseen",
+      "condition": "jpeg65",
+      "images": 5000,
+      "feature_file": "76796ee260673c154046132e806f32781b18e80fe7d5f3409c8f9ba2e6b67bfe.npy",
+      "feature_sha256": "02d386a4de89551c61d7dcb355c1c958b083f5e99164db24a4f18c0b68b4a326"
+    },
+    {
+      "split": "unseen",
+      "condition": "resize112",
+      "images": 5000,
+      "feature_file": "9e52eee823b0dc59b6fa47c3e91035ae6a609f9a07ca2d91e789b409f9aadfec.npy",
+      "feature_sha256": "6bd4969a5946c4aa17accd94d6bdc5892f4b1cb226dcdd3075f8597b442c23fa"
+    }
+  ],
+  "complete": true
+}

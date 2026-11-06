@@ -1,0 +1,96 @@
+{
+  "method": "Rebuilt from committed test scores, validation scores, manifest and protocol in an isolated temporary project; no training, images, weights or network.",
+  "numerical_exports": 13,
+  "tables": 5,
+  "figures": 4,
+  "checks": {
+    "experiments/full35k/evaluation/absolute_metric_intervals.csv": {
+      "status": "exact match",
+      "sha256": "4a4f69dab8a72333528f0fca693c8553ebb9ebdfef118d41748f90d88ab1b0d3"
+    },
+    "experiments/full35k/evaluation/error_records.csv": {
+      "status": "exact match",
+      "sha256": "158186eebc36b516e913e5d18d788890f743b10bded6730a5fa957d6748ce64e"
+    },
+    "experiments/full35k/evaluation/main_metrics_all_conditions.csv": {
+      "status": "exact match",
+      "sha256": "625ee53b2654153709c026834a0e899c33d5cad01893abc8a23d46901c421e88"
+    },
+    "experiments/full35k/evaluation/paired_model_differences.csv": {
+      "status": "exact match",
+      "sha256": "af0bb7e289aefc4191ab74fe21a2f99ff82874167ac29e6cf4360810a8a6ce08"
+    },
+    "experiments/full35k/evaluation/per_run_metrics.csv": {
+      "status": "exact match",
+      "sha256": "a3172fe5c026589f33a57bf0ce05fb59e250ccbb296aa6dfadedf160e3b7b8e0"
+    },
+    "experiments/full35k/evaluation/processing_transitions.csv": {
+      "status": "exact match",
+      "sha256": "613ba78a5060191686765ad6230d2821aaa9d465aadacf1b97cafab46ca30322"
+    },
+    "experiments/full35k/evaluation/robustness_changes.csv": {
+      "status": "exact match",
+      "sha256": "728556409424b5aa47af2a4d73a8f47f6830f5048c1e314ae7f7e613517fa93f"
+    },
+    "experiments/full35k/evaluation/source_group_errors.csv": {
+      "status": "exact match",
+      "sha256": "d3d9a779861c1e0c6e76356915325b2bfc56f8016d096497dbaeb6b2ddbc3165"
+    },
+    "experiments/full35k/evaluation/success_checks.csv": {
+      "status": "exact match",
+      "sha256": "8f12a2c191e2fc120287bf6e8b439e86c166a75cb2300190c1651144483c6a61"
+    },
+    "experiments/full35k/evaluation/threshold_sensitivity.csv": {
+      "status": "exact match",
+      "sha256": "7d3b0e152a5cf36212423a8ce30b29cfd1a24d0a2a8be6b720c7d47cd9b02d95"
+    },
+    "experiments/full35k/evaluation/unseen_confusion_counts.csv": {
+      "status": "exact match",
+      "sha256": "994eed67fa00be2dea1d4130f9c4d7f6a5c012da6ffc2930fa51434d5af4d61e"
+    },
+    "experiments/full35k/evaluation/validation_thresholds.csv": {
+      "status": "exact match",
+      "sha256": "6d2ba48099375486e487fed006e26bdae80e616ba16a5eb98f5bf524011bcace"
+    },
+    "experiments/full35k/evaluation/paper_details.json": {
+      "status": "exact match",
+      "sha256": "99ef4f75cc98efab655d8634efac45331517a45f155cb8869aca6cc66f320f5d"
+    },
+    "tables/dataset.tex": {
+      "status": "exact match",
+      "sha256": "b9252ef42553dd3ff18a7c90753124a0d8c8ab0bd526c8a2b53eab71e99b4463"
+    },
+    "tables/main_results.tex": {
+      "status": "exact match",
+      "sha256": "ec674bc6bdbaaa010a3832f88f9857fbcd6a4a611f218e989376d74325bb338a"
+    },
+    "tables/paired.tex": {
+      "status": "exact match",
+      "sha256": "3ec3b4bf3992e8ca89e811773c1d221f175e3b3e933c1034a6deeedfbb0110ee"
+    },
+    "tables/robustness.tex": {
+      "status": "exact match",
+      "sha256": "3d30afe0424a03957dd8123fc08207a5edd107aac8e394952e2ff74553815dc4"
+    },
+    "tables/sensitivity.tex": {
+      "status": "exact match",
+      "sha256": "8be13d1aaa09e9076ec589f23eeb7576b009f07bb8aee973cecb0dccf936a1cf"
+    },
+    "experiments/full35k/figures/unseen_robustness.png": {
+      "status": "exact match",
+      "sha256": "6e3dcb6f77549ef329a78618edbe9d43c3d9695da21cddc8a85a401fabef95be"
+    },
+    "experiments/full35k/figures/unseen_robustness.pdf": {
+      "status": "exact match",
+      "sha256": "c92a57be72e72490c38a3ce40147623c67dcb52d84e0848b7bdc50c2fc2dca8f"
+    },
+    "experiments/full35k/figures/unseen_confusion_seed42.png": {
+      "status": "exact match",
+      "sha256": "c2de308f410e26789881cb825d0a4fbb085dfdf5ab16f519e1a1b63112bf0a0e"
+    },
+    "experiments/full35k/figures/unseen_confusion_seed42.pdf": {
+      "status": "exact match",
+      "sha256": "d7e0f79ebde0dc23cfad82a43915a5c1bf69c587f04ee7ca188a3881e94ac1f8"
+    }
+  }
+}

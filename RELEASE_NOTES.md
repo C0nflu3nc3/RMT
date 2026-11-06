@@ -1,3 +1,11 @@
+# RMT v2.0.0 — 6 November 2026
+
+Completed the full Tiny-GenImage mirror refit after exact deduplication: 34,998 unique images, six fitted model variants and 198,000 saved test scores. Added the full protocol, train/validation/test manifests, validation scores, checkpoint digests, current metrics and uncertainty estimates, five LaTeX result tables, two PNG/PDF figures and an offline reproduction check.
+
+This is a new split and refit, including previously studied mirror content. The unseen generator is Midjourney. Model fitting budgets remain unequal: one ResNet-50 epoch and 40 CLIP-head epochs. Both models miss the unseen-F1 target. Large weights, source images and feature caches remain separate from Git.
+
+## Historical v1.0 notes
+
 # RMT v1.0
 
 Exploratory ResNet-50 and CLIP comparison with three training seeds, common test IDs, saved scores and paired uncertainty estimates.

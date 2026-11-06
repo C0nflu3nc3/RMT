@@ -1,0 +1,55 @@
+{
+  "availability": "Selected weights supplied separately; source images and feature caches are not committed.",
+  "manifest_sha256": "1d8fb1ab8e174d31802e6b904b4730f69930214abf100dc5aea992e6241b941e",
+  "config_sha256": "9805291b5315a0a8032f362a3c48dcedec0e01c87b697c6aff46a6de67698adb",
+  "checkpoints": [
+    {
+      "model": "resnet50",
+      "seed": 42,
+      "epochs": 1,
+      "selected_epoch": 1,
+      "best_validation_f1": 0.9066942362367537,
+      "best_sha256": "6355cbfb2412e59c9b7f2e426c10a7355bfc9b3f816eaf0e3e8938668cb1d84b"
+    },
+    {
+      "model": "resnet50",
+      "seed": 43,
+      "epochs": 1,
+      "selected_epoch": 1,
+      "best_validation_f1": 0.9173553719008265,
+      "best_sha256": "95ab5d01a9042ff94a54048b99d4a596134871a7a75f12f10a78d24162ac03e9"
+    },
+    {
+      "model": "resnet50",
+      "seed": 44,
+      "epochs": 1,
+      "selected_epoch": 1,
+      "best_validation_f1": 0.9109871452825612,
+      "best_sha256": "a1ad1414afd03f98d1c5a5099902dee1a842c379849f6e45af2c8a496437748a"
+    },
+    {
+      "model": "clip_linear",
+      "seed": 42,
+      "epochs": 40,
+      "selected_epoch": 38,
+      "best_validation_f1": 0.9500860585197934,
+      "best_sha256": "1cdd472ccad51e266d6db2ddf36f79a44155807e248004759b0d1a821e384a0f"
+    },
+    {
+      "model": "clip_linear",
+      "seed": 43,
+      "epochs": 40,
+      "selected_epoch": 40,
+      "best_validation_f1": 0.9503197245450073,
+      "best_sha256": "d658cd7d41a3b2f90f97b59185be5de8ceb26573109714adcdfd0e6e1325cf6b"
+    },
+    {
+      "model": "clip_linear",
+      "seed": 44,
+      "epochs": 40,
+      "selected_epoch": 38,
+      "best_validation_f1": 0.9507631708517972,
+      "best_sha256": "f23a1c1e865917a476ca61c2627db0c388c2f40a891d8d4204441b501f28306e"
+    }
+  ]
+}

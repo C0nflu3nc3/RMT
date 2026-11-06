@@ -1,0 +1,18 @@
+{
+  "device": "cpu",
+  "threads": 2,
+  "amp_bfloat16": true,
+  "torch": "2.14.1+cpu",
+  "condition": "original",
+  "manifest_sha256": "1d8fb1ab8e174d31802e6b904b4730f69930214abf100dc5aea992e6241b941e",
+  "config_sha256": "9805291b5315a0a8032f362a3c48dcedec0e01c87b697c6aff46a6de67698adb",
+  "feature_file": "34d4d543b6fb82997bdb8922fef1e7495f73a065ffc89d025451acb2c7dc37c6.npy",
+  "started_utc": "2026-11-06T05:35:54Z",
+  "batch_size": 16,
+  "note": "Frozen encoder precomputed alongside ResNet; preprocessing and cache keys match train.py.",
+  "completed_utc": "2026-11-06T06:00:40Z",
+  "elapsed_seconds": 1485.294207246,
+  "complete": true,
+  "images": 34998,
+  "feature_sha256": "2cd436e82407e730ec4e4582f037b08e82af2e071db4eeed9e19ecec6bcb28a3"
+}

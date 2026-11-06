@@ -1,0 +1,23 @@
+{
+  "device": "cpu",
+  "threads": 2,
+  "amp_bfloat16": true,
+  "manifest_sha256": "1d8fb1ab8e174d31802e6b904b4730f69930214abf100dc5aea992e6241b941e",
+  "config_sha256": "9805291b5315a0a8032f362a3c48dcedec0e01c87b697c6aff46a6de67698adb",
+  "groups": [
+    {
+      "condition": "original",
+      "n": 5000,
+      "f1": 0.3480305702527925,
+      "published": true,
+      "candidate_sha256": "ad045ad22978f5fa939d7af74f87467d739e97eb1edb1df707f6e2cccaee01c2"
+    },
+    {
+      "condition": "resize112",
+      "n": 5000,
+      "f1": 0.6641345632121541,
+      "published": true,
+      "candidate_sha256": "b77a0416015e70be7f66bef27e9e6834fddd923d8a1be8f8f1d7de1909c61c0f"
+    }
+  ]
+}

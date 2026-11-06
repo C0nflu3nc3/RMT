@@ -1,8 +1,18 @@
 {
-  "repository_url": "https://github.com/C0nflu3nc3/RMT",
-  "analysis_commit": "491a65b7fbf6916e553cb38d7745c535f22ede42",
-  "analysis_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/491a65b7fbf6916e553cb38d7745c535f22ede42",
-  "scope": "The original pilot analysis remains recorded in analysis_commit. The main paper now reports the later 1,600-image held-out evaluation from evidence_commit, with unchanged training and validation data and fixed checkpoints.",
-  "evidence_commit": "6dc0d1027d606b43c8c50af20d7db4a7303d042a",
-  "evidence_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/6dc0d1027d606b43c8c50af20d7db4a7303d042a"
+  "current_experiment": {
+    "path": "experiments/full35k",
+    "completed_utc": "2026-11-06",
+    "base_commit": "02ca9ae7cc01aae8dae1040964a0e75c32a48010",
+    "dataset_revision": "89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69",
+    "unique_images": 34998,
+    "prediction_rows": 198000
+  },
+  "historical_pilot_evidence": {
+    "repository_url": "https://github.com/C0nflu3nc3/RMT",
+    "analysis_commit": "491a65b7fbf6916e553cb38d7745c535f22ede42",
+    "analysis_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/491a65b7fbf6916e553cb38d7745c535f22ede42",
+    "scope": "The original pilot analysis remains recorded in analysis_commit. The main paper now reports the later 1,600-image held-out evaluation from evidence_commit, with unchanged training and validation data and fixed checkpoints.",
+    "evidence_commit": "6dc0d1027d606b43c8c50af20d7db4a7303d042a",
+    "evidence_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/6dc0d1027d606b43c8c50af20d7db4a7303d042a"
+  }
 }

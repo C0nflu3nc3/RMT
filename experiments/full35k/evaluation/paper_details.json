@@ -1,0 +1,209 @@
+{
+  "counts": {
+    "seen": 6000,
+    "train": 19998,
+    "unseen": 5000,
+    "validation": 4000
+  },
+  "unique_images": 34998,
+  "unique_test_images": 11000,
+  "prediction_rows": 198000,
+  "thresholds": [
+    {
+      "model": "resnet50",
+      "seed": 42,
+      "threshold": 0.25
+    },
+    {
+      "model": "resnet50",
+      "seed": 43,
+      "threshold": 0.55
+    },
+    {
+      "model": "resnet50",
+      "seed": 44,
+      "threshold": 0.55
+    },
+    {
+      "model": "clip_linear",
+      "seed": 42,
+      "threshold": 0.5
+    },
+    {
+      "model": "clip_linear",
+      "seed": 43,
+      "threshold": 0.55
+    },
+    {
+      "model": "clip_linear",
+      "seed": 44,
+      "threshold": 0.5
+    }
+  ],
+  "success_checks": [
+    {
+      "model": "resnet50",
+      "seed": 42,
+      "unseen_f1": false,
+      "seen_fpr": true,
+      "unseen_fpr": true,
+      "f1_drop": false,
+      "all_targets": false
+    },
+    {
+      "model": "resnet50",
+      "seed": 43,
+      "unseen_f1": false,
+      "seen_fpr": false,
+      "unseen_fpr": false,
+      "f1_drop": false,
+      "all_targets": false
+    },
+    {
+      "model": "resnet50",
+      "seed": 44,
+      "unseen_f1": false,
+      "seen_fpr": false,
+      "unseen_fpr": false,
+      "f1_drop": false,
+      "all_targets": false
+    },
+    {
+      "model": "clip_linear",
+      "seed": 42,
+      "unseen_f1": false,
+      "seen_fpr": true,
+      "unseen_fpr": true,
+      "f1_drop": false,
+      "all_targets": false
+    },
+    {
+      "model": "clip_linear",
+      "seed": 43,
+      "unseen_f1": false,
+      "seen_fpr": true,
+      "unseen_fpr": true,
+      "f1_drop": false,
+      "all_targets": false
+    },
+    {
+      "model": "clip_linear",
+      "seed": 44,
+      "unseen_f1": false,
+      "seen_fpr": true,
+      "unseen_fpr": true,
+      "f1_drop": false,
+      "all_targets": false
+    }
+  ],
+  "absolute_intervals": [
+    {
+      "split": "seen",
+      "condition": "original",
+      "model": "resnet50",
+      "f1_low": 0.9044013286566593,
+      "f1_high": 0.9155868519303088,
+      "fpr_low": 0.08944444444444444,
+      "fpr_high": 0.10700277777777778
+    },
+    {
+      "split": "seen",
+      "condition": "original",
+      "model": "clip_linear",
+      "f1_low": 0.9438022604173222,
+      "f1_high": 0.9546439123991547,
+      "fpr_low": 0.050333333333333334,
+      "fpr_high": 0.06789166666666666
+    },
+    {
+      "split": "seen",
+      "condition": "jpeg65",
+      "model": "resnet50",
+      "f1_low": 0.8934733102010796,
+      "f1_high": 0.9044711037970935,
+      "fpr_low": 0.057666666666666665,
+      "fpr_high": 0.07055833333333333
+    },
+    {
+      "split": "seen",
+      "condition": "jpeg65",
+      "model": "clip_linear",
+      "f1_low": 0.9135580750381768,
+      "f1_high": 0.9275785945807606,
+      "fpr_low": 0.02388888888888889,
+      "fpr_high": 0.03588888888888889
+    },
+    {
+      "split": "seen",
+      "condition": "resize112",
+      "model": "resnet50",
+      "f1_low": 0.6730986322543191,
+      "f1_high": 0.6753127956992708,
+      "fpr_low": 0.9595555555555556,
+      "fpr_high": 0.9687777777777778
+    },
+    {
+      "split": "seen",
+      "condition": "resize112",
+      "model": "clip_linear",
+      "f1_low": 0.7500039111543798,
+      "f1_high": 0.7626413712949535,
+      "fpr_low": 0.5453333333333333,
+      "fpr_high": 0.5827805555555556
+    },
+    {
+      "split": "unseen",
+      "condition": "original",
+      "model": "resnet50",
+      "f1_low": 0.2958926352633405,
+      "f1_high": 0.32552350063341134,
+      "fpr_low": 0.08759333333333333,
+      "fpr_high": 0.10547333333333332
+    },
+    {
+      "split": "unseen",
+      "condition": "original",
+      "model": "clip_linear",
+      "f1_low": 0.7316887057693284,
+      "f1_high": 0.7590141738892859,
+      "fpr_low": 0.05213333333333334,
+      "fpr_high": 0.07080333333333334
+    },
+    {
+      "split": "unseen",
+      "condition": "jpeg65",
+      "model": "resnet50",
+      "f1_low": 0.27252713622035846,
+      "f1_high": 0.3044719100162411,
+      "fpr_low": 0.054933333333333334,
+      "fpr_high": 0.06946666666666666
+    },
+    {
+      "split": "unseen",
+      "condition": "jpeg65",
+      "model": "clip_linear",
+      "f1_low": 0.6707847180927382,
+      "f1_high": 0.7042368538503729,
+      "fpr_low": 0.02186333333333333,
+      "fpr_high": 0.034403333333333334
+    },
+    {
+      "split": "unseen",
+      "condition": "resize112",
+      "model": "resnet50",
+      "f1_low": 0.6640436628566523,
+      "f1_high": 0.6675375438948327,
+      "fpr_low": 0.9659999999999999,
+      "fpr_high": 0.9749366666666668
+    },
+    {
+      "split": "unseen",
+      "condition": "resize112",
+      "model": "clip_linear",
+      "f1_low": 0.7245534501544993,
+      "f1_high": 0.7408631735936646,
+      "fpr_low": 0.5418666666666666,
+      "fpr_high": 0.5806666666666667
+    }
+  ]
+}

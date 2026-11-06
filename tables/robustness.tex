@@ -1,17 +1,15 @@
-\begin{table}[!htbp]
-\caption{Changes from original to processed images, averaged across seeds. Paired image-bootstrap 95\% intervals appear below the estimates. Negative $\Delta F_1$ and positive $\Delta\mathrm{FPR}$ indicate deterioration. Each comparison uses the same 800 IDs per test and conditions on the three fitted checkpoint pairs.}
-\label{tab:robustness}
-\centering
-\fontsize{8.5}{10.5}\selectfont
-\setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
-\begin{tabularx}{\linewidth}{@{}llCCCC@{}}
-\toprule
-Model & Test & JPEG $\Delta F_1$ & JPEG $\Delta$FPR & 112 $\Delta F_1$ & 112 $\Delta$FPR\\
-\midrule
-ResNet-50 & Seen & \shortstack{-0.008\\{[-0.013, -0.003]}} & \shortstack{-0.008\\{[-0.015, -0.003]}} & \shortstack{-0.261\\{[-0.272, -0.249]}} & \shortstack{0.837\\{[0.809, 0.863]}}\\
-CLIP linear & Seen & \shortstack{-0.004\\{[-0.013, 0.005]}} & \shortstack{0.001\\{[-0.021, 0.022]}} & \shortstack{-0.217\\{[-0.233, -0.200]}} & \shortstack{0.749\\{[0.706, 0.788]}}\\
-ResNet-50 & Unseen & \shortstack{-0.021\\{[-0.034, -0.011]}} & \shortstack{-0.004\\{[-0.009, 0.001]}} & \shortstack{0.504\\{[0.470, 0.538]}} & \shortstack{0.844\\{[0.820, 0.868]}}\\
-CLIP linear & Unseen & \shortstack{-0.046\\{[-0.065, -0.030]}} & \shortstack{-0.007\\{[-0.028, 0.014]}} & \shortstack{0.027\\{[-0.010, 0.062]}} & \shortstack{0.744\\{[0.705, 0.782]}}\\
-\bottomrule
-\end{tabularx}
+\begin{table}[!htbp]\centering\resulttable
+\caption{Processing minus original metrics on identical image IDs, averaged over seeds. Intervals are paired 95\% image-bootstrap intervals.}\label{tab:robustness}
+\begin{tabularx}{\linewidth}{@{}Yllrr@{}}\toprule
+Model & Test & Condition & $\Delta$F1 [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
+ResNet-50 & Seen & JPEG 65 & -0.010 [-0.014, -0.007] & -0.034 [-0.039, -0.030]\\
+CLIP linear & Seen & JPEG 65 & -0.029 [-0.035, -0.023] & -0.029 [-0.036, -0.023]\\
+ResNet-50 & Seen & Resize 112 & -0.236 [-0.241, -0.230] & 0.866 [0.857, 0.876]\\
+CLIP linear & Seen & Resize 112 & -0.193 [-0.200, -0.185] & 0.505 [0.486, 0.522]\\
+ResNet-50 & Unseen & JPEG 65 & -0.022 [-0.026, -0.017] & -0.034 [-0.039, -0.030]\\
+CLIP linear & Unseen & JPEG 65 & -0.059 [-0.070, -0.047] & -0.034 [-0.041, -0.027]\\
+ResNet-50 & Unseen & Resize 112 & 0.355 [0.341, 0.372] & 0.874 [0.865, 0.884]\\
+CLIP linear & Unseen & Resize 112 & -0.013 [-0.027, 0.001] & 0.500 [0.480, 0.519]\\
+\bottomrule\end{tabularx}
+\par\smallskip\parbox{\linewidth}{\footnotesize Compression and downsampling are applied independently to common JPEG quality-75 inputs. Higher F1 does not imply robustness if false positives also increase.}
 \end{table}

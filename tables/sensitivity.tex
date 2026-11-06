@@ -1,21 +1,15 @@
-\begin{table}[!htbp]
-\caption{Threshold comparison on the later original images. Thresholds are listed for seeds 42, 43 and 44 in that order, with separate columns for means and sample SDs. Validation thresholds were chosen on the original 80-image validation set and kept for the later tests.}
-\label{tab:sensitivity}
-\centering
-\fontsize{8.5}{10.5}\selectfont
-\setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
-\begin{tabularx}{\linewidth}{@{}llYccccc@{}}
-\toprule
-Model & Test & Rule & $t_{42},t_{43},t_{44}$ & F1 & SD & FPR & SD\\
-\midrule
-ResNet-50 & Seen & Fixed & 0.50, 0.50, 0.50 & 0.955 & 0.018 & 0.033 & 0.014\\
-ResNet-50 & Seen & Validation & 0.85, 0.60, 0.30 & 0.951 & 0.024 & 0.019 & 0.008\\
-ResNet-50 & Unseen & Fixed & 0.50, 0.50, 0.50 & 0.157 & 0.106 & 0.034 & 0.023\\
-ResNet-50 & Unseen & Validation & 0.85, 0.60, 0.30 & 0.097 & 0.025 & 0.023 & 0.015\\
-CLIP linear & Seen & Fixed & 0.50, 0.50, 0.50 & 0.884 & 0.005 & 0.251 & 0.012\\
-CLIP linear & Seen & Validation & 0.50, 0.50, 0.50 & 0.884 & 0.005 & 0.251 & 0.012\\
-CLIP linear & Unseen & Fixed & 0.50, 0.50, 0.50 & 0.640 & 0.005 & 0.255 & 0.009\\
-CLIP linear & Unseen & Validation & 0.50, 0.50, 0.50 & 0.640 & 0.005 & 0.255 & 0.009\\
-\bottomrule
-\end{tabularx}
+\begin{table}[!htbp]\centering\resulttable
+\caption{Threshold sensitivity on original images: fixed threshold 0.5 versus the threshold maximizing F1 on the 4,000-image validation split. Values are means $\pm$ sample SD.}\label{tab:sensitivity}
+\begin{tabularx}{\linewidth}{@{}Yllrr@{}}\toprule
+Model & Test & Rule & F1 & FPR\\\midrule
+ResNet-50 & Seen & Fixed & $0.910\pm 0.004$ & $0.098\pm 0.029$\\
+ResNet-50 & Seen & Validation & $0.914\pm 0.001$ & $0.106\pm 0.010$\\
+ResNet-50 & Unseen & Fixed & $0.310\pm 0.106$ & $0.096\pm 0.038$\\
+ResNet-50 & Unseen & Validation & $0.334\pm 0.019$ & $0.104\pm 0.007$\\
+CLIP linear & Seen & Fixed & $0.949\pm 0.001$ & $0.059\pm 0.001$\\
+CLIP linear & Seen & Validation & $0.948\pm 0.001$ & $0.057\pm 0.004$\\
+CLIP linear & Unseen & Fixed & $0.746\pm 0.004$ & $0.061\pm 0.002$\\
+CLIP linear & Unseen & Validation & $0.737\pm 0.015$ & $0.058\pm 0.006$\\
+\bottomrule\end{tabularx}
+\par\smallskip\parbox{\linewidth}{\footnotesize Thresholds are selected separately per model/seed from 0.05 to 0.95 in steps of 0.05, with the larger threshold winning ties. Test labels never select the threshold.}
 \end{table}

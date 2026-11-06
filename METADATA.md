@@ -1,3 +1,15 @@
+# Research metadata — completed full-mirror refit
+
+Completed on 6 November 2026. The current evidence is in `experiments/full35k/`: 34,998 unique images, with 19,998 training, 4,000 validation, 6,000 seen-test and 5,000 unseen-test images. Midjourney is held out from training and validation. Each model has seeds 42, 43 and 44. The 198,000 test score rows are repeated evaluations of 11,000 test images, not unique images.
+
+ResNet-50 was fine-tuned for one epoch. Frozen CLIP ViT-B/32 features feed a linear head trained for 40 epochs. Validation F1 selects the checkpoint; test labels do not select epochs or thresholds. All fitting and recorded evaluations used a CPU. `FINAL_SUMMARY.json`, `run_metadata.json` and the per-stage metadata give the actual fitting, preprocessing and evaluation settings.
+
+The current mean unseen F1 is 0.310 for ResNet-50 and 0.746 for CLIP linear. Neither meets the 0.80 target. Current tables and figures regenerate with `python reproduce_tables.py`. The new cohort pools the entire pinned source mirror and can include old pilot content. It is not a wholly fresh post-pilot cohort. Native size, category and previous compression remain unmatched.
+
+## Historical pilot metadata
+
+The following describes the earlier 1,920-image study, retained for provenance; its planned-work statements and results are historical.
+
 # Research metadata - Assignment 3
 
 | Field | Details |

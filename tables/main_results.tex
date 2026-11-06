@@ -1,29 +1,18 @@
-\begin{table}[!htbp]
-\caption{Results on later original images at threshold 0.5. Panel A gives means and sample SDs (in parentheses) across seeds 42, 43 and 44. P denotes precision, R recall and AUC AUROC. Panel B gives unseen confusion counts per seed, with generated images as positive. Each test contains 400 real and 400 generated images; the same images are reused across seeds.}
-\label{tab:main-results}
-\centering
-\fontsize{8.5}{10.5}\selectfont
-\setlength{\tabcolsep}{3.2pt}\renewcommand{\arraystretch}{1.10}
-\begin{tabularx}{\linewidth}{@{}llCCCCCCC@{}}
-\toprule
-\multicolumn{9}{l}{\textbf{A. Mean metrics and variation across training seeds}}\\
-Model & Test & Acc. & P & R & F1 & FPR & AUC & AP\\
-\midrule
-ResNet-50 & Seen & \shortstack{0.956\\{(0.016)}} & \shortstack{0.967\\{(0.012)}} & \shortstack{0.944\\{(0.042)}} & \shortstack{0.955\\{(0.018)}} & \shortstack{0.033\\{(0.014)}} & \shortstack{0.991\\{(0.003)}} & \shortstack{0.986\\{(0.004)}}\\
-CLIP linear & Seen & \shortstack{0.870\\{(0.006)}} & \shortstack{0.798\\{(0.007)}} & \shortstack{0.990\\{(0.003)}} & \shortstack{0.884\\{(0.005)}} & \shortstack{0.251\\{(0.012)}} & \shortstack{0.977\\{(0.002)}} & \shortstack{0.971\\{(0.002)}}\\
-ResNet-50 & Unseen & \shortstack{0.529\\{(0.023)}} & \shortstack{0.719\\{(0.022)}} & \shortstack{0.092\\{(0.069)}} & \shortstack{0.157\\{(0.106)}} & \shortstack{0.034\\{(0.023)}} & \shortstack{0.670\\{(0.029)}} & \shortstack{0.652\\{(0.017)}}\\
-CLIP linear & Unseen & \shortstack{0.668\\{(0.003)}} & \shortstack{0.699\\{(0.005)}} & \shortstack{0.591\\{(0.010)}} & \shortstack{0.640\\{(0.005)}} & \shortstack{0.255\\{(0.009)}} & \shortstack{0.738\\{(0.007)}} & \shortstack{0.694\\{(0.005)}}\\
-\bottomrule
-\end{tabularx}
-\par\medskip\small\noindent\textbf{B. Later unseen test: individual confusion counts}\par\smallskip
-\begin{tabularx}{\linewidth}{@{}CCCCCCCCC@{}}
-\toprule
-Seed & \multicolumn{4}{c}{ResNet-50} & \multicolumn{4}{c}{CLIP linear}\\
- & TP & FP & TN & FN & TP & FP & TN & FN\\
-\midrule
-42 & 68 & 24 & 376 & 332 & 237 & 105 & 295 & 163\\
-43 & 26 & 10 & 390 & 374 & 240 & 103 & 297 & 160\\
-44 & 16 & 7 & 393 & 384 & 232 & 98 & 302 & 168\\
-\bottomrule
-\end{tabularx}
+\begin{table}[!htbp]\centering\resulttable
+\caption{Original-image metrics at threshold 0.5. Values are means $\pm$ sample SD over seeds 42, 43 and 44. P is precision and R is recall.}\label{tab:main}
+\begin{tabularx}{\linewidth}{@{}Ylrrrr@{}}\toprule
+Model & Test & Accuracy & P & R & F1\\\midrule
+ResNet-50 & Seen & $0.909\pm 0.002$ & $0.904\pm 0.024$ & $0.916\pm 0.031$ & $0.910\pm 0.004$\\
+CLIP linear & Seen & $0.949\pm 0.001$ & $0.942\pm 0.001$ & $0.957\pm 0.002$ & $0.949\pm 0.001$\\
+ResNet-50 & Unseen & $0.555\pm 0.025$ & $0.680\pm 0.026$ & $0.206\pm 0.084$ & $0.310\pm 0.106$\\
+CLIP linear & Unseen & $0.785\pm 0.002$ & $0.911\pm 0.002$ & $0.632\pm 0.007$ & $0.746\pm 0.004$\\
+\bottomrule\end{tabularx}
+\par\medskip\begin{tabularx}{\linewidth}{@{}Ylrrr@{}}\toprule
+Model & Test & FPR & AUROC & F1 95\% CI\\\midrule
+ResNet-50 & Seen & $0.098\pm 0.029$ & $0.971\pm 0.002$ & [0.904, 0.916]\\
+CLIP linear & Seen & $0.059\pm 0.001$ & $0.988\pm 0.000$ & [0.944, 0.955]\\
+ResNet-50 & Unseen & $0.096\pm 0.038$ & $0.652\pm 0.022$ & [0.296, 0.326]\\
+CLIP linear & Unseen & $0.061\pm 0.002$ & $0.925\pm 0.000$ & [0.732, 0.759]\\
+\bottomrule\end{tabularx}
+\par\smallskip\parbox{\linewidth}{\footnotesize Seen test: 3,000 images per class. Unseen test: 2,500 per class. Confidence intervals resample images within label/source strata and condition on fitted checkpoints.}
 \end{table}

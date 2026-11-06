@@ -1,0 +1,7 @@
+{
+  "split": "unseen",
+  "condition": "resize112",
+  "completed": 5000,
+  "total": 5000,
+  "elapsed_seconds": 244.64104204000068
+}

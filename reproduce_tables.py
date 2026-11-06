@@ -1,45 +1,50 @@
-"""Reproduce article Tables 1-5 and every numerical export used in Results."""
-import hashlib, json, os, shutil, subprocess, sys, tempfile
+"""Rebuild the completed 35k experiment's published outputs from committed scores."""
+import hashlib
+import json
+import shutil
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parent
-EXPORTS = [
-    "absolute_metric_intervals.json", "cohort_comparison.csv",
-    "main_metrics_all_conditions.csv", "paired_model_differences.csv",
-    "per_run_metrics.csv", "robustness_changes.csv", "source_group_errors.csv",
-    "threshold_sensitivity.csv", "unseen_confusion_counts.csv",
-    "processing_transitions.csv", "prose_details.json",
-]
-with tempfile.TemporaryDirectory(prefix="rmt-reproduce-") as directory:
-    copy = Path(directory) / "project"
-    shutil.copytree(PROJECT, copy, ignore=shutil.ignore_patterns(
-        ".git", "cache", "__pycache__", "*.pt", "*.pth", "main.pdf", "exports"))
-    environment = os.environ.copy()
-    for variable in ("PILOT_WORK", "ARTICLE_IMAGE_DIR"):
-        environment.pop(variable, None)
-    environment["ARTICLE_SCORES_ONLY"] = "1"
-    for script in ("analyze.py", "report_error_transitions.py",
-                   "report_prose_details.py", "write_tables.py"):
-        subprocess.run([sys.executable, str(copy / "article" / script)],
-                       env=environment, check=True, stdout=subprocess.DEVNULL)
-    tables, exports = {}, {}
-    def compare(relative):
-        expected = (PROJECT / relative).read_bytes()
-        actual = (copy / relative).read_bytes()
-        if expected != actual:
-            raise SystemExit(f"Reproduction mismatch: {relative}")
-        return dict(status="exact match", sha256=hashlib.sha256(actual).hexdigest())
-    for number, filename in [(1, "dataset.tex"), (2, "main_results.tex"),
-                             (3, "paired.tex"), (4, "robustness.tex"),
-                             (5, "sensitivity.tex")]:
-        tables[str(number)] = compare(Path("tables") / filename)
-        print(f"Table {number}: exact match")
-    for filename in EXPORTS:
-        exports[filename] = compare(Path("article/evaluation") / filename)
-        print(f"Export {filename}: exact match")
-    record = dict(method="Regenerated from saved scores, manifests and validation history "
-                         "in an isolated temporary copy; no images, weights or network",
-                  tables=tables, numerical_exports=exports)
-    (PROJECT / "article/reproduction_check.json").write_text(
-        json.dumps(record, indent=2) + "\n")
-print("Tables 1-5 and all 11 numerical exports reproduced exactly.")
+EXPERIMENT = Path('experiments/full35k')
+TABLES = ('dataset.tex', 'main_results.tex', 'paired.tex', 'robustness.tex', 'sensitivity.tex')
+FIGURES = tuple(name + '.' + suffix for name in ('unseen_robustness', 'unseen_confusion_seed42') for suffix in ('png', 'pdf'))
+
+
+def digest(content):
+    return hashlib.sha256(content).hexdigest()
+
+
+def main():
+    expected_dir = PROJECT / EXPERIMENT / 'evaluation'
+    numerical = sorted([p.name for p in expected_dir.glob('*.csv')]) + ['paper_details.json']
+    records = {}
+    with tempfile.TemporaryDirectory(prefix='rmt-full35k-') as directory:
+        temporary = Path(directory) / 'project'
+        run = temporary / EXPERIMENT
+        run.mkdir(parents=True)
+        for name in ('report_results.py', 'publish_results.py', 'config.json', 'manifest.csv',
+                     'sample_audit.json', 'predictions.csv', 'validation_predictions.csv'):
+            shutil.copy2(PROJECT / EXPERIMENT / name, run / name)
+        subprocess.run([sys.executable, str(run / 'report_results.py'), str(run / 'predictions.csv'),
+                        '--out', str(run / 'evaluation')], check=True)
+        subprocess.run([sys.executable, str(run / 'publish_results.py')], check=True)
+        relative_paths = [EXPERIMENT / 'evaluation' / name for name in numerical]
+        relative_paths += [Path('tables') / name for name in TABLES]
+        relative_paths += [EXPERIMENT / 'figures' / name for name in FIGURES]
+        for relative in relative_paths:
+            expected = (PROJECT / relative).read_bytes()
+            actual = (temporary / relative).read_bytes()
+            if expected != actual:
+                raise SystemExit('Reproduction mismatch: ' + str(relative))
+            records[str(relative)] = dict(status='exact match', sha256=digest(actual))
+    result = dict(method='Rebuilt from committed test scores, validation scores, manifest and protocol in an isolated temporary project; no training, images, weights or network.',
+                  numerical_exports=len(numerical), tables=len(TABLES), figures=len(FIGURES), checks=records)
+    (PROJECT / EXPERIMENT / 'reproduction_check.json').write_text(json.dumps(result, indent=2) + '\n')
+    print(f'Exact matches: {len(numerical)} numerical exports, {len(TABLES)} tables and {len(FIGURES)} figure files.')
+
+
+if __name__ == '__main__':
+    main()

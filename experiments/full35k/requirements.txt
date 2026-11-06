@@ -1,0 +1,13 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1+cpu
+torchvision==0.29.1+cpu
+openai-clip==1.0.1
+setuptools==80.10.2
+pyarrow==26.0.1
+numpy==2.3.5
+Pillow==13.0.0
+scikit-learn==1.8.0
+scipy==1.17.0
+ftfy==6.3.1
+regex==2026.9.29
+tqdm==4.70.1
