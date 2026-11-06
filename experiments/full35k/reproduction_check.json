@@ -70,7 +70,7 @@
     },
     "tables/robustness.tex": {
       "status": "render-only exact match",
-      "sha256": "574e8a08c5763d81a9f2e5af0e9851db4ae9f67f1cdfbde327631a5a91667d33"
+      "sha256": "c970e02575e96f81892ff810da6703af3c1da9db70d967403b912446ccf1144b"
     },
     "tables/sensitivity.tex": {
       "status": "render-only exact match",
@@ -93,5 +93,75 @@
       "sha256": "58d1649fe669d5d8e0cdcfc84bc58c1f5ab442b483e4ac364f526e516fca331c"
     }
   },
-  "presentation_checked_utc": "2026-11-06"
+  "presentation_checked_utc": "2026-11-06",
+  "table4_jpeg_resnet_fpr_audit": {
+    "checked_utc": "2026-11-06",
+    "finding": "Separate seen/unseen estimates coincide only after rounding to three decimals; no table copy-paste error.",
+    "method": "Recomputed mean FPR changes from per-seed confusion counts, cross-checked paired decision transitions, inspected split-specific bootstrap code and unrounded archived interval endpoints.",
+    "scope": "Checks of counts, table generation, bootstrap implementation and archived intervals; no new image-level bootstrap run.",
+    "estimates": {
+      "seen": {
+        "per_seed": [
+          {
+            "seed": 42,
+            "real_n": 3000,
+            "original_fp": 194,
+            "jpeg65_fp": 130,
+            "delta_fpr": -0.021333333333333333
+          },
+          {
+            "seed": 43,
+            "real_n": 3000,
+            "original_fp": 350,
+            "jpeg65_fp": 212,
+            "delta_fpr": -0.046
+          },
+          {
+            "seed": 44,
+            "real_n": 3000,
+            "original_fp": 340,
+            "jpeg65_fp": 234,
+            "delta_fpr": -0.035333333333333335
+          }
+        ],
+        "mean_from_counts": -0.03422222222222222,
+        "csv_mean": -0.034222222222222216,
+        "csv_ci": [
+          -0.038891666666666665,
+          -0.029666666666666664
+        ]
+      },
+      "unseen": {
+        "per_seed": [
+          {
+            "seed": 42,
+            "real_n": 2500,
+            "original_fp": 133,
+            "jpeg65_fp": 88,
+            "delta_fpr": -0.018
+          },
+          {
+            "seed": 43,
+            "real_n": 2500,
+            "original_fp": 279,
+            "jpeg65_fp": 179,
+            "delta_fpr": -0.04
+          },
+          {
+            "seed": 44,
+            "real_n": 2500,
+            "original_fp": 310,
+            "jpeg65_fp": 200,
+            "delta_fpr": -0.044
+          }
+        ],
+        "mean_from_counts": -0.034,
+        "csv_mean": -0.034,
+        "csv_ci": [
+          -0.039066666666666666,
+          -0.0296
+        ]
+      }
+    }
+  }
 }

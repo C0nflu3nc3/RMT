@@ -222,7 +222,7 @@ def render_publication(out, tables_dir, figures_dir):
                 continue
             values = [NAMES[r["model"]], r["split"].title(),
                       f"{float(r['delta_f1']):+.3f} " + ci(r["f1_ci_low"], r["f1_ci_high"]),
-                      f"{float(r['fpr_increase']):+.3f} " + ci(r["fpr_ci_low"], r["fpr_ci_high"])]
+                      f"{float(r['fpr_increase']):+.4f} " + f"[{float(r['fpr_ci_low']):.4f}, {float(r['fpr_ci_high']):.4f}]"]
             body.append(" & ".join(values) + r"\\")
         panels.append(r"\par\smallskip\noindent\textbf{" + title + r"}\par\smallskip" + "\n"
             + r"\begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule" + "\n"
@@ -231,7 +231,7 @@ def render_publication(out, tables_dir, figures_dir):
     texts["robustness.tex"] = (r"\begin{table}[!htbp]\centering\resulttable" + "\n"
         + r"\caption{Paired processing minus original changes, averaged over seeds, with 95\% image-bootstrap intervals. Compression and downsampling are applied independently to the common quality-75 baseline.}\label{tab:robustness}" + "\n"
         + "".join(panels)
-        + r"\parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. An F1 rise does not establish robustness when false positives increase.}\end{table}" + "\n")
+        + r"\parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. $\Delta$FPR is shown to four decimals: the ResNet JPEG estimates differ before rounding. An F1 rise does not establish robustness when false positives increase.}\end{table}" + "\n")
     sensitivity_rows = []
     for model in MODELS:
         for split in ("seen", "unseen"):

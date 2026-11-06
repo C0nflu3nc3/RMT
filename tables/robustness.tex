@@ -3,17 +3,17 @@
 \par\smallskip\noindent\textbf{JPEG recompression, quality 65}\par\smallskip
 \begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule
 Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
-ResNet-50 & Seen & -0.010 [-0.014, -0.007] & -0.034 [-0.039, -0.030]\\
-CLIP linear & Seen & -0.029 [-0.035, -0.023] & -0.029 [-0.036, -0.023]\\
-ResNet-50 & Unseen & -0.022 [-0.026, -0.017] & -0.034 [-0.039, -0.030]\\
-CLIP linear & Unseen & -0.059 [-0.070, -0.047] & -0.034 [-0.041, -0.027]\\
+ResNet-50 & Seen & -0.010 [-0.014, -0.007] & -0.0342 [-0.0389, -0.0297]\\
+CLIP linear & Seen & -0.029 [-0.035, -0.023] & -0.0292 [-0.0364, -0.0226]\\
+ResNet-50 & Unseen & -0.022 [-0.026, -0.017] & -0.0340 [-0.0391, -0.0296]\\
+CLIP linear & Unseen & -0.059 [-0.070, -0.047] & -0.0337 [-0.0413, -0.0268]\\
 \bottomrule\end{tabularx}\par\medskip
 \par\smallskip\noindent\textbf{Downsampling to $112\times112$ pixels}\par\smallskip
 \begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule
 Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
-ResNet-50 & Seen & -0.236 [-0.241, -0.230] & +0.866 [0.857, 0.876]\\
-CLIP linear & Seen & -0.193 [-0.200, -0.185] & +0.505 [0.486, 0.522]\\
-ResNet-50 & Unseen & +0.355 [0.341, 0.372] & +0.874 [0.865, 0.884]\\
-CLIP linear & Unseen & -0.013 [-0.027, 0.001] & +0.500 [0.480, 0.519]\\
+ResNet-50 & Seen & -0.236 [-0.241, -0.230] & +0.8661 [0.8567, 0.8758]\\
+CLIP linear & Seen & -0.193 [-0.200, -0.185] & +0.5049 [0.4864, 0.5223]\\
+ResNet-50 & Unseen & +0.355 [0.341, 0.372] & +0.8744 [0.8649, 0.8839]\\
+CLIP linear & Unseen & -0.013 [-0.027, 0.001] & +0.4996 [0.4797, 0.5185]\\
 \bottomrule\end{tabularx}\par\medskip
-\parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. An F1 rise does not establish robustness when false positives increase.}\end{table}
+\parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. $\Delta$FPR is shown to four decimals: the ResNet JPEG estimates differ before rounding. An F1 rise does not establish robustness when false positives increase.}\end{table}

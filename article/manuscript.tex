@@ -41,7 +41,7 @@ Astana, Kazakhstan\\[3pt]
 \end{center}
 \vspace{6pt}
 \begin{abstract}
-Detectors that recognize images from familiar generators may struggle when the generator or image processing changes. We tested unseen-generator detection and processing robustness with a fine-tuned 50-layer residual network (ResNet-50) and a frozen Contrastive Language-Image Pre-training (CLIP) encoder with a linear classifier. After exact deduplication, the entire third-party Tiny-GenImage mirror contained 34,998 images: 19,998 for training, 4,000 for validation, 6,000 for seen testing and 5,000 for unseen testing. Six generators supplied development data, with Midjourney excluded from training and validation. Both models used three training seeds and identical test IDs. ResNet-50's mean F1 fell from 0.910 on seen generators to 0.310 on Midjourney; CLIP's fell from 0.949 to 0.746. The unseen CLIP-minus-ResNet F1 difference was 0.436, with a paired 95\% confidence interval of [0.415, 0.456]. Their unseen false-positive rates were 0.096 and 0.061, respectively. Joint Photographic Experts Group (JPEG) recompression at quality 65 reduced unseen F1 to 0.289 and 0.687. Downsampling to $112\times112$ raised unseen false-positive rates to 0.971 and 0.561. Neither model met all targets: unseen F1 $\geq0.80$, false-positive rate $\leq0.10$ and seen-to-unseen F1 loss $\leq0.10$. CLIP detected more unseen images and made fewer false alarms on the original inputs, but both models remained sensitive to processing. Unequal fitting budgets, unmatched source characteristics and reuse of previously inspected mirror content limit these findings.
+Image detectors may lose accuracy when the generator or image processing changes. We compared a fine-tuned 50-layer residual network (ResNet-50) with a frozen Contrastive Language-Image Pre-training (CLIP) encoder and a linear classifier. Exact deduplication of the third-party Tiny-GenImage mirror retained 34,998 images: 19,998 for training, 4,000 for validation, 6,000 for seen testing and 5,000 for unseen testing. Six generators supplied development data; Midjourney was excluded from training and validation. Both models used three training seeds and identical test IDs. Mean F1, the harmonic mean of precision and recall, fell from 0.910 on seen generators to 0.310 on Midjourney for ResNet-50, and from 0.949 to 0.746 for CLIP. The unseen CLIP-minus-ResNet F1 difference was 0.436, with a paired 95\% confidence interval of [0.415, 0.456]. The unseen false-positive rate was 0.096 for ResNet-50 and 0.061 for CLIP. Joint Photographic Experts Group (JPEG) recompression at quality 65 reduced unseen F1 to 0.289 for ResNet-50 and 0.687 for CLIP. Downsampling to $112\times112$ raised unseen false-positive rates to 0.971 for ResNet-50 and 0.561 for CLIP. Neither model met all targets: unseen F1 $\geq0.80$, false-positive rate $\leq0.10$ and seen-to-unseen F1 loss $\leq0.10$. CLIP detected more unseen images with fewer false alarms on original inputs, but both models remained sensitive to processing. Unequal fitting budgets, unmatched source characteristics and reuse of previously inspected mirror content limit interpretation.
 \end{abstract}
 \noindent{\small\textbf{Keywords:} AI-generated images; deep learning; image forensics; generator generalization; processing robustness; false-positive rate}
 
@@ -50,13 +50,19 @@ A convincing synthetic image can be difficult to verify because its appearance s
 
 A low false-positive rate can also be misleading: a model that labels nearly everything real will miss most generated images. Precision, recall and F1 describe this trade-off, and the error counts show how the model reached its score.
 
+For the intended system, a positive prediction would prompt further checking of an image's source and provenance. It would not settle whether the depicted event occurred. A genuine photograph incorrectly flagged as generated creates a different verification problem from a synthetic image that passes unnoticed. We therefore assess detection and false alarms together. The operating targets make this requirement explicit: a configuration needs useful unseen-generator detection while keeping errors on real photographs within the stated limit.
+
 Earlier benchmarks show how processing can affect detection. FaceForensics++ tests facial manipulation at different compression levels and image sizes. Corvi et al. examine diffusion-generated images and test compression and resizing \cite{r3,r4}. Both include processing in the evaluation, though they study different tasks. Evidence from manipulated faces may not transfer to entirely generated objects or landscapes.
 
 Frank et al. identify spectral patterns that distinguish generated images, and Durall et al. trace spectral discrepancies to upsampling operations \cite{r5,r6}. Such patterns may change when an image is resized. These studies give us a reason to test processing, although they do not establish which features cause errors in our classifiers.
 
+A processing test also needs to preserve the identity of the images being compared. If a detector makes different decisions after compression, using the same images allows us to count which correct decisions became errors and which errors were corrected. This paired design separates a processing-induced change from a change in test composition. It does not remove differences between the seen and unseen cohorts, whose photographs and generated images are different. We keep those two forms of comparison separate throughout the analysis.
+
 Transfer methods use different kinds of evidence. Learning on Gradients and Neighboring Pixel Relationships look for reusable artifacts in network gradients and local pixel dependencies \cite{r7,r8}. DIRE and AEROBLADE measure reconstruction error through a diffusion model or an autoencoder \cite{r9,r10}. The former methods learn discriminative artifact representations; the latter assess how a generative model reconstructs the input. Each approach makes different assumptions about which traces survive a source change, and their different protocols prevent a common ranking.
 
 Studies using pretrained vision-language features also differ in how much adaptation they recommend. FatFormer argues that a frozen CLIP encoder with a linear head can miss forgery evidence and introduces forgery-aware adaptation \cite{r11}. Cozzolino et al. obtain broad transfer with a lightweight CLIP-based detector, including on unfamiliar generators and processed inputs \cite{r12}. Their training and evaluation choices differ. Cozzolino et al. also show that strong ranking scores can coexist with weaker accuracy at a fixed threshold, so the operating point needs separate attention.
+
+Our two configurations make different adaptation choices. Fine-tuning ResNet-50 updates its image representation, whereas the CLIP configuration fits only a linear classifier on frozen features. We compare their decisions under common data and processing conditions, while retaining their recorded training budgets. This makes the comparison relevant to the configurations actually fitted. It also limits what can be concluded about the architectures themselves: an observed advantage could depend on pretraining, the extent of adaptation or the fitting budget.
 
 We examine whether transfer gains are accompanied by acceptable false-positive rates at the chosen threshold, including after processing. Corvi et al. and Cozzolino et al. already test unfamiliar generators and processed images \cite{r4,r12}. Our comparison focuses on seed variation and paired changes in F1 and false positives for two configurations evaluated on identical test IDs. Generator changes can coincide with differences in photographic source, category or resolution. We therefore cannot isolate generator identity as the cause of an error.
 
@@ -67,7 +73,9 @@ We compare unseen-generator detection and processing robustness while measuring 
 \end{enumerate}
 For RQ1, the targets are unseen F1 $\geq 0.80$, false-positive rate $\leq 0.10$ on each original-image test, and a seen-to-unseen F1 drop $\leq 0.10$. For RQ2, we examine changes in both F1 and false positives, since a higher F1 alone does not establish robustness.
 
-We refit both configurations on the entire available Tiny-GenImage mirror, retaining 34,998 images after exact deduplication and using six development generators. Saved scores allow each processing-induced error to be traced to the same test ID across three seeds. Paired intervals, decision-transition counts and threshold checks let us assess whether an F1 advantage accompanies acceptable false-positive rates. Previously inspected pilot content can be included in the new split, so the refit does not provide an independent confirmation cohort. The statistical methods are standard, the fitting budgets differ, and source differences remain uncontrolled. We treat the findings as exploratory.
+The empirical novelty of this study is an auditable comparison of ResNet-50 and frozen CLIP that jointly measures unseen-generator detection, paired processing errors and threshold sensitivity on the full 34,998-image mirror across three training seeds. Six generators provide development data. Saved scores trace each processing-induced error to the same test ID, while paired intervals and decision-transition counts let us assess whether an F1 advantage accompanies acceptable false-positive rates. Previously inspected pilot content can be included in the new split, so the refit does not provide an independent confirmation cohort. The statistical methods are standard, the fitting budgets differ, and source differences remain uncontrolled. We treat the findings as exploratory.
+
+Section~2 reviews the literature; Section~3 describes the experiment; Section~4 reports the results; Section~5 concludes; Sections~6 and~7 give data and code availability.
 
 \section{Literature Review}
 Testing an unfamiliar generator, a new category from a familiar generator, and a compressed version of an existing input measures different capabilities. The studies below address these problems through surveys, transfer experiments and alternative detection features.
@@ -217,20 +225,20 @@ On seen images, downsampling reduces F1 by 0.236 for ResNet and 0.193 for CLIP; 
 \par\smallskip\noindent\textbf{JPEG recompression, quality 65}\par\smallskip
 \begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule
 Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
-ResNet-50 & Seen & -0.010 [-0.014, -0.007] & -0.034 [-0.039, -0.030]\\
-CLIP linear & Seen & -0.029 [-0.035, -0.023] & -0.029 [-0.036, -0.023]\\
-ResNet-50 & Unseen & -0.022 [-0.026, -0.017] & -0.034 [-0.039, -0.030]\\
-CLIP linear & Unseen & -0.059 [-0.070, -0.047] & -0.034 [-0.041, -0.027]\\
+ResNet-50 & Seen & -0.010 [-0.014, -0.007] & -0.0342 [-0.0389, -0.0297]\\
+CLIP linear & Seen & -0.029 [-0.035, -0.023] & -0.0292 [-0.0364, -0.0226]\\
+ResNet-50 & Unseen & -0.022 [-0.026, -0.017] & -0.0340 [-0.0391, -0.0296]\\
+CLIP linear & Unseen & -0.059 [-0.070, -0.047] & -0.0337 [-0.0413, -0.0268]\\
 \bottomrule\end{tabularx}\par\medskip
 \par\smallskip\noindent\textbf{Downsampling to $112\times112$ pixels}\par\smallskip
 \begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule
 Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
-ResNet-50 & Seen & -0.236 [-0.241, -0.230] & +0.866 [0.857, 0.876]\\
-CLIP linear & Seen & -0.193 [-0.200, -0.185] & +0.505 [0.486, 0.522]\\
-ResNet-50 & Unseen & +0.355 [0.341, 0.372] & +0.874 [0.865, 0.884]\\
-CLIP linear & Unseen & -0.013 [-0.027, 0.001] & +0.500 [0.480, 0.519]\\
+ResNet-50 & Seen & -0.236 [-0.241, -0.230] & +0.8661 [0.8567, 0.8758]\\
+CLIP linear & Seen & -0.193 [-0.200, -0.185] & +0.5049 [0.4864, 0.5223]\\
+ResNet-50 & Unseen & +0.355 [0.341, 0.372] & +0.8744 [0.8649, 0.8839]\\
+CLIP linear & Unseen & -0.013 [-0.027, 0.001] & +0.4996 [0.4797, 0.5185]\\
 \bottomrule\end{tabularx}\par\medskip
-\parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. An F1 rise does not establish robustness when false positives increase.}\end{table}
+\parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. $\Delta$FPR is shown to four decimals: the ResNet JPEG estimates differ before rounding. An F1 rise does not establish robustness when false positives increase.}\end{table}
 \begin{figure}[!htbp]\centering
 \includegraphics[width=\linewidth]{unseen_robustness.pdf}
 \caption{Full-mirror unseen-test means over three seeds. Error bars are stratified image-bootstrap 95\% intervals conditional on fitted checkpoints. Each condition uses the same 2,500 real and 2,500 Midjourney images. Dashed lines mark minimum F1 0.80 and maximum FPR 0.10.}\label{fig:robustness}
@@ -368,4 +376,6 @@ To reproduce metrics from the archived scores on Python 3.12, install the analys
 
 \bibitem{r39} U. Ojha, Y. Li and Y. J. Lee. Towards universal fake image detectors that generalize across generative models. CVPR, pp. 24480--24489, 2023. \href{https://doi.org/10.1109/CVPR52729.2023.02345}{doi:10.1109/CVPR52729.2023.02345}.
 \end{thebibliography}
+\par\medskip\noindent\textbf{AI assistance declaration.} OpenAI ChatGPT was used for manuscript drafting and editing, literature searches, code preparation, numerical reporting and LaTeX formatting. Reported experimental values come from the archived predictions and evaluation exports. The authors remain responsible for checking the sources, methods and results and for approving the final submission.
+
 \end{document}
