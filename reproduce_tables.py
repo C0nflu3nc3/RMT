@@ -40,9 +40,13 @@ def main():
             if expected != actual:
                 raise SystemExit('Reproduction mismatch: ' + str(relative))
             records[str(relative)] = dict(status='exact match', sha256=digest(actual))
+    check_path = PROJECT / EXPERIMENT / 'reproduction_check.json'
+    previous = json.loads(check_path.read_text()) if check_path.exists() else {}
     result = dict(method='Rebuilt from committed test scores, validation scores, manifest and protocol in an isolated temporary project; no training, images, weights or network.',
                   numerical_exports=len(numerical), tables=len(TABLES), figures=len(FIGURES), checks=records)
-    (PROJECT / EXPERIMENT / 'reproduction_check.json').write_text(json.dumps(result, indent=2) + '\n')
+    if 'table4_jpeg_resnet_fpr_audit' in previous:
+        result['table4_jpeg_resnet_fpr_audit'] = previous['table4_jpeg_resnet_fpr_audit']
+    check_path.write_text(json.dumps(result, indent=2) + '\n')
     print(f'Exact matches: {len(numerical)} numerical exports, {len(TABLES)} tables and {len(FIGURES)} figure files.')
 
 

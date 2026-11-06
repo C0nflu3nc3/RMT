@@ -16,7 +16,6 @@ import pyarrow.parquet as pq
 from PIL import Image
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]
 DATASET = "TheKernel01/Tiny-GenImage"
 REVISION = "89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69"
 NAMES = {0: "real", 1: "ADM", 2: "BigGAN", 3: "GLIDE", 4: "Midjourney",
@@ -147,15 +146,8 @@ def main():
             raise ValueError("Unexpected source split counts: " + str(offsets))
         write_csv(index_path, records)
 
-    old = []
-    for path in (REPO / "pilot/manifest.csv", REPO / "expanded_test/manifest.csv"):
-        with path.open(newline="") as f:
-            old.extend(csv.DictReader(f))
-    old_by_id = {r["image_id"]: r for r in old}
-    if len(old_by_id) != 2080:
-        raise ValueError("Expected 2,080 previous IDs")
-    # The viewer used JPEG quality 75 in the pilot. Give every raw source the
-    # same baseline encoding before training or robustness transformations.
+    # Give every raw source the same baseline JPEG quality 75 encoding
+    # before training or robustness transformations.
     canonical = cache / "canonical"
     canonical.mkdir(exist_ok=True)
     canonical_index = cache / "canonical_index.csv"
@@ -187,11 +179,6 @@ def main():
                 if len(additions) % 2000 == 0:
                     print("COMMON JPEG ENCODING", len(additions), "/", len(records), flush=True)
         write_csv(canonical_index, additions)
-    # Previous IDs refer to the dataset viewer, whose image encoding need not
-    # equal the embedded parquet bytes. Never equate those two row-ID namespaces.
-    previous_hash_matches = len({r["sha256"] for r in old} & {r["sha256"] for r in records})
-    previous_pixel_matches = len({r["pixel_sha256"] for r in old if r.get("pixel_sha256")} &
-                                 {r["pixel_sha256"] for r in records})
     used_hashes = set()
     used_pixels = set()
     used_canonical = set()
@@ -251,9 +238,8 @@ def main():
     write_csv(HERE / "manifest.csv", selected)
     summary = dict(dataset=DATASET, revision=REVISION, sampling_seed=SEED,
         source_rows=len(records), source_counts=dict(Counter(r["generator"] for r in records)),
-        unique_selected=len(selected), previous_ids_excluded=0,
-        previous_manifest_rows=len(old_by_id), previous_exact_file_matches=previous_hash_matches,
-        previous_known_exact_pixel_matches=previous_pixel_matches, exclusion_counts=dict(excluded),
+        unique_selected=len(selected), prior_study_content_excluded=False,
+        exclusion_counts=dict(excluded),
         eligible_counts=eligible_counts, counts=dict(Counter(r["split"] for r in selected)),
         groups={f"{s}/{l}": n for (s, l), n in sorted(Counter((r["split"], r["label"]) for r in selected).items())},
         generator_groups={f"{s}/{g}": n for (s, g), n in sorted(Counter((r["split"], r["generator"]) for r in selected).items())},

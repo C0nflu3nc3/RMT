@@ -141,8 +141,9 @@
       "ap_sd": "0.00017503640406689287"
     }
   ],
-  "github_upload_performed": false,
   "precision": "CPU encoder bfloat16 autocast; float32 parameters, optimizer, CLIP head and stored features/scores",
   "execution": "ResNet fitting and main pipeline: 6 CPU threads; two ResNet-44 test groups: 2; CLIP feature preparation: 2; CLIP head fitting/scoring: 1",
-  "history_timing_note": "Epoch seconds in a resumed epoch measure its final resumed segment, not its entire wall time."
+  "history_timing_note": "Epoch seconds in a resumed epoch measure its final resumed segment, not its entire wall time.",
+  "repository_url": "https://github.com/C0nflu3nc3/RMT",
+  "repository_version": "2.0.0"
 }

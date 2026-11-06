@@ -11,7 +11,6 @@ __pycache__/
 *.bin
 weights/
 data/
-pilot/cache/
 main.pdf
 
 .venv/
@@ -19,3 +18,8 @@ experiments/full35k/cache/
 experiments/full35k/*.log
 experiments/full35k/precomputed_predictions/
 experiments/full35k/artifacts/**/*.csv
+experiments/full35k/status.json
+experiments/full35k/*_status.json
+experiments/full35k/*_last.json
+experiments/full35k/session_history.jsonl
+*.tmp

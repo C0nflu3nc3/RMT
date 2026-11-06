@@ -1,8 +1,8 @@
 {
-  "title": "Unseen-Generator Detection and Processing Robustness of ResNet-50 and CLIP Classifiers: A Pilot Study",
-  "version": "1.0",
+  "title": "Unseen-Generator Detection and Processing Robustness of ResNet-50 and CLIP Classifiers: Full-Mirror Refit",
+  "version": "2.0.0",
   "upload_type": "software",
-  "description": "Python code and saved-score records for an exploratory comparison of ResNet-50 and a frozen CLIP encoder with a linear classifier. The pilot uses three training seeds and common test IDs for original images, JPEG quality 65, and downsampling to 112 x 112 pixels. The later tests were selected after the initial results were inspected. The archive includes manifests, prediction scores, sampling audits, numerical exports, and analysis scripts, but no source images or fitted checkpoints. Code is MIT licensed. Source images remain at the third-party Tiny-GenImage mirror, which declares CC BY-NC-SA 4.0; that dataset licence is separate from the code licence.",
+  "description": "Code and saved-score records for the completed full-mirror refit of ResNet-50 and a frozen CLIP ViT-B/32 encoder with a linear classifier. Exact deduplication leaves 34,998 images: 19,998 training, 4,000 validation, 6,000 seen-test and 5,000 unseen-test images. Midjourney is held out from training and validation. CPU fits use three seeds and evaluate original images, JPEG quality 65 and downsampling to 112 x 112 pixels. Saved scores reproduce 13 numerical exports, five tables and two figures without images or fitted weights. The refit can include previously inspected pilot content and remains exploratory; categories, native size and compression history are unmatched. The current paper, manifests, scores, audits, execution metadata and analysis code are included. Earlier pilot files remain in Git history. Code is MIT licensed; source images and pretrained models have separate licences.",
   "creators": [
     {
       "name": "Afanasyev, Kirill",
@@ -29,5 +29,6 @@
       "relation": "isSupplementTo",
       "scheme": "url"
     }
-  ]
+  ],
+  "publication_date": "2026-11-06"
 }

@@ -11,8 +11,11 @@
     "repository_url": "https://github.com/C0nflu3nc3/RMT",
     "analysis_commit": "491a65b7fbf6916e553cb38d7745c535f22ede42",
     "analysis_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/491a65b7fbf6916e553cb38d7745c535f22ede42",
-    "scope": "The original pilot analysis remains recorded in analysis_commit. The main paper now reports the later 1,600-image held-out evaluation from evidence_commit, with unchanged training and validation data and fixed checkpoints.",
+    "scope": "Historical pilot and expanded-test analyses only. The current paper reports the separate 34,998-image full-mirror refit in current_experiment; historical scores are not pooled with its results.",
     "evidence_commit": "6dc0d1027d606b43c8c50af20d7db4a7303d042a",
-    "evidence_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/6dc0d1027d606b43c8c50af20d7db4a7303d042a"
+    "evidence_commit_url": "https://github.com/C0nflu3nc3/RMT/tree/6dc0d1027d606b43c8c50af20d7db4a7303d042a",
+    "last_full_snapshot": "94f2e05602e5a8007995f9cc24088a5088e633b1",
+    "last_full_snapshot_url": "https://github.com/C0nflu3nc3/RMT/tree/94f2e05602e5a8007995f9cc24088a5088e633b1",
+    "location": "Git history; removed from the current working tree after dependency cleanup."
   }
 }

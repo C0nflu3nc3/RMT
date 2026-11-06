@@ -1,5 +1,5 @@
 {
-  "method": "Archived full score-based numerical reproduction retained. Current tables and figures rendered from unchanged numerical exports in two separate projects and compared byte for byte; no retraining or new score-level bootstrap run.",
+  "method": "Rebuilt from committed test scores, validation scores, manifest and protocol in an isolated temporary project; no training, images, weights or network.",
   "numerical_exports": 13,
   "tables": 5,
   "figures": 4,
@@ -57,43 +57,42 @@
       "sha256": "99ef4f75cc98efab655d8634efac45331517a45f155cb8869aca6cc66f320f5d"
     },
     "tables/dataset.tex": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "8d32e81e0a796a8545392aaad3e13d9cd71580ce0abf19f48e4cdfa82e2eee01"
     },
     "tables/main_results.tex": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "39b3976b3b0509555e34bed3ec97112a38411ef4b1e1a0ae89dd33dc9c49d8df"
     },
     "tables/paired.tex": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "2a4fc1af1c0b1018df0efb2faf5183d20505fb27087b3a6b701a319598936115"
     },
     "tables/robustness.tex": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "c28e47db24a796913bdb1ae13691e2363fd1c8e7243a534f5cdba129db0e4823"
     },
     "tables/sensitivity.tex": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "536ae4b5d1f9d1dda0c7420d38daddf49fe243e66d5de0fc2cdf773542052052"
     },
     "experiments/full35k/figures/unseen_robustness.png": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "552854a3dadafc3149da8e0d15ca5d8c5615241c9862ee43decf77634a5959dc"
     },
     "experiments/full35k/figures/unseen_robustness.pdf": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "a6bb229ab09ac9161d21e34fdae1c12d11ef4bc862e1f4398416fa7f9faebcd0"
     },
     "experiments/full35k/figures/unseen_confusion_seed42.png": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "863cf04001490bc2478aa3181d2d38dbbac544ce66de9501b0ee948c9b137c44"
     },
     "experiments/full35k/figures/unseen_confusion_seed42.pdf": {
-      "status": "render-only exact match",
+      "status": "exact match",
       "sha256": "58d1649fe669d5d8e0cdcfc84bc58c1f5ab442b483e4ac364f526e516fca331c"
     }
   },
-  "presentation_checked_utc": "2026-11-06",
   "table4_jpeg_resnet_fpr_audit": {
     "checked_utc": "2026-11-06",
     "finding": "Separate seen/unseen estimates coincide only after rounding to three decimals; no table copy-paste error.",
