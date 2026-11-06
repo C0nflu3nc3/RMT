@@ -9,7 +9,7 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{xurl,booktabs,tabularx,array,graphicx,placeins,enumitem}
 \graphicspath{{../experiments/full35k/figures/}{experiments/full35k/figures/}{figures/}}
-\usepackage{microtype}
+\usepackage{microtype,xcolor}
 \usepackage[a4paper,margin=22mm,footskip=10mm]{geometry}
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf,labelsep=space}
@@ -17,6 +17,7 @@
 \setlength{\bibsep}{1.5pt}
 \renewcommand{\bibfont}{\fontsize{9}{10.8}\selectfont}
 \urlstyle{same}
+\newcommand{\repositorylink}{\href{https://github.com/C0nflu3nc3/RMT}{\mbox{\textcolor{blue}{\texttt{C0nflu3nc3/RMT}}}}}
 \setlength{\emergencystretch}{2em}
 \setlength{\intextsep}{10pt plus 2pt minus 2pt}
 \setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
@@ -216,29 +217,30 @@ Unseen & Resize 112 & 0.067 & [0.059, 0.075] & 0.0001\\
 \subsection{RQ2: Recompression and downsampling}
 Every test image remains evaluable after processing. JPEG quality-65 recompression lowers unseen F1 to 0.289 for ResNet and 0.687 for CLIP. The paired changes, $-0.022$ and $-0.059$, have intervals excluding zero (Table~\ref{tab:robustness}). Unseen FPR also falls, to 0.062 and 0.028, with intervals for both reductions excluding zero. Recall declines to 0.183 for ResNet and 0.538 for CLIP. Recompression reduces false alarms at the cost of missed detections.
 
-After downsampling, unseen ResNet F1 rises to 0.666 and CLIP F1 falls to 0.733. Their FPRs rise to 0.971 and 0.561. ResNet is close to the all-generated baseline, $F_1=2/3\approx0.667$, for this balanced test; its unseen accuracy is 0.506 and AUROC 0.561. CLIP retains more discrimination, with accuracy 0.671 and AUROC 0.800, but falsely flags over half of the photographs. Its paired F1 change is $-0.013$, with interval [$-0.027$, 0.001]. The FPR increase is 0.500, with interval [0.480, 0.519]. The relatively small F1 change therefore accompanies a large rise in false alarms.
-
-On seen images, downsampling reduces F1 by 0.236 for ResNet and 0.193 for CLIP; FPR reaches 0.964 and 0.564. Both models fail the FPR requirement in every resized run. Figure~\ref{fig:robustness} plots the unseen results with conditional image-bootstrap intervals. These tests cover only one recompression quality and one downsampling size.
-
 \begin{table}[!htbp]\centering\resulttable
 \caption{Paired processing minus original changes, averaged over seeds, with 95\% image-bootstrap intervals. Compression and downsampling are applied independently to the common quality-75 baseline.}\label{tab:robustness}
 \par\smallskip\noindent\textbf{JPEG recompression, quality 65}\par\smallskip
 \begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule
 Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
-ResNet-50 & Seen & -0.010 [-0.014, -0.007] & -0.0342 [-0.0389, -0.0297]\\
-CLIP linear & Seen & -0.029 [-0.035, -0.023] & -0.0292 [-0.0364, -0.0226]\\
-ResNet-50 & Unseen & -0.022 [-0.026, -0.017] & -0.0340 [-0.0391, -0.0296]\\
-CLIP linear & Unseen & -0.059 [-0.070, -0.047] & -0.0337 [-0.0413, -0.0268]\\
+ResNet-50 & Seen & $-0.010\;[-0.014, -0.007]$ & $-0.0342\;[-0.0389, -0.0297]$\\
+CLIP linear & Seen & $-0.029\;[-0.035, -0.023]$ & $-0.0292\;[-0.0364, -0.0226]$\\
+ResNet-50 & Unseen & $-0.022\;[-0.026, -0.017]$ & $-0.0340\;[-0.0391, -0.0296]$\\
+CLIP linear & Unseen & $-0.059\;[-0.070, -0.047]$ & $-0.0337\;[-0.0413, -0.0268]$\\
 \bottomrule\end{tabularx}\par\medskip
 \par\smallskip\noindent\textbf{Downsampling to $112\times112$ pixels}\par\smallskip
 \begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule
 Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
-ResNet-50 & Seen & -0.236 [-0.241, -0.230] & +0.8661 [0.8567, 0.8758]\\
-CLIP linear & Seen & -0.193 [-0.200, -0.185] & +0.5049 [0.4864, 0.5223]\\
-ResNet-50 & Unseen & +0.355 [0.341, 0.372] & +0.8744 [0.8649, 0.8839]\\
-CLIP linear & Unseen & -0.013 [-0.027, 0.001] & +0.4996 [0.4797, 0.5185]\\
+ResNet-50 & Seen & $-0.236\;[-0.241, -0.230]$ & $+0.8661\;[0.8567, 0.8758]$\\
+CLIP linear & Seen & $-0.193\;[-0.200, -0.185]$ & $+0.5049\;[0.4864, 0.5223]$\\
+ResNet-50 & Unseen & $+0.355\;[0.341, 0.372]$ & $+0.8744\;[0.8649, 0.8839]$\\
+CLIP linear & Unseen & $-0.013\;[-0.027, 0.001]$ & $+0.4996\;[0.4797, 0.5185]$\\
 \bottomrule\end{tabularx}\par\medskip
 \parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. $\Delta$FPR is shown to four decimals: the ResNet JPEG estimates differ before rounding. An F1 rise does not establish robustness when false positives increase.}\end{table}
+
+After downsampling, unseen ResNet F1 rises to 0.666 and CLIP F1 falls to 0.733. Their FPRs rise to 0.971 and 0.561. ResNet is close to the all-generated baseline, $F_1=2/3\approx0.667$, for this balanced test; its unseen accuracy is 0.506 and AUROC 0.561. CLIP retains more discrimination, with accuracy 0.671 and AUROC 0.800, but falsely flags over half of the photographs. Its paired F1 change is $-0.013$, with interval [$-0.027$, 0.001]. The FPR increase is 0.500, with interval [0.480, 0.519]. The relatively small F1 change therefore accompanies a large rise in false alarms.
+
+On seen images, downsampling reduces F1 by 0.236 for ResNet and 0.193 for CLIP; FPR reaches 0.964 and 0.564. Both models fail the FPR requirement in every resized run. Figure~\ref{fig:robustness} plots the unseen results with conditional image-bootstrap intervals. These tests cover only one recompression quality and one downsampling size.
+
 \begin{figure}[!htbp]\centering
 \includegraphics[width=\linewidth]{unseen_robustness.pdf}
 \caption{Full-mirror unseen-test means over three seeds. Error bars are stratified image-bootstrap 95\% intervals conditional on fitted checkpoints. Each condition uses the same 2,500 real and 2,500 Midjourney images. Dashed lines mark minimum F1 0.80 and maximum FPR 0.10.}\label{fig:robustness}
@@ -284,15 +286,17 @@ For RQ1, CLIP detects more unseen generated images and has a lower mean false-po
 
 For RQ2, JPEG recompression reduces unseen F1 as well as false-positive rates. Downsampling has a much larger effect on false alarms: FPR reaches 0.561 for CLIP and 0.971 for ResNet. ResNet's resized F1 approaches the all-generated baseline. Although CLIP retains a higher resized F1, it falsely flags most photographs. A useful assessment therefore needs detection scores and false-positive rates for both original and processed inputs.
 
+Reporting FPR for every processing test shows whether an apparent F1 gain comes at the cost of more false alarms. Detectors should therefore be compared under the same false-positive limit on both original and processed inputs. This links a robustness claim to the risk of wrongly flagging genuine photographs in a verification workflow.
+
 These results apply to the fitted configurations and this mirror. They do not establish readiness for practical verification or isolate a causal effect of generator identity. We use one third-party mirror and one held-out generator, with unequal fitting budgets and unmatched categories, resolution and compression history. Perceptual duplicates and possible pretraining exposure remain unresolved. Because previously inspected pilot content can enter the refit, we treat the findings as exploratory and do not claim independent confirmation. Bootstrap intervals condition on the fitted checkpoints, and three seeds give limited evidence about variation under full retraining.
 
 Further tests should audit the official archives, screen near-duplicates, match source characteristics, and use fresh external cohorts selected before their outcomes are inspected. Longer ResNet fitting with an explicit budget, more seeds, generator-wise holdouts and additional processing levels would help establish whether CLIP's advantage persists. Threshold selection should directly test an FPR-constrained operating point on development data. Any use in fact-checking would still need source and provenance checks, since a detector score alone cannot establish an image's origin.
 
 \section{Data Availability}
-Source images are available in \texttt{TheKernel01/Tiny-GenImage}, revision \nolinkurl{89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69}, accessed 6 November 2026. The mirror declares Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0); the official-source audit is incomplete. The manifest, labels, source-shard records, exact-duplicate audit, test and validation scores, and numerical exports are public at \url{https://github.com/C0nflu3nc3/RMT}, under \texttt{experiments/full35k/}. The manifest SHA256 begins \texttt{1d8fb1ab8e174d31}, with the full digest in \texttt{sample\_audit.json}. Source images, image caches, CLIP feature caches and large fitted weights are kept outside Git. Checkpoint digests identify the six selected fitted models. Committed scores support numerical reproduction; retraining needs the pinned source images and pretrained weights.
+Source images are available in \texttt{TheKernel01/Tiny-GenImage}, revision \nolinkurl{89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69}, accessed 6 November 2026. The mirror declares Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0); the official-source audit is incomplete. The manifest, labels, source-shard records, exact-duplicate audit, test and validation scores, and numerical exports are public in the \repositorylink{} repository, under \texttt{experiments/full35k/}. The manifest SHA256 begins \texttt{1d8fb1ab8e174d31}, with the full digest in \texttt{sample\_audit.json}. Source images, image caches, CLIP feature caches and large fitted weights are kept outside Git. Checkpoint digests identify the six selected fitted models. Committed scores support numerical reproduction; retraining needs the pinned source images and pretrained weights.
 
 \section{Code Availability}
-Code for selection, training, evaluation and reporting is public at \url{https://github.com/C0nflu3nc3/RMT}. The full-mirror evidence snapshot is \texttt{f9624d9cce60}, checked on 6 November 2026. Runs used Python 3.12.14, PyTorch 2.14.1+cpu, torchvision 0.29.1+cpu, openai-clip 1.0.1, NumPy 2.3.5, Pillow 13.0.0, scikit-learn 1.8.0 and SciPy 1.17.0. Training dependencies are pinned in \texttt{experiments/full35k/requirements.txt}, and analysis dependencies are in \texttt{requirements-analysis.txt}.
+Code for selection, training, evaluation and reporting is available from the \repositorylink{} repository. The full-mirror evidence snapshot is \texttt{f9624d9cce60}, checked on 6 November 2026. Runs used Python 3.12.14, PyTorch 2.14.1+cpu, torchvision 0.29.1+cpu, openai-clip 1.0.1, NumPy 2.3.5, Pillow 13.0.0, scikit-learn 1.8.0 and SciPy 1.17.0. Training dependencies are pinned in \texttt{experiments/full35k/requirements.txt}, and analysis dependencies are in \texttt{requirements-analysis.txt}.
 
 To reproduce metrics from the archived scores on Python 3.12, install the analysis requirements and run \texttt{python reproduce\_tables.py} at the repository root. A new fit requires the training dependencies: run \texttt{collect.py}, then \texttt{train.py}, in \texttt{experiments/full35k/}. These steps download the pinned source and pretrained weights. The code uses an MIT licence; dataset and pretrained-model licences are separate. The earlier pilot and its historical analysis remain in \texttt{pilot/}, \texttt{expanded\_test/}, \texttt{article/evaluation/} and Git history.
 \FloatBarrier

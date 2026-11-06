@@ -221,8 +221,8 @@ def render_publication(out, tables_dir, figures_dir):
             if r["condition"] != condition:
                 continue
             values = [NAMES[r["model"]], r["split"].title(),
-                      f"{float(r['delta_f1']):+.3f} " + ci(r["f1_ci_low"], r["f1_ci_high"]),
-                      f"{float(r['fpr_increase']):+.4f} " + f"[{float(r['fpr_ci_low']):.4f}, {float(r['fpr_ci_high']):.4f}]"]
+                      "$" + f"{float(r['delta_f1']):+.3f}" + r"\;" + ci(r["f1_ci_low"], r["f1_ci_high"]) + "$",
+                      "$" + f"{float(r['fpr_increase']):+.4f}" + r"\;" + f"[{float(r['fpr_ci_low']):.4f}, {float(r['fpr_ci_high']):.4f}]" + "$"]
             body.append(" & ".join(values) + r"\\")
         panels.append(r"\par\smallskip\noindent\textbf{" + title + r"}\par\smallskip" + "\n"
             + r"\begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule" + "\n"

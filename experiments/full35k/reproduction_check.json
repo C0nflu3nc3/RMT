@@ -70,7 +70,7 @@
     },
     "tables/robustness.tex": {
       "status": "render-only exact match",
-      "sha256": "c970e02575e96f81892ff810da6703af3c1da9db70d967403b912446ccf1144b"
+      "sha256": "c28e47db24a796913bdb1ae13691e2363fd1c8e7243a534f5cdba129db0e4823"
     },
     "tables/sensitivity.tex": {
       "status": "render-only exact match",
