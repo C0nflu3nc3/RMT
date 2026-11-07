@@ -15,7 +15,7 @@
 \hypersetup{pdftitle={Development of a System for Detecting AI-Generated Images Using Deep Learning Methods},
 pdfauthor={Afanasyev Kirill and Amangeldi Beksultan}}
 \newcommand{\resultstable}[1]{\input{../experiments/resnet40/tables/#1.tex}}
-\newcommand{\figurelink}[1]{\href{https://github.com/C0nflu3nc3/RMT/blob/5a37e8c054afbc3717b1c7e9af3a096592bf4d18/experiments/resnet40/figures/#1.pdf}{\includegraphics[width=\linewidth]{#1.pdf}}}
+\newcommand{\figurelink}[1]{\href{https://github.com/C0nflu3nc3/RMT/blob/f107c2a3a5f70342654308baccb572bf04f454ed/experiments/resnet40/figures/#1.pdf}{\includegraphics[width=\linewidth]{#1.pdf}}}
 \setlength{\bibsep}{0.25pt}
 \renewcommand{\bibfont}{\fontsize{9}{9.8}\selectfont}
 \urlstyle{same}
@@ -44,7 +44,7 @@ Astana, Kazakhstan\\[3pt]
 \end{center}
 \vspace{6pt}
 \begin{abstract}
-Detectors for AI-generated images can lose accuracy when the generator or image processing changes. We compared a 50-layer residual network (ResNet-50) with a linear classifier on frozen Contrastive Language-Image Pre-training (CLIP) features. The Tiny-GenImage mirror contained 34,998 images after duplicate removal. We held out Midjourney from training and validation and evaluated both models on the same test images across three seeds. We report F1, the harmonic mean of precision and recall, and the false-positive rate (FPR). From epoch 1 to epoch 40, ResNet-50 mean F1 rose from 0.910 to 0.982 on seen images and fell from 0.310 to 0.166 on unseen images. On original unseen images, CLIP reached 0.746 F1 and led epoch-40 ResNet-50 by 0.581 (paired 95\% confidence interval [0.561, 0.600]). Mean FPR was 0.016 for ResNet-50 and 0.061 for CLIP. JPEG recompression reduced unseen F1 for both models. Downsampling to $112\times112$ raised unseen FPR to 0.070 for ResNet-50 and 0.561 for CLIP. At threshold 0.20, ResNet-50 unseen recall was 0.129 and FPR was 0.023. Neither model reached the 0.80 unseen F1 target at threshold 0.50. The findings are exploratory because the study uses one held-out generator and includes earlier pilot images.
+Detectors for AI-generated images can lose accuracy when the generator or image processing changes. We compared a 50-layer residual network (ResNet-50) with a linear classifier on frozen Contrastive Language-Image Pre-training (CLIP) features. The Tiny-GenImage mirror contained 34,998 images after duplicate removal. We held out Midjourney from training and validation and evaluated both models on the same test images across three seeds. We report F1, the harmonic mean of precision and recall, and the false-positive rate (FPR). From epoch 1 to epoch 40, ResNet-50 mean F1 rose from 0.910 to 0.982 on seen images and fell from 0.310 to 0.166 on unseen images. On original unseen images, CLIP reached 0.746 F1 and led epoch-40 ResNet-50 by 0.581 (paired 95\% confidence interval [0.561, 0.600]). Mean FPR was 0.016 for ResNet-50 and 0.061 for CLIP. JPEG recompression reduced unseen F1 for both models. Downsampling to $112\times112$ raised unseen FPR to 0.070 for ResNet-50 and 0.561 for CLIP. Lowering the cutoff to 0.05 raised ResNet-50 unseen F1 to 0.292 and FPR to 0.037. Neither model reached the 0.80 unseen F1 target at threshold 0.50. The findings are exploratory because the study uses one held-out generator and includes earlier pilot images.
 \end{abstract}
 
 \noindent{\small\textbf{Keywords:} AI-generated images; deep learning; image forensics; generator generalization; processing robustness; false-positive rate}
@@ -60,7 +60,7 @@ A facial manipulation benchmark can contain a genuine photograph with a local ed
 
 Learning on Gradients and Neighboring Pixel Relationships use gradients or nearby pixels to detect artifacts \cite{r7,r8}. DIRE and AEROBLADE assess how a diffusion model or an autoencoder reconstructs an image \cite{r9,r10}. These methods use different training and test protocols.
 
-FatFormer adapts CLIP to detect forgery evidence. Cozzolino et al. report transfer with a lightweight detector based on pretrained CLIP features \cite{r11,r12}. They also show why evaluation at a fixed threshold matters. A model can rank images well and still make many classification errors at a given threshold.
+FatFormer adapts CLIP to detect forgery evidence. Cozzolino et al. report transfer with a lightweight detector based on pretrained CLIP features \cite{r11,r12}.
 
 Corvi et al.\ and Cozzolino et al.\ already test unfamiliar generators and processed inputs \cite{r4,r12}. Their results show why a detector needs tests beyond its training data. They leave a question for the two configurations in this study. On the same held-out images and at the same decision threshold, does a model with higher F1 also keep false alarms within the stated limit? Generator transfer and processing can produce different errors, even when the final F1 scores are close.
 
@@ -68,9 +68,9 @@ The two configurations use pretrained image representations in different ways. F
 
 A change in threshold can also alter the comparison. The area under the receiver operating characteristic curve (AUROC) measures how well a model ranks generated images above real photographs across thresholds. A fixed-threshold test measures the decisions the model makes at one cutoff. A model can rank images well while missing many generated images at that cutoff. We therefore measure both ranking and decisions, and keep the development and test sets separate when choosing thresholds.
 
-The comparison also needs to account for training variation. Results from a single seed can hide changes in missed detections or false alarms. We use the same images for both models in each test and processing condition. This lets us compare their decisions on each image. It also helps us distinguish a change caused by image processing from a change in the test set. The seen and unseen sets contain different images, so a generator change can coincide with changes in photographic sources, category or resolution.
+Both models use the same images in each paired comparison. The seen and unseen sets contain different images. Changes in photographic source, category or resolution can also affect the comparison.
 
-A longer training run gives a separate check of the ResNet-50 result. If it fits the development images more closely, its validation score can rise while its decisions on a held-out generator change in a different direction. We keep the original and final checkpoints in the comparison to examine this possibility. We record changes in the training procedure so readers can distinguish the comparison from a controlled experiment on epoch count.
+A false-positive limit helps a verification team estimate how many genuine photographs it would need to review when a platform resizes uploads.
 
 Our aim is to develop a system to detect AI-generated images. We compare a fine-tuned ResNet-50 with a linear classifier on frozen CLIP features. We evaluate generator transfer, JPEG compression, downsampling and false alarms on real photographs. The study addresses two questions.
 
@@ -153,16 +153,18 @@ F_1&=\frac{2TP}{2TP+FP+FN},\\
 \end{align}
 We set undefined precision and F1 to zero. We also report area under the receiver operating characteristic curve (AUROC) and average precision (AP). We apply threshold 0.50 and calculate each metric for each seed. The tables report means and sample standard deviations (SDs) across the three seeds.
 
-We use 1,000 paired bootstrap resamples to calculate percentile 95\% confidence intervals. We resample images within each label and source group. Each resample preserves the joint decisions of both models and all three seeds. We draw counts from the observed decision patterns within each label and source group. The intervals describe image-sampling uncertainty for the fitted checkpoints. The sample SD describes the observed differences between the three training seeds.
+Both the bootstrap and permutation tests use grouped counts of the models' joint decisions across the three seeds. We use 1,000 paired bootstrap resamples within each label and source group to calculate percentile 95\% confidence intervals. These intervals describe image-sampling uncertainty for the fitted checkpoints. The sample SD describes variation across seeds.
 
-We use 9,999 two-sided paired permutations for the model comparison. Within each decision pattern, we draw how many images exchange model outputs jointly across seeds. If $k$ absolute differences are at least as large as the observed difference, $p=(1+k)/10,000$. The smallest reportable p-value is 0.0001. We treat comparisons beyond the original unseen test as exploratory and report their unadjusted p-values.
+The grouped calculation uses a different sequence of random draws from the earlier image-level calculation. This moved the original unseen paired interval from [0.560, 0.601] to [0.561, 0.600].
+
+We use 9,999 two-sided paired permutations for the model comparison. Each permutation swaps the two models' decisions jointly across seeds. If $k$ absolute differences are at least as large as the observed difference, $p=(1+k)/10,000$. The smallest reportable p-value is 0.0001. We treat comparisons beyond the original unseen test as exploratory and report their unadjusted p-values.
 
 The practical comparison rule has three requirements. The mean F1 difference in absolute value must be at least 0.03. The confidence interval must exclude zero in the same direction. The model with higher F1 must have a mean FPR of at most 0.10 in that condition. The absolute performance targets apply separately.
 
 \subsection{Processing and decision threshold}
 We test the common quality-75 baseline and two processed versions. The first version uses JPEG quality-65 recompression. The second uses downsampling to $112\times112$ pixels. We apply each operation separately. Each version then receives the $224\times224$ input resize. We calculate each paired change as the processed metric minus the original metric.
 
-The 40-epoch comparison uses the fixed threshold of 0.50. For the original checkpoints, we also choose a threshold on the 4,000 original validation images for each seed. We maximize validation F1 over thresholds from 0.05 to 0.95 in steps of 0.05. A tie goes to the higher threshold. We then apply those thresholds to the original test images. For epoch 40, we examine five fixed thresholds on the unseen test as a descriptive analysis. The submitted epoch-40 exports contain test scores and validation F1 at 0.50. Selecting a new cutoff for that checkpoint would require its per-image validation scores.
+The 40-epoch comparison uses the fixed threshold of 0.50. For the original checkpoints, we also choose a threshold on the 4,000 original validation images for each seed. We maximize validation F1 over thresholds from 0.05 to 0.95 in steps of 0.05. A tie goes to the higher threshold. We then apply those thresholds to the original test images. For epoch 40, we examine seven thresholds from 0.05 to 0.80 on the unseen test as a descriptive analysis. The submitted epoch-40 exports contain test scores and validation F1 at 0.50. Selecting a new cutoff for that checkpoint would require its per-image validation scores.
 \FloatBarrier
 
 \section{Results}
@@ -185,7 +187,7 @@ ResNet-50 has higher F1 on all three seen conditions. Its largest advantage is 0
 \subsection{RQ2. JPEG recompression and downsampling}
 On the unseen test, JPEG recompression reduces mean F1 from 0.166 to 0.140 for ResNet-50 and from 0.746 to 0.687 for CLIP. Mean FPR also falls, to 0.012 and 0.028, respectively. The 95\% intervals for all four changes exclude zero (Table~\ref{tab:robustness}).
 
-Downsampling raises unseen FPR from 0.016 to 0.070 for ResNet-50 and from 0.061 to 0.561 for CLIP (Figure~\ref{fig:robustness}). The increase for CLIP is 0.500, with a paired 95\% interval of [0.479, 0.519]. After downsampling, CLIP flags more than half of the real photographs. ResNet-50 mean F1 rises to 0.219 on the unseen test and remains below the F1 target. CLIP mean F1 changes by $-0.013$, with a 95\% interval of [$-0.0283$, 0.0004].
+Downsampling raises unseen FPR from 0.016 to 0.070 for ResNet-50 and from 0.061 to 0.561 for CLIP (Figure~\ref{fig:robustness}). The increase for CLIP is 0.500, with a paired 95\% interval of [0.479, 0.519]. After downsampling, CLIP flags more than half of the real photographs. ResNet-50 mean F1 rises to 0.219 on the unseen test and remains below the F1 target. CLIP mean F1 changes by $-0.013$, with a 95\% interval of [$-0.028$, 0.000]. The interval includes zero, so the data do not show a clear change in CLIP F1.
 
 On the seen test, downsampling reduces ResNet-50 F1 to 0.945 and CLIP F1 to 0.756. It raises FPR to 0.066 for ResNet-50 and 0.564 for CLIP.
 
@@ -196,11 +198,11 @@ On the seen test, downsampling reduces ResNet-50 F1 to 0.945 and CLIP F1 to 0.75
 \end{figure}
 
 \subsection{Threshold sensitivity and ranking}
-Table~\ref{tab:sensitivity} compares the baseline thresholds. On original unseen images, validation-based threshold selection raises ResNet-50 F1 from 0.310 to 0.334. FPR rises from 0.096 to 0.104 and exceeds the 0.10 limit. For CLIP, F1 falls from 0.746 to 0.737 and FPR falls from 0.061 to 0.058. These results show how a threshold selected on familiar validation data can change the balance of misses and false alarms on an unseen generator.
+Table~\ref{tab:sensitivity} separates the epoch-1 and epoch-40 ResNet-50 results. On original unseen images, validation-based threshold selection raises epoch-1 ResNet-50 F1 from 0.310 to 0.334. FPR rises from 0.096 to 0.104 and exceeds the 0.10 limit. For CLIP, F1 falls from 0.746 to 0.737 and FPR falls from 0.061 to 0.058. These results show how a threshold selected on familiar validation data can change the balance of misses and false alarms on an unseen generator.
 
-\input{../tables/sensitivity.tex}
+\resultstable{sensitivity}
 
-From epoch 1 to epoch 40, ResNet-50 mean unseen AUROC rises from 0.652 to 0.787. At threshold 0.50, mean recall falls from 0.206 to 0.093. The ranking improves while fewer generated images receive a positive decision at this cutoff. The descriptive sweep shows the trade-off (Table~\ref{tab:threshold40}). At 0.20, recall rises to 0.129, FPR rises to 0.023 and F1 reaches 0.220. The model gap at 0.50 therefore describes one operating point. A validation-based test would be needed to select a cutoff for use on fresh images.
+From epoch 1 to epoch 40, ResNet-50 mean unseen AUROC rises from 0.652 to 0.787. At threshold 0.50, mean recall falls from 0.206 to 0.093. The ranking improves while fewer generated images receive a positive decision at this cutoff. The descriptive sweep shows the trade-off (Table~\ref{tab:threshold40}). At 0.10, recall reaches 0.156, FPR reaches 0.028 and F1 reaches 0.258. At 0.05, recall reaches 0.182, FPR reaches 0.037 and F1 reaches 0.292. All tested cutoffs fall short of the 0.80 F1 target. Selecting an epoch-40 cutoff for fresh images requires its per-image validation scores.
 
 \resultstable{epoch40_thresholds}
 
@@ -233,11 +235,11 @@ The findings are exploratory. The study uses one mirror and one held-out generat
 Future tests should use fresh external data and more held-out generators. They should match the training and checkpoint rules and record the backend for every run. A separate validation experiment can choose a threshold under a false-positive limit. Source and provenance checks remain part of image verification.
 
 \section{Data Availability}
-We use \texttt{TheKernel01/Tiny-GenImage} at revision \nolinkurl{89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69}, accessed 6 November 2026. The mirror declares Creative Commons Attribution-NonCommercial-ShareAlike 4.0. The \repositorylink{} repository provides the manifest, the duplicate audit, the baseline scores and the follow-up evidence. The file \href{https://github.com/C0nflu3nc3/RMT/blob/5a37e8c054afbc3717b1c7e9af3a096592bf4d18/experiments/full35k/sample_audit.json}{\nolinkurl{experiments/full35k/sample_audit.json}} records the full manifest SHA-256 digest. The follow-up evidence contains grouped decision counts, rank totals and threshold counts. Source images, caches and model weights stay outside Git. The derived evaluation data use the same CC BY-NC-SA 4.0 terms. The GitHub commit in Section~7 identifies the version of these files.
+We use \texttt{TheKernel01/Tiny-GenImage} at revision \nolinkurl{89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69}, accessed 6 November 2026. The mirror declares Creative Commons Attribution-NonCommercial-ShareAlike 4.0. The \repositorylink{} repository provides the manifest, the duplicate audit, the baseline scores and the follow-up evidence. The file \href{https://github.com/C0nflu3nc3/RMT/blob/f107c2a3a5f70342654308baccb572bf04f454ed/experiments/full35k/sample_audit.json}{\nolinkurl{experiments/full35k/sample_audit.json}} records the full manifest SHA-256 digest. The follow-up evidence contains grouped decision counts, rank totals and threshold counts. Source images, caches and model weights stay outside Git. The derived evaluation data use the same CC BY-NC-SA 4.0 terms. The GitHub commit in Section~7 identifies the version of these files.
 
 \Needspace{12\baselineskip}
 \section{Code Availability}
-The \repositorylink{} repository provides the code under the MIT licence. Commit \href{https://github.com/C0nflu3nc3/RMT/commit/5a37e8c054afbc3717b1c7e9af3a096592bf4d18}{\texttt{5a37e8c054af}} identifies the evaluation inputs and scripts. The recorded baseline used Python 3.12.14, PyTorch 2.14.1+cpu and torchvision 0.29.1+cpu. Baseline training dependencies are in \nolinkurl{experiments/full35k/requirements.txt}. Install \nolinkurl{requirements-analysis.txt} to reproduce the analysis. Run these commands from the repository root.
+The \repositorylink{} repository provides the code under the MIT licence. Commit \href{https://github.com/C0nflu3nc3/RMT/commit/f107c2a3a5f70342654308baccb572bf04f454ed}{\texttt{f107c2a3a5f7}} identifies the evaluation inputs and scripts. The recorded baseline used Python 3.12.14, PyTorch 2.14.1+cpu and torchvision 0.29.1+cpu. Baseline training dependencies are in \nolinkurl{experiments/full35k/requirements.txt}. Install \nolinkurl{requirements-analysis.txt} to reproduce the analysis. Run these commands from the repository root.
 
 \noindent\begin{minipage}{\linewidth}
 \begin{verbatim}
