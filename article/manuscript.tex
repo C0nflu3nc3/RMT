@@ -230,7 +230,7 @@ We compared ResNet-50 and a linear classifier on frozen CLIP features to assess 
 
 For RQ2, JPEG recompression lowers mean unseen F1 to 0.140 for ResNet-50 and 0.687 for CLIP. Downsampling raises mean unseen FPR to 0.070 and 0.561, respectively. CLIP's high downsampled F1 of 0.733 therefore accompanies false alarms on more than half of real photographs. An evaluation should report F1 and FPR together for each processing condition.
 
-The findings are exploratory. The study uses one mirror and one held-out generator. The splits differ in category, size and compression history, and the data include images from earlier pilot analyses. The three seeds give a limited measure of training variation. The checkpoint rules differ, and the follow-up restarts Adam. The run histories cannot verify whether the compute backend changed. These factors limit conclusions about training duration and architecture.
+The findings are exploratory. The study uses one mirror and one held-out generator. The splits differ in category, size and compression history, and the data include images from earlier pilot analyses. At epoch 40, unseen F1 rises for one ResNet seed and falls for two. ResNet uses the final checkpoint and CLIP uses validation-selected checkpoints. The follow-up restarts Adam, and its CPU or CUDA backend remains unverified. These factors limit conclusions about training duration and architecture.
 
 Future tests should use fresh external data and more held-out generators. They should match the training and checkpoint rules and record the backend for every run. A separate validation experiment can choose a threshold under a false-positive limit. Source and provenance checks remain part of image verification.
 
@@ -330,6 +330,6 @@ The first command recalculates the follow-up results from public counts and rebu
 
 \bibitem{r39} U. Ojha, Y. Li and Y. J. Lee. Towards universal fake image detectors that generalize across generative models. CVPR, pp. 24480--24489, 2023. \href{https://doi.org/10.1109/CVPR52729.2023.02345}{doi:10.1109/CVPR52729.2023.02345}.
 \end{thebibliography}
-\par\medskip\noindent\textbf{AI assistance declaration.} We used OpenAI ChatGPT to prepare code, present numerical results, and format the article in LaTeX. It also helped draft and edit the article and search the literature. The reported results come from archived model predictions and evaluation exports.
+\par\medskip\noindent\textbf{AI assistance declaration.} We used OpenAI ChatGPT to prepare code, present numerical results, and format the article in LaTeX. It also helped draft and edit the article and search the literature. The reported results come from archived model predictions and evaluation exports. The authors remain responsible for checking the sources, methods and results and for approving the final submission.
 
 \end{document}
