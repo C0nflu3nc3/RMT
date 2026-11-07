@@ -87,7 +87,7 @@ def epoch_table(tables, output):
             rows.append([split.title(), label, *(f"{float(r[m+'_mean']):.3f}" for m in ("f1", "fpr") for r in (before, after))])
     (tables / "epochs.tex").write_text(table(
         "ResNet-50 results at epochs 1 and 40. Values are means across the same three seeds at threshold 0.50.",
-        "tab:epochs", "llrrrr", ["Test", "Condition", "F1 (epoch 1)", "F1 (epoch 40)", "FPR (epoch 1)", "FPR (epoch 40)"],
+        "tab:epochs", "llCCCC", ["Test", "Condition", "F1 (epoch 1)", "F1 (epoch 40)", "FPR (epoch 1)", "FPR (epoch 40)"],
         rows, "The follow-up starts from the epoch-1 weights and initializes a new Adam optimizer. Both evaluations use the same test images."
     ))
 

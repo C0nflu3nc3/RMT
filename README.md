@@ -41,6 +41,6 @@ The scripts download the pinned dataset and pretrained weights. For CUDA, use a 
 
 Dataset: [Tiny-GenImage, pinned revision](https://huggingface.co/datasets/TheKernel01/Tiny-GenImage/tree/89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69). Images, feature caches and trained weights are excluded from Git.
 
-The baseline used one ResNet epoch and up to 40 CLIP-head epochs on CPU. The ResNet follow-up initializes a new Adam optimizer from the epoch-1 weights and continues on CUDA. The comparison covers one unseen generator. The mirror includes earlier pilot content and differences in source characteristics. Confidence intervals apply to the evaluated checkpoints.
+The baseline used one ResNet epoch and up to 40 CLIP-head epochs on CPU. The ResNet follow-up initializes a new Adam optimizer from the epoch-1 weights and uses a continuation script with CUDA as its default. The comparison covers one unseen generator. The mirror includes earlier pilot content and differences in source characteristics. Confidence intervals apply to the evaluated checkpoints.
 
 Code: [MIT](LICENSE). Dataset and pretrained-model licences apply separately.
