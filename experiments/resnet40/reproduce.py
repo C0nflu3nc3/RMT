@@ -14,6 +14,7 @@ sys.path.insert(0, str(BASELINE))
 
 from publish_results import build, read_csv, render_publication, table
 from report_results import CONDITIONS, SEEDS, report
+from public_evidence import calculate, export_evidence
 
 
 def read_scores(directory):
@@ -100,24 +101,43 @@ def main():
     tables = HERE / "tables"
     figures = HERE / "figures"
     names = {"resnet50": "ResNet-50 (epoch 40)", "clip_linear": "CLIP linear"}
+    evidence = HERE / "evidence"
+    evidence.mkdir(exist_ok=True)
+    tables.mkdir(exist_ok=True)
     if args.score_dir:
         with TemporaryDirectory(prefix="rmt-resnet40-") as temp:
             scores = Path(temp) / "paired_scores.csv"
             comparison_input(scores, args.score_dir)
             report(scores, output)
-            verify_summary(output)
-            # The public exports are aggregates. The original scores can reproduce these rows.
             (output / "error_records.csv").unlink()
             build(output, tables, figures, predictions_path=scores, fixed_only=True, names=names)
-        print("Verified 18 ResNet score groups against the submitted summary and archived baseline.")
-    else:
-        verify_summary(output)
-        render_publication(output, tables, figures, fixed_only=True, names=names)
+            export_evidence(scores, evidence)
+    verify_summary(output)
+    calculate(evidence, output, tables)
+    metadata_path = output / "evaluation_metadata.json"
+    metadata = json.loads(metadata_path.read_text())
+    metadata.update(public_seed=20261107,
+                    bootstrap="multinomial draws within each label and source stratum",
+                    permutation="binomial swaps within each joint decision pattern",
+                    evidence="grouped decision counts and AUROC rank totals")
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n")
+    details_path = output / "paper_details.json"
+    details = json.loads(details_path.read_text())
+    details["absolute_intervals"] = [
+        {k: float(v) if k.endswith(("_low", "_high")) else v for k, v in row.items()}
+        for row in read_csv(output / "absolute_metric_intervals.csv")
+    ]
+    details_path.write_text(json.dumps(details, indent=2) + "\n")
+    render_publication(output, tables, figures, fixed_only=True, names=names)
     epoch_table(tables, output)
+    print("Verified the 18 ResNet groups and rebuilt paired statistics from joint counts.")
     checksums = output / "publication_checksums.json"
     values = json.loads(checksums.read_text())
     values.pop("experiments/resnet40/evaluation/error_records.csv", None)
-    values["experiments/resnet40/tables/epochs.tex"] = hashlib.sha256((tables / "epochs.tex").read_bytes()).hexdigest()
+    extra = [tables / "epochs.tex", tables / "epoch40_thresholds.tex", *evidence.glob("*.csv")]
+    for path in extra:
+        key = str(path.relative_to(HERE.parents[1]))
+        values[key] = hashlib.sha256(path.read_bytes()).hexdigest()
     checksums.write_text(json.dumps(values, indent=2, sort_keys=True) + "\n")
 
 

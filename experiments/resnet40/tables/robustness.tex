@@ -4,16 +4,16 @@
 \begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule
 Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
 ResNet-50 (epoch 40) & Seen & $-0.002\;[-0.004, -0.001]$ & $-0.0039\;[-0.0060, -0.0020]$\\
-CLIP linear & Seen & $-0.029\;[-0.035, -0.023]$ & $-0.0292\;[-0.0364, -0.0226]$\\
-ResNet-50 (epoch 40) & Unseen & $-0.026\;[-0.035, -0.017]$ & $-0.0044\;[-0.0064, -0.0024]$\\
-CLIP linear & Unseen & $-0.059\;[-0.070, -0.047]$ & $-0.0337\;[-0.0413, -0.0268]$\\
+CLIP linear & Seen & $-0.029\;[-0.036, -0.023]$ & $-0.0292\;[-0.0352, -0.0226]$\\
+ResNet-50 (epoch 40) & Unseen & $-0.026\;[-0.035, -0.017]$ & $-0.0044\;[-0.0065, -0.0023]$\\
+CLIP linear & Unseen & $-0.059\;[-0.071, -0.047]$ & $-0.0337\;[-0.0411, -0.0267]$\\
 \bottomrule\end{tabularx}\par\medskip
 \par\smallskip\noindent\textbf{Downsampling to $112\times112$ pixels}\par\smallskip
 \begin{tabularx}{\linewidth}{@{}Ylrr@{}}\toprule
 Model & Test & $\Delta F_1$ [95\% CI] & $\Delta$FPR [95\% CI]\\\midrule
-ResNet-50 (epoch 40) & Seen & $-0.037\;[-0.041, -0.034]$ & $+0.0473\;[0.0420, 0.0522]$\\
-CLIP linear & Seen & $-0.193\;[-0.200, -0.185]$ & $+0.5049\;[0.4864, 0.5223]$\\
-ResNet-50 (epoch 40) & Unseen & $+0.053\;[0.041, 0.065]$ & $+0.0537\;[0.0483, 0.0592]$\\
-CLIP linear & Unseen & $-0.013\;[-0.027, 0.001]$ & $+0.4996\;[0.4797, 0.5185]$\\
+ResNet-50 (epoch 40) & Seen & $-0.037\;[-0.041, -0.034]$ & $+0.0473\;[0.0427, 0.0526]$\\
+CLIP linear & Seen & $-0.193\;[-0.200, -0.186]$ & $+0.5049\;[0.4867, 0.5231]$\\
+ResNet-50 (epoch 40) & Unseen & $+0.053\;[0.041, 0.065]$ & $+0.0537\;[0.0480, 0.0589]$\\
+CLIP linear & Unseen & $-0.013\;[-0.028, 0.000]$ & $+0.4996\;[0.4793, 0.5185]$\\
 \bottomrule\end{tabularx}\par\medskip
 \parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. $\Delta$FPR is shown to four decimals: the ResNet JPEG estimates differ before rounding. Read the changes in F1 and FPR together.}\end{table}

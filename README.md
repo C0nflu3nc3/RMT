@@ -16,7 +16,7 @@ python experiments/resnet40/reproduce.py
 python reproduce_tables.py
 ```
 
-The first command rebuilds the current paper tables and figures. The second verifies the archived one-epoch baseline.
+The first command recomputes the follow-up statistics from the public grouped evidence and rebuilds its tables and figures. The second verifies the archived one-epoch baseline.
 
 ## Retrain the models
 

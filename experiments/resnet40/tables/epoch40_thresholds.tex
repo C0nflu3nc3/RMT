@@ -1,0 +1,12 @@
+\begin{table}[!htbp]\centering\resulttable
+\caption{ResNet-50 at epoch 40 on original unseen images. Values are means across three seeds.}\label{tab:threshold40}
+\begin{tabularx}{\linewidth}{@{}YCCC@{}}\toprule
+Threshold & Recall & FPR & F1\\\midrule
+0.20 & 0.129 & 0.023 & 0.220\\
+0.35 & 0.108 & 0.018 & 0.188\\
+0.50 & 0.093 & 0.016 & 0.166\\
+0.65 & 0.076 & 0.014 & 0.138\\
+0.80 & 0.060 & 0.011 & 0.110\\
+\bottomrule\end{tabularx}
+\par\smallskip\parbox{\linewidth}{\footnotesize This test-set sweep is descriptive. It does not select a threshold for use on future images.}
+\end{table}

@@ -10,5 +10,9 @@
     44
   ],
   "threshold": 0.5,
-  "interval_scope": "image sampling conditional on trained models; not joint seed uncertainty"
+  "interval_scope": "image sampling conditional on trained models; not joint seed uncertainty",
+  "public_seed": 20261107,
+  "bootstrap": "multinomial draws within each label and source stratum",
+  "permutation": "binomial swaps within each joint decision pattern",
+  "evidence": "grouped decision counts and AUROC rank totals"
 }
