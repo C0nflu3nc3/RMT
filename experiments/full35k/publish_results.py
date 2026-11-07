@@ -65,44 +65,10 @@ def validate_scores(groups, identity, manifest):
                 raise ValueError("Unequal image coverage across conditions")
 
 
-def build(out, tables_dir, figures_dir):
-    out.mkdir(parents=True, exist_ok=True)
-    tables_dir.mkdir(parents=True, exist_ok=True)
-    figures_dir.mkdir(parents=True, exist_ok=True)
-    manifest = read_csv(HERE / "manifest.csv")
-    audit = json.loads((HERE / "sample_audit.json").read_text())
-    config = json.loads((HERE / "config.json").read_text())
-    if len(manifest) != audit["unique_selected"]:
-        raise ValueError("Manifest count differs from the data audit")
-    groups, identity = load_predictions(HERE / "predictions.csv")
-    validate_scores(groups, identity, manifest)
-    summaries = read_csv(out / "main_metrics_all_conditions.csv")
-    summary = {(r["split"], r["condition"], r["model"]): r for r in summaries}
-    original = lambda split, model: summary[(split, "original", model)]
-    rng = np.random.default_rng(20261106)
-    absolute = []
-    for split in ("seen", "unseen"):
-        for condition in CONDITIONS:
-            ids, y, strata, scores = aligned(groups, identity, split, condition)
-            samples = {model: {metric: [] for metric in ("f1", "fpr")} for model in MODELS}
-            for _ in range(config["bootstrap_resamples"]):
-                ix = draw_indices(strata, rng)
-                for model in MODELS:
-                    a, b = f1_fpr(y[ix], scores[model][:, ix])
-                    samples[model]["f1"].append(float(a.mean()))
-                    samples[model]["fpr"].append(float(b.mean()))
-            for model in MODELS:
-                record = dict(split=split, condition=condition, model=model)
-                for metric in ("f1", "fpr"):
-                    low, high = interval(samples[model][metric])
-                    record[metric + "_low"], record[metric + "_high"] = low, high
-                absolute.append(record)
-    write_csv(out / "absolute_metric_intervals.csv", absolute)
-    abs_lookup = {(r["split"], r["condition"], r["model"]): r for r in absolute}
-
+def validation_sensitivity(out, manifest, groups, identity):
     validation = read_csv(HERE / "validation_predictions.csv")
     expected_val = {r["image_id"]: r for r in manifest if r["split"] == "validation"}
-    thresholds, sensitivities, transitions = [], [], []
+    thresholds, sensitivities = [], []
     for model in MODELS:
         for seed in SEEDS:
             rows = [r for r in validation if r["model"] == model and int(r["seed"]) == seed]
@@ -129,7 +95,55 @@ def build(out, tables_dir, figures_dir):
                     sensitivities.append(dict(model=model, seed=seed, split=split, rule=rule, threshold=threshold,
                         f1=float(2 * tp / (2 * tp + fp + fn)) if 2 * tp + fp + fn else 0.,
                         fpr=float(fp / np.sum(actual == 0))))
-                before = raw >= .5
+    write_csv(out / "validation_thresholds.csv", thresholds)
+    write_csv(out / "threshold_sensitivity.csv", sensitivities)
+    return thresholds
+
+
+def build(out, tables_dir, figures_dir, *, predictions_path=None, fixed_only=False, names=NAMES):
+    out.mkdir(parents=True, exist_ok=True)
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    manifest = read_csv(HERE / "manifest.csv")
+    audit = json.loads((HERE / "sample_audit.json").read_text())
+    config = json.loads((HERE / "config.json").read_text())
+    if len(manifest) != audit["unique_selected"]:
+        raise ValueError("Manifest count differs from the data audit")
+    groups, identity = load_predictions(predictions_path or HERE / "predictions.csv")
+    validate_scores(groups, identity, manifest)
+    summaries = read_csv(out / "main_metrics_all_conditions.csv")
+    summary = {(r["split"], r["condition"], r["model"]): r for r in summaries}
+    original = lambda split, model: summary[(split, "original", model)]
+    rng = np.random.default_rng(20261106)
+    absolute = []
+    for split in ("seen", "unseen"):
+        for condition in CONDITIONS:
+            ids, y, strata, scores = aligned(groups, identity, split, condition)
+            samples = {model: {metric: [] for metric in ("f1", "fpr")} for model in MODELS}
+            for _ in range(config["bootstrap_resamples"]):
+                ix = draw_indices(strata, rng)
+                for model in MODELS:
+                    a, b = f1_fpr(y[ix], scores[model][:, ix])
+                    samples[model]["f1"].append(float(a.mean()))
+                    samples[model]["fpr"].append(float(b.mean()))
+            for model in MODELS:
+                record = dict(split=split, condition=condition, model=model)
+                for metric in ("f1", "fpr"):
+                    low, high = interval(samples[model][metric])
+                    record[metric + "_low"], record[metric + "_high"] = low, high
+                absolute.append(record)
+    write_csv(out / "absolute_metric_intervals.csv", absolute)
+    abs_lookup = {(r["split"], r["condition"], r["model"]): r for r in absolute}
+
+    thresholds = [] if fixed_only else validation_sensitivity(out, manifest, groups, identity)
+    transitions = []
+    for model in MODELS:
+        for seed in SEEDS:
+            for split in ("seen", "unseen"):
+                baseline_scores = groups[(split, "original", model, seed)]
+                ids = sorted(baseline_scores)
+                actual = np.array([identity[i][0] for i in ids])
+                before = np.array([baseline_scores[i] >= .5 for i in ids])
                 for condition in ("jpeg65", "resize112"):
                     after = np.array([groups[(split, condition, model, seed)][i] >= .5 for i in ids])
                     transitions.append(dict(model=model, seed=seed, split=split, condition=condition,
@@ -137,8 +151,6 @@ def build(out, tables_dir, figures_dir):
                         real_fp_to_correct=int(np.sum((actual == 0) & before & ~after)),
                         generated_miss_to_tp=int(np.sum((actual == 1) & ~before & after)),
                         generated_tp_to_miss=int(np.sum((actual == 1) & before & ~after))))
-    write_csv(out / "validation_thresholds.csv", thresholds)
-    write_csv(out / "threshold_sensitivity.csv", sensitivities)
     write_csv(out / "processing_transitions.csv", transitions)
 
     run_rows = read_csv(out / "per_run_metrics.csv")
@@ -159,10 +171,10 @@ def build(out, tables_dir, figures_dir):
                    success_checks=successes, absolute_intervals=absolute)
     (out / "paper_details.json").write_text(json.dumps(details, indent=2) + "\n")
 
-    render_publication(out, tables_dir, figures_dir)
+    render_publication(out, tables_dir, figures_dir, fixed_only=fixed_only, names=names)
 
 
-def render_publication(out, tables_dir, figures_dir):
+def render_publication(out, tables_dir, figures_dir, *, fixed_only=False, names=NAMES):
     """Render current tables and figures without recalculating the saved statistics."""
     out.mkdir(parents=True, exist_ok=True)
     tables_dir.mkdir(parents=True, exist_ok=True)
@@ -176,7 +188,7 @@ def render_publication(out, tables_dir, figures_dir):
     abs_lookup = {(r["split"], r["condition"], r["model"]):
                   {k: (float(v) if k.endswith(("_low", "_high")) else v) for k, v in r.items()}
                   for r in absolute}
-    sensitivities = read_csv(out / "threshold_sensitivity.csv")
+    sensitivities = [] if fixed_only else read_csv(out / "threshold_sensitivity.csv")
     confusion = read_csv(out / "unseen_confusion_counts.csv")
     dataset_rows = []
     for split, label in (("train", "Training"), ("validation", "Validation"), ("seen", "Seen test"), ("unseen", "Unseen test")):
@@ -193,14 +205,14 @@ def render_publication(out, tables_dir, figures_dir):
         for model in MODELS:
             r = original(split, model)
             a = abs_lookup[(split, "original", model)]
-            metric_rows.append([NAMES[model], split.title(), pm(r,"accuracy"), pm(r,"precision"), pm(r,"recall"), pm(r,"f1")])
+            metric_rows.append([names[model], split.title(), pm(r,"accuracy"), pm(r,"precision"), pm(r,"recall"), pm(r,"f1")])
     first = table("Original-image metrics at threshold 0.5. Values are means $\\pm$ sample SD over seeds 42, 43 and 44. P is precision and R is recall.",
         "tab:main", "llCCCC", ["Model", "Test", "Accuracy", "P", "R", "F1"], metric_rows)
     extra = []
     for split in ("seen", "unseen"):
         for model in MODELS:
             r, a = original(split, model), abs_lookup[(split,"original",model)]
-            extra.append([NAMES[model], split.title(), pm(r,"fpr"), pm(r,"auroc"), ci(a["f1_low"],a["f1_high"]), ci(a["fpr_low"],a["fpr_high"])])
+            extra.append([names[model], split.title(), pm(r,"fpr"), pm(r,"auroc"), ci(a["f1_low"],a["f1_high"]), ci(a["fpr_low"],a["fpr_high"])])
     body = "\n".join(" & ".join(row) + r"\\" for row in extra)
     panel = (r"\par\medskip\begin{tabularx}{\linewidth}{@{}llCCCC@{}}\toprule" + "\n"
              + r"Model & Test & FPR & AUROC & F1 95\% CI & FPR 95\% CI\\\midrule" + "\n" + body + "\n"
@@ -220,7 +232,7 @@ def render_publication(out, tables_dir, figures_dir):
         for r in robust:
             if r["condition"] != condition:
                 continue
-            values = [NAMES[r["model"]], r["split"].title(),
+            values = [names[r["model"]], r["split"].title(),
                       "$" + f"{float(r['delta_f1']):+.3f}" + r"\;" + ci(r["f1_ci_low"], r["f1_ci_high"]) + "$",
                       "$" + f"{float(r['fpr_increase']):+.4f}" + r"\;" + f"[{float(r['fpr_ci_low']):.4f}, {float(r['fpr_ci_high']):.4f}]" + "$"]
             body.append(" & ".join(values) + r"\\")
@@ -232,17 +244,28 @@ def render_publication(out, tables_dir, figures_dir):
         + r"\caption{Paired processing minus original changes, averaged over seeds, with 95\% image-bootstrap intervals. Compression and downsampling are applied independently to the common quality-75 baseline.}\label{tab:robustness}" + "\n"
         + "".join(panels)
         + r"\parbox{\linewidth}{\footnotesize Each comparison uses identical IDs within the 6,000-image seen or 5,000-image unseen test. $\Delta$FPR is shown to four decimals: the ResNet JPEG estimates differ before rounding. An F1 rise does not establish robustness when false positives increase.}\end{table}" + "\n")
-    sensitivity_rows = []
-    for model in MODELS:
-        for split in ("seen", "unseen"):
-            for rule in ("fixed", "validation"):
-                selected = [r for r in sensitivities if r["model"] == model and r["split"] == split and r["rule"] == rule]
-                values = {m + "_mean":float(np.mean([float(r[m]) for r in selected])) for m in ("f1","fpr")}
-                values.update({m + "_sd":float(np.std([float(r[m]) for r in selected],ddof=1)) for m in ("f1","fpr")})
-                sensitivity_rows.append([NAMES[model],split.title(),rule.title(),pm(values,"f1"),pm(values,"fpr")])
-    texts["sensitivity.tex"] = table("Threshold sensitivity on original images: fixed threshold 0.5 versus the threshold maximizing F1 on the 4,000-image validation split. Values are means $\\pm$ sample SD.",
-        "tab:sensitivity", "lllCC", ["Model","Test","Rule","F1","FPR"], sensitivity_rows,
-        "Thresholds are selected separately per model/seed from 0.05 to 0.95 in steps of 0.05, with the larger threshold winning ties. Test labels never select the threshold.")
+    if not fixed_only:
+        sensitivity_rows = []
+        for model in MODELS:
+            for split in ("seen", "unseen"):
+                for rule in ("fixed", "validation"):
+                    selected = [r for r in sensitivities if r["model"] == model and r["split"] == split and r["rule"] == rule]
+                    values = {m + "_mean":float(np.mean([float(r[m]) for r in selected])) for m in ("f1","fpr")}
+                    values.update({m + "_sd":float(np.std([float(r[m]) for r in selected],ddof=1)) for m in ("f1","fpr")})
+                    sensitivity_rows.append([names[model],split.title(),rule.title(),pm(values,"f1"),pm(values,"fpr")])
+        texts["sensitivity.tex"] = table("Threshold sensitivity on original images: fixed threshold 0.5 versus the threshold maximizing F1 on the 4,000-image validation split. Values are means $\\pm$ sample SD.",
+            "tab:sensitivity", "lllCC", ["Model","Test","Rule","F1","FPR"], sensitivity_rows,
+            "Thresholds are selected separately per model/seed from 0.05 to 0.95 in steps of 0.05, with the larger threshold winning ties. Test labels never select the threshold.")
+    if fixed_only:
+        texts["main_results.tex"] = texts["main_results.tex"].replace(
+            "Confidence intervals resample images within label/source strata and condition on fitted checkpoints.",
+            "We resample images within each label and source group. The intervals apply to these checkpoints.")
+        texts["paired.tex"] = texts["paired.tex"].replace(
+            "The original-unseen comparison is primary; other p-values are exploratory and unadjusted.",
+            "Original unseen images are the main comparison. We report unadjusted p-values for the other comparisons.")
+        texts["robustness.tex"] = texts["robustness.tex"].replace(
+            "An F1 rise does not establish robustness when false positives increase.",
+            "Read the changes in F1 and FPR together.")
     for name, text in texts.items():
         (tables_dir / name).write_text(text)
 
@@ -262,7 +285,7 @@ def render_publication(out, tables_dir, figures_dir):
             ax.errorbar(positions, means,
                 yerr=np.maximum(0, np.array([means-lows, highs-means])),
                 fmt="o-", capsize=4, markersize=5, color=COLORS[model],
-                label=NAMES[model], linewidth=1.8)
+                label=names[model], linewidth=1.8)
             offset = (-17 if j == 0 else 10) if metric == "f1" else (11 if j == 0 else -18)
             for xx, yy in zip(positions, means):
                 ax.annotate(f"{yy:.3f}", (xx, yy), xytext=(0, offset),
@@ -282,7 +305,7 @@ def render_publication(out, tables_dir, figures_dir):
     plt.close(fig)
 
     fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.8))
-    fig.subplots_adjust(left=.10, right=.98, bottom=.20, top=.88, wspace=.55)
+    fig.subplots_adjust(left=.15 if fixed_only else .10, right=.98, bottom=.20, top=.88, wspace=.55)
     for ax, model in zip(axes, MODELS):
         r = next(r for r in confusion if r["model"] == model and int(r["seed"]) == 42)
         matrix = np.array([[int(r["tn"]), int(r["fp"])], [int(r["fn"]), int(r["tp"])]])
@@ -290,7 +313,7 @@ def render_publication(out, tables_dir, figures_dir):
         for (i, j), value in np.ndenumerate(matrix):
             color = "white" if value > 1250 else "#111111"
             ax.text(j, i, f"{value:,}", ha="center", va="center", fontsize=17, color=color)
-        ax.set(title=NAMES[model], xticks=[0, 1], yticks=[0, 1],
+        ax.set(title=names[model], xticks=[0, 1], yticks=[0, 1],
             xticklabels=["Real", "Generated"], yticklabels=["Real", "Generated"],
             xlabel="Predicted class", ylabel="Actual class")
         ax.tick_params(length=0, pad=7)
@@ -310,7 +333,7 @@ def render_publication(out, tables_dir, figures_dir):
     hashes.update({str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                    for p in outputs})
     checksum_path.write_text(json.dumps(dict(sorted(hashes.items())), indent=2) + "\n")
-    print("Rendered five tables and two PNG/PDF figure pairs from archived numerical exports.")
+    print(f"Rendered {len(texts)} tables and two PNG/PDF figure pairs from saved scores.")
 
 
 if __name__ == "__main__":

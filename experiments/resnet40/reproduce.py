@@ -1,0 +1,125 @@
+"""Rebuild the epoch-40 comparisons from the archived scores."""
+import argparse
+import csv
+import hashlib
+import json
+import math
+import sys
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+HERE = Path(__file__).resolve().parent
+BASELINE = HERE.parent / "full35k"
+sys.path.insert(0, str(BASELINE))
+
+from publish_results import build, read_csv, render_publication, table
+from report_results import CONDITIONS, SEEDS, report
+
+
+def read_scores(directory):
+    scores = {}
+    for seed in SEEDS:
+        for split in ("seen", "unseen"):
+            for condition in CONDITIONS:
+                path = directory / f"seed{seed}" / f"epoch40_{split}_{condition}.csv"
+                for row in read_csv(path):
+                    key = seed, split, condition, row["image_id"]
+                    if key in scores:
+                        raise ValueError(f"Duplicate prediction {key}")
+                    scores[key] = row["label"], row["score"]
+    return scores
+
+
+def comparison_input(path, directory):
+    """Join the new ResNet scores to the archived test IDs and keep the CLIP scores."""
+    resnet = read_scores(directory)
+    with (BASELINE / "predictions.csv").open(newline="", encoding="utf-8") as source, path.open(
+            "w", newline="", encoding="utf-8") as destination:
+        reader = csv.DictReader(source)
+        writer = csv.DictWriter(destination, fieldnames=reader.fieldnames)
+        writer.writeheader()
+        for row in reader:
+            if row["model"] == "resnet50":
+                key = int(row["seed"]), row["split"], row["condition"], row["image_id"]
+                label, score = resnet.pop(key)
+                if label != row["label"]:
+                    raise ValueError(f"Changed label for {key}")
+                row["score"] = score
+            writer.writerow(row)
+    if resnet:
+        raise ValueError(f"{len(resnet)} scores had no matching test ID")
+
+
+def verify_summary(output):
+    inputs = read_csv(HERE / "metrics_epoch40.csv")
+    actual = [r for r in read_csv(output / "per_run_metrics.csv") if r["model"] == "resnet50"]
+    original = [r for r in read_csv(BASELINE / "evaluation/per_run_metrics.csv") if r["model"] == "resnet50"]
+    key = lambda r: (r["seed"], r["split"], r["condition"])
+    baseline = {key(r):r for r in original}
+    inputs_by_key = {key(r):r for r in inputs}
+    if len(inputs) != len(inputs_by_key) or set(inputs_by_key) != {key(r) for r in actual}:
+        raise ValueError("Summary and prediction groups differ")
+    for row in actual:
+        reference = inputs_by_key[key(row)]
+        prior = baseline[key(row)]
+        if reference["epoch"] != "40":
+            raise ValueError("Expected epoch 40")
+        for field in ("tp", "tn", "fp", "fn", "f1", "fpr"):
+            if not math.isclose(float(row[field]), float(reference[field]), abs_tol=1e-12):
+                raise ValueError(f"Summary mismatch for {key(row)} and {field}")
+        for field in ("f1", "fpr"):
+            if not math.isclose(float(prior[field]), float(reference["epoch1_"+field]), abs_tol=1e-12):
+                raise ValueError(f"Baseline mismatch for {key(row)} and {field}")
+            if not math.isclose(float(row[field])-float(prior[field]), float(reference["delta_"+field]), abs_tol=1e-12):
+                raise ValueError(f"Change mismatch for {key(row)} and {field}")
+
+
+def epoch_table(tables, output):
+    def read(directory):
+        return {(r["split"], r["condition"], r["model"]):r
+                for r in read_csv(directory / "main_metrics_all_conditions.csv")}
+    baseline, final = read(BASELINE / "evaluation"), read(output)
+    rows = []
+    for split in ("seen", "unseen"):
+        for condition, label in zip(CONDITIONS, ("Original", "JPEG 65", "Resize 112")):
+            before = baseline[split, condition, "resnet50"]
+            after = final[split, condition, "resnet50"]
+            rows.append([split.title(), label, *(f"{float(r[m+'_mean']):.3f}" for m in ("f1", "fpr") for r in (before, after))])
+    (tables / "epochs.tex").write_text(table(
+        "ResNet-50 results at epochs 1 and 40. Values are means across the same three seeds at threshold 0.50.",
+        "tab:epochs", "llrrrr", ["Test", "Condition", "F1 (epoch 1)", "F1 (epoch 40)", "FPR (epoch 1)", "FPR (epoch 40)"],
+        rows, "The follow-up starts from the epoch-1 weights and initializes a new Adam optimizer. Both evaluations use the same test images."
+    ))
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--score-dir", type=Path, help="Local followup directory with the per-image exports")
+    args = parser.parse_args()
+    output = HERE / "evaluation"
+    tables = HERE / "tables"
+    figures = HERE / "figures"
+    names = {"resnet50": "ResNet-50 (epoch 40)", "clip_linear": "CLIP linear"}
+    if args.score_dir:
+        with TemporaryDirectory(prefix="rmt-resnet40-") as temp:
+            scores = Path(temp) / "paired_scores.csv"
+            comparison_input(scores, args.score_dir)
+            report(scores, output)
+            verify_summary(output)
+            # The public exports are aggregates. The original scores can reproduce these rows.
+            (output / "error_records.csv").unlink()
+            build(output, tables, figures, predictions_path=scores, fixed_only=True, names=names)
+        print("Verified 18 ResNet score groups against the submitted summary and archived baseline.")
+    else:
+        verify_summary(output)
+        render_publication(output, tables, figures, fixed_only=True, names=names)
+    epoch_table(tables, output)
+    checksums = output / "publication_checksums.json"
+    values = json.loads(checksums.read_text())
+    values.pop("experiments/resnet40/evaluation/error_records.csv", None)
+    values["experiments/resnet40/tables/epochs.tex"] = hashlib.sha256((tables / "epochs.tex").read_bytes()).hexdigest()
+    checksums.write_text(json.dumps(values, indent=2, sort_keys=True) + "\n")
+
+
+if __name__ == "__main__":
+    main()

@@ -4,7 +4,7 @@ Afanasyev Kirill and Amangeldi Beksultan · Astana IT University, BDA-2403.
 
 [Paper](article/manuscript.pdf) · [LaTeX source](article/manuscript.tex) · [Citation](CITATION.cff)
 
-This study compares ResNet-50 with a linear classifier on frozen CLIP ViT-B/32 features using 34,998 deduplicated Tiny-GenImage images. Midjourney is held out from training and validation. Both models use three training seeds.
+This study compares ResNet-50 with a linear classifier on frozen CLIP ViT-B/32 features using 34,998 deduplicated Tiny-GenImage images. Midjourney is held out from training and validation. Both models use three training seeds. The follow-up evaluates ResNet-50 after 40 total epochs on the same test images.
 
 ## Reproduce the results
 
@@ -12,10 +12,11 @@ With Python 3.12, run from the repository root:
 
 ```bash
 python -m pip install -r requirements-analysis.txt
+python experiments/resnet40/reproduce.py
 python reproduce_tables.py
 ```
 
-This rebuilds and checks the paper outputs from saved scores without images, trained weights or a GPU.
+The first command rebuilds the current paper tables and figures. The second verifies the archived one-epoch baseline.
 
 ## Retrain the models
 
@@ -33,12 +34,13 @@ The scripts download the pinned dataset and pretrained weights. For CUDA, use a 
 
 - [article/](article/): paper and LaTeX source.
 - [experiments/full35k/](experiments/full35k/): training code, dataset splits, saved predictions and evaluation outputs.
-- [tables/](tables/): LaTeX result tables.
+- [experiments/resnet40/](experiments/resnet40/): 40-epoch results, training histories, tables and figures.
+- [tables/](tables/): archived baseline tables.
 
 ## Data and limitations
 
 Dataset: [Tiny-GenImage, pinned revision](https://huggingface.co/datasets/TheKernel01/Tiny-GenImage/tree/89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69). Images, feature caches and trained weights are excluded from Git.
 
-Reported training used CPU only, with one ResNet epoch and 40 CLIP-head epochs. The study is exploratory: one unseen generator, reused pilot content and unmatched source characteristics. Confidence intervals apply to the selected checkpoints.
+The baseline used one ResNet epoch and up to 40 CLIP-head epochs on CPU. The ResNet follow-up initializes a new Adam optimizer from the epoch-1 weights and continues on CUDA. The comparison covers one unseen generator. The mirror includes earlier pilot content and differences in source characteristics. Confidence intervals apply to the evaluated checkpoints.
 
 Code: [MIT](LICENSE). Dataset and pretrained-model licences apply separately.

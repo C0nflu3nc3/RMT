@@ -1,0 +1,7 @@
+model,seed,unseen_f1,seen_fpr,unseen_fpr,f1_drop,all_targets
+resnet50,42,False,True,True,False,False
+resnet50,43,False,True,True,False,False
+resnet50,44,False,True,True,False,False
+clip_linear,42,False,True,True,False,False
+clip_linear,43,False,True,True,False,False
+clip_linear,44,False,True,True,False,False

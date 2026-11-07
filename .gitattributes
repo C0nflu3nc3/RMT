@@ -1,3 +1,6 @@
 # Preserve exact input bytes; hashes also bind the fitted checkpoints.
 experiments/full35k/**/*.csv -text whitespace=cr-at-eol
 experiments/full35k/*.csv -text whitespace=cr-at-eol
+
+experiments/resnet40/**/*.csv -text whitespace=cr-at-eol
+experiments/resnet40/*.csv -text whitespace=cr-at-eol

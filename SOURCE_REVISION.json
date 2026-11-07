@@ -17,5 +17,18 @@
     "last_full_snapshot": "94f2e05602e5a8007995f9cc24088a5088e633b1",
     "last_full_snapshot_url": "https://github.com/C0nflu3nc3/RMT/tree/94f2e05602e5a8007995f9cc24088a5088e633b1",
     "location": "Git history; removed from the current working tree after dependency cleanup."
+  },
+  "resnet_epoch40_followup": {
+    "path": "experiments/resnet40",
+    "baseline_commit": "305a16e8694bb3096cbcf75f2d4be12e6d41c39a",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "resnet_final_epoch": 40,
+    "decision_threshold": 0.5,
+    "resnet_score_count": 99000,
+    "comparison_score_count": 198000
   }
 }
