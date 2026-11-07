@@ -19,6 +19,6 @@ The script recomputes the fixed-threshold metrics, AUROC, paired intervals, perm
 
 Add `--score-dir /path/to/followup` to rebuild the grouped evidence from local exports. That directory must contain `seed42`, `seed43` and `seed44`, each with its six `epoch40_*.csv` files. The script matches those test IDs with the archived CLIP scores. Image-level exports are needed for this separate check.
 
-The epoch-40 main comparison uses threshold 0.50. The test-set threshold sweep is descriptive. The [baseline validation-threshold table](../../tables/sensitivity.tex) applies to the original checkpoints.
+The epoch-40 main comparison uses threshold 0.50. The test-set threshold sweep is descriptive and includes cutoffs of 0.05 and 0.10. The [threshold comparison table](tables/sensitivity.tex) separates ResNet epochs 1 and 40. Validation-selected cutoffs are available for the original checkpoints.
 
 The Tiny-GenImage mirror declares [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). The derived evaluation data in `evidence/` and `evaluation/` use those terms. The MIT licence covers the analysis code.

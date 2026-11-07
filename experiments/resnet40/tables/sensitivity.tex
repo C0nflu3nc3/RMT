@@ -1,0 +1,13 @@
+\begin{table}[!htbp]\centering\resulttable
+\caption{Threshold sensitivity on original images. Values are means $\pm$ sample SD across three seeds.}\label{tab:sensitivity}
+\begin{tabularx}{\linewidth}{@{}llCCCC@{}}\toprule
+Checkpoint & Test & F1 at 0.50 & FPR at 0.50 & F1 at val. cutoff & FPR at val. cutoff\\\midrule
+ResNet-50 (epoch 1) & Seen & $0.910\pm 0.004$ & $0.098\pm 0.029$ & $0.914\pm 0.001$ & $0.106\pm 0.010$\\
+ResNet-50 (epoch 40) & Seen & $0.982\pm 0.003$ & $0.019\pm 0.011$ & -- & --\\
+CLIP linear (selected) & Seen & $0.949\pm 0.001$ & $0.059\pm 0.001$ & $0.948\pm 0.001$ & $0.057\pm 0.004$\\
+ResNet-50 (epoch 1) & Unseen & $0.310\pm 0.106$ & $0.096\pm 0.038$ & $0.334\pm 0.019$ & $0.104\pm 0.007$\\
+ResNet-50 (epoch 40) & Unseen & $0.166\pm 0.080$ & $0.016\pm 0.011$ & -- & --\\
+CLIP linear (selected) & Unseen & $0.746\pm 0.004$ & $0.061\pm 0.002$ & $0.737\pm 0.015$ & $0.058\pm 0.006$\\
+\bottomrule\end{tabularx}
+\par\smallskip\parbox{\linewidth}{\footnotesize The validation cutoff maximizes F1 on the original validation set. Dashes indicate that per-image validation scores are unavailable for epoch 40.}
+\end{table}

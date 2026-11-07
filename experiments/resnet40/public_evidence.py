@@ -8,7 +8,7 @@ from publish_results import read_csv, table
 from report_results import CONDITIONS, MODELS, SEEDS, aligned, interval, load_predictions, write_csv
 
 SPLITS = ("seen", "unseen")
-THRESHOLDS = (0.20, 0.35, 0.50, 0.65, 0.80)
+THRESHOLDS = (0.05, 0.10, 0.20, 0.35, 0.50, 0.65, 0.80)
 SEED_COUNT = len(SEEDS)
 MODEL_WIDTH = SEED_COUNT * len(MODELS)
 
@@ -179,5 +179,5 @@ def threshold_table(evidence, tables):
     (tables / "epoch40_thresholds.tex").write_text(table(
         "ResNet-50 at epoch 40 on original unseen images. Values are means across three seeds.",
         "tab:threshold40", "YCCC", ["Threshold", "Recall", "FPR", "F1"], rows,
-        "This test-set sweep is descriptive. It does not select a threshold for use on future images."
+        "This sweep describes the test set. Choose an operating cutoff on separate validation data."
     ))

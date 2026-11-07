@@ -272,8 +272,11 @@ def render_publication(out, tables_dir, figures_dir, *, fixed_only=False, names=
     plt.rcParams.update({"font.size": 14, "axes.spines.top": False,
         "axes.spines.right": False, "pdf.fonttype": 42, "ps.fonttype": 42,
         "figure.facecolor": "white", "savefig.facecolor": "white"})
-    fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.0))
-    fig.subplots_adjust(left=.07, right=.985, bottom=.18, top=.82, wspace=.28)
+    fig, axes = plt.subplots(1, 2, figsize=(10.2, 4.3 if fixed_only else 4.0))
+    fig.subplots_adjust(left=.07, right=.985, bottom=.17 if fixed_only else .18,
+                        top=.755 if fixed_only else .82, wspace=.28)
+    if fixed_only:
+        fig.suptitle("Unseen test at threshold 0.50, mean across three seeds", fontsize=13, y=.98)
     for ax, metric, target, label in zip(axes, ("f1", "fpr"), (.8, .1),
                                        ("F1 score", "False-positive rate")):
         x = np.arange(3)
@@ -287,6 +290,8 @@ def render_publication(out, tables_dir, figures_dir, *, fixed_only=False, names=
                 fmt="o-", capsize=4, markersize=5, color=COLORS[model],
                 label=names[model], linewidth=1.8)
             offset = (-17 if j == 0 else 10) if metric == "f1" else (11 if j == 0 else -18)
+            if fixed_only and offset > 0:
+                offset = 18
             for xx, yy in zip(positions, means):
                 ax.annotate(f"{yy:.3f}", (xx, yy), xytext=(0, offset),
                     textcoords="offset points", ha="center", fontsize=11, color=COLORS[model])
@@ -297,15 +302,18 @@ def render_publication(out, tables_dir, figures_dir, *, fixed_only=False, names=
                ylim=(-.12, 1.07), xlim=(-.3, 2.3), yticks=np.arange(0,1.01,.2), ylabel=label, xlabel="Image condition")
         ax.grid(axis="y", alpha=.2)
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(.5, 1.01),
+    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(.5, .925 if fixed_only else 1.01),
                ncol=2, frameon=False, fontsize=14)
     for suffix in ("png", "pdf"):
         fig.savefig(figures_dir / ("unseen_robustness." + suffix), dpi=240,
             **({"metadata": {"CreationDate": None, "ModDate": None}} if suffix == "pdf" else {}))
     plt.close(fig)
 
-    fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.8))
-    fig.subplots_adjust(left=.15 if fixed_only else .10, right=.98, bottom=.20, top=.88, wspace=.55)
+    fig, axes = plt.subplots(1, 2, figsize=(9.6, 4.1 if fixed_only else 3.8))
+    fig.subplots_adjust(left=.15 if fixed_only else .10, right=.98, bottom=.20,
+                        top=.82 if fixed_only else .88, wspace=.55)
+    if fixed_only:
+        fig.suptitle("Original unseen images, seed 42, threshold 0.50", fontsize=13, y=.98)
     for ax, model in zip(axes, MODELS):
         r = next(r for r in confusion if r["model"] == model and int(r["seed"]) == 42)
         matrix = np.array([[int(r["tn"]), int(r["fp"])], [int(r["fn"]), int(r["tp"])]])

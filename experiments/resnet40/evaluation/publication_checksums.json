@@ -12,15 +12,16 @@
   "experiments/resnet40/evaluation/unseen_confusion_counts.csv": "80b3cfab280297a718ad8b4cb26dae1326584e56bcc2520cefe16b92547888a1",
   "experiments/resnet40/evidence/auroc_rank_totals.csv": "68ae29ba0421fa86a3eb9d65d1e10e9bf6896b02c24223ade658929a8b8d80a8",
   "experiments/resnet40/evidence/joint_decision_counts.csv": "fec5476e4c21baefdad9cf0d689b100313ca2a3471d7d5235505d7939cb016f2",
-  "experiments/resnet40/evidence/unseen_threshold_counts.csv": "c6e88c35ace727c2e3415378febccb4b6873a2efa7b04072814f676fc2bb1f17",
-  "experiments/resnet40/figures/unseen_confusion_seed42.pdf": "807e3cfe0dc220b76e538849820928b4b0427a39f2c50dd0e0b3bdc979d82902",
-  "experiments/resnet40/figures/unseen_confusion_seed42.png": "7ba61852f1f79574863ba69474393b8c25dbda66809bdef913b716bf38eee3ba",
-  "experiments/resnet40/figures/unseen_robustness.pdf": "328d704839090c852a21cfff7153a519045f1a3c8ee55b0e785dfd1a9bb6953c",
-  "experiments/resnet40/figures/unseen_robustness.png": "3aebba9945bc3ef1f227388b065e27ca7aa020cd961458de84004fa5e627435d",
+  "experiments/resnet40/evidence/unseen_threshold_counts.csv": "15d17db42aeb60f1e2a71772d6e4f55900a4da5272f752e8a8934176e6fe80e4",
+  "experiments/resnet40/figures/unseen_confusion_seed42.pdf": "46f6022d47cdc688f8c5912fb7cea0aec7eeb8148fe90c548ce00479f7661e9b",
+  "experiments/resnet40/figures/unseen_confusion_seed42.png": "8161a1ca3edcb5c55b69c3e64306d41272b0d9d0b01d388d8cf6a3f4cef12d6f",
+  "experiments/resnet40/figures/unseen_robustness.pdf": "ffa8219a545e836e14ac33ceb9e605a03a163e8718142659797045c3574798a1",
+  "experiments/resnet40/figures/unseen_robustness.png": "9fa8ae8f6c5bb8807f941298814549d8a457fcbcd140d990daf831ab80129f85",
   "experiments/resnet40/tables/dataset.tex": "8d32e81e0a796a8545392aaad3e13d9cd71580ce0abf19f48e4cdfa82e2eee01",
-  "experiments/resnet40/tables/epoch40_thresholds.tex": "c515e3ada7c7c706b7fb6fd8f5d306b8318dbd7a78f513c088ab322e93324b92",
+  "experiments/resnet40/tables/epoch40_thresholds.tex": "1079320e2a5826e9c2bf23017ed41c4b250841bbbe0a93678b205a0b369e6f2a",
   "experiments/resnet40/tables/epochs.tex": "be7762109c0e82984f2520ed96df8ff49e041ce910cb5891b4fca5a831c6ab2b",
   "experiments/resnet40/tables/main_results.tex": "4ed30bc0e0c523e727b80b281affb08773cf350ced7a14773a875181fb9321c8",
   "experiments/resnet40/tables/paired.tex": "22119b0bf26809b764cc317caff5d63a7d483c5a5e73416735b4e7d75bd4dbcb",
-  "experiments/resnet40/tables/robustness.tex": "4a8a8c68f3e0043185cb00f8a8a8de3a285b5ee2c432cca000db30edb7f3d42a"
+  "experiments/resnet40/tables/robustness.tex": "4a8a8c68f3e0043185cb00f8a8a8de3a285b5ee2c432cca000db30edb7f3d42a",
+  "experiments/resnet40/tables/sensitivity.tex": "080062b72176e7c55a0dbf8e7b44076aceca7d541a6cc9f401e9968201d1f971"
 }

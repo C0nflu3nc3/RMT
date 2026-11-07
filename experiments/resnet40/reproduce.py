@@ -5,6 +5,7 @@ import hashlib
 import json
 import math
 import sys
+from statistics import mean, stdev
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -12,7 +13,7 @@ HERE = Path(__file__).resolve().parent
 BASELINE = HERE.parent / "full35k"
 sys.path.insert(0, str(BASELINE))
 
-from publish_results import build, read_csv, render_publication, table
+from publish_results import build, pm, read_csv, render_publication, table
 from report_results import CONDITIONS, SEEDS, report
 from public_evidence import calculate, export_evidence
 
@@ -93,6 +94,41 @@ def epoch_table(tables, output):
     ))
 
 
+def sensitivity_table(tables, output):
+    baseline = read_csv(BASELINE / "evaluation/threshold_sensitivity.csv")
+    final = {(r["split"], r["model"]): r for r in read_csv(output / "main_metrics_all_conditions.csv")
+             if r["condition"] == "original"}
+
+    def baseline_cells(model, split, rule):
+        runs = [r for r in baseline if (r["model"], r["split"], r["rule"]) == (model, split, rule)]
+        if sorted(int(r["seed"]) for r in runs) != list(SEEDS):
+            raise ValueError(f"Incomplete threshold data for {model}, {split}, {rule}")
+        values = {}
+        for metric in ("f1", "fpr"):
+            scores = [float(r[metric]) for r in runs]
+            values[metric + "_mean"], values[metric + "_sd"] = mean(scores), stdev(scores)
+        return [pm(values, metric) for metric in ("f1", "fpr")]
+
+    rows = []
+    for split in ("seen", "unseen"):
+        rows.append(["ResNet-50 (epoch 1)", split.title(),
+                     *baseline_cells("resnet50", split, "fixed"),
+                     *baseline_cells("resnet50", split, "validation")])
+        epoch40 = final[split, "resnet50"]
+        rows.append(["ResNet-50 (epoch 40)", split.title(),
+                     pm(epoch40, "f1"), pm(epoch40, "fpr"), "--", "--"])
+        rows.append(["CLIP linear (selected)", split.title(),
+                     *baseline_cells("clip_linear", split, "fixed"),
+                     *baseline_cells("clip_linear", split, "validation")])
+    (tables / "sensitivity.tex").write_text(table(
+        "Threshold sensitivity on original images. Values are means $\\pm$ sample SD across three seeds.",
+        "tab:sensitivity", "llCCCC",
+        ["Checkpoint", "Test", "F1 at 0.50", "FPR at 0.50", "F1 at val. cutoff", "FPR at val. cutoff"],
+        rows, "The validation cutoff maximizes F1 on the original validation set. "
+              "Dashes indicate that per-image validation scores are unavailable for epoch 40."
+    ))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--score-dir", type=Path, help="Local followup directory with the per-image exports")
@@ -130,11 +166,12 @@ def main():
     details_path.write_text(json.dumps(details, indent=2) + "\n")
     render_publication(output, tables, figures, fixed_only=True, names=names)
     epoch_table(tables, output)
+    sensitivity_table(tables, output)
     print("Verified the 18 ResNet groups and rebuilt paired statistics from joint counts.")
     checksums = output / "publication_checksums.json"
     values = json.loads(checksums.read_text())
     values.pop("experiments/resnet40/evaluation/error_records.csv", None)
-    extra = [tables / "epochs.tex", tables / "epoch40_thresholds.tex", *evidence.glob("*.csv")]
+    extra = [tables / "epochs.tex", tables / "epoch40_thresholds.tex", tables / "sensitivity.tex", *evidence.glob("*.csv")]
     for path in extra:
         key = str(path.relative_to(HERE.parents[1]))
         values[key] = hashlib.sha256(path.read_bytes()).hexdigest()
