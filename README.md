@@ -18,6 +18,8 @@ python reproduce_tables.py
 
 The first command recomputes the follow-up statistics from the public grouped evidence and rebuilds its tables and figures. The second verifies the archived one-epoch baseline. Numerical exports and LaTeX tables must match byte for byte. PNG figures must match pixel for pixel. PDF byte differences produce a warning after the corresponding PNG passes.
 
+The commands can rewrite tracked figures and `publication_checksums.json`. Use a separate checkout to keep your working tree clean.
+
 ## Retrain the models
 
 Use a separate environment:
