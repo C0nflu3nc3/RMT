@@ -16,7 +16,7 @@ python experiments/resnet40/reproduce.py
 python reproduce_tables.py
 ```
 
-The first command recomputes the follow-up statistics from the public grouped evidence and rebuilds its tables and figures. The second verifies the archived one-epoch baseline.
+The first command recomputes the follow-up statistics from the public grouped evidence and rebuilds its tables and figures. The second verifies the archived one-epoch baseline. Numerical exports and LaTeX tables must match byte for byte. PNG figures must match pixel for pixel. PDF byte differences produce a warning after the corresponding PNG passes.
 
 ## Retrain the models
 

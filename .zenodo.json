@@ -1,8 +1,8 @@
 {
   "title": "Unseen-Generator Detection and Processing Robustness of ResNet-50 and CLIP Classifiers: Full-Mirror Refit",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "upload_type": "software",
-  "description": "Code and saved-score records for the completed full-mirror refit of ResNet-50 and a frozen CLIP ViT-B/32 encoder with a linear classifier. Exact deduplication leaves 34,998 images: 19,998 training, 4,000 validation, 6,000 seen-test and 5,000 unseen-test images. Midjourney is held out from training and validation. CPU fits use three seeds and evaluate original images, JPEG quality 65 and downsampling to 112 x 112 pixels. Saved scores reproduce 13 numerical exports, five tables and two figures without images or fitted weights. The refit can include previously inspected pilot content and remains exploratory; categories, native size and compression history are unmatched. The current paper, manifests, scores, audits, execution metadata and analysis code are included. Earlier pilot files remain in Git history. Code is MIT licensed; source images and pretrained models have separate licences.",
+  "description": "Reproduction code and evaluation records for the Tiny-GenImage full-mirror study. Exact deduplication leaves 34,998 images, with Midjourney held out from training and validation. The archived CPU baseline compares one-epoch ResNet-50 with a linear classifier on frozen CLIP ViT-B/32 features. The follow-up compares ResNet-50 at epoch 40 with the same CLIP classifier across three seeds on original, JPEG-recompressed and downsampled test images. Saved baseline scores reproduce 13 numerical exports, five tables and two figures. Public grouped decisions, rank totals and threshold counts reproduce the main follow-up statistics, uncertainty intervals and threshold sweep. The archive includes the paper, manifest, audit, training histories and scripts. The evaluation inputs are unchanged from Git commit f107c2a3a5f7. Code is MIT licensed. Derived evaluation data are available under CC BY-NC-SA 4.0.",
   "creators": [
     {
       "name": "Afanasyev, Kirill",
@@ -30,5 +30,5 @@
       "scheme": "url"
     }
   ],
-  "publication_date": "2026-11-06"
+  "publication_date": "2026-11-09"
 }

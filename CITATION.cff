@@ -1,7 +1,12 @@
 cff-version: 1.2.0
-message: "Please cite this software and its saved-score evaluation records when reusing the analysis."
+message: "Please cite this release when reusing the analysis or evaluation records."
 type: software
 title: "Unseen-Generator Detection and Processing Robustness of ResNet-50 and CLIP Classifiers: Full-Mirror Refit"
+abstract: >-
+  Reproduction code and evaluation records for the Tiny-GenImage full-mirror
+  study. Saved scores reproduce the CPU baseline. Public grouped decisions,
+  rank totals and threshold counts reproduce the ResNet-50 epoch-40
+  comparison with the frozen CLIP linear classifier and its robustness analyses.
 authors:
   - family-names: Afanasyev
     given-names: Kirill
@@ -9,8 +14,8 @@ authors:
   - family-names: Amangeldi
     given-names: Beksultan
     affiliation: Astana IT University
-version: "2.0.0"
-date-released: "2026-11-06"
+version: "2.1.0"
+date-released: "2026-11-09"
 repository-code: "https://github.com/C0nflu3nc3/RMT"
 license: MIT
 keywords:
