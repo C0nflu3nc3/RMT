@@ -235,20 +235,11 @@ The findings are exploratory. The study uses one mirror and one held-out generat
 Future tests should use fresh external data and more held-out generators. They should match the training and checkpoint rules and record the backend for every run. A separate validation experiment can choose a threshold under a false-positive limit. Source and provenance checks remain part of image verification.
 
 \section{Data Availability}
-We use \texttt{TheKernel01/Tiny-GenImage} at revision \nolinkurl{89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69}, accessed 6 November 2026. The mirror declares Creative Commons Attribution-NonCommercial-ShareAlike 4.0. The \repositorylink{} repository provides the manifest, the duplicate audit, the baseline scores and the follow-up evidence. The file \href{https://github.com/C0nflu3nc3/RMT/blob/f107c2a3a5f70342654308baccb572bf04f454ed/experiments/full35k/sample_audit.json}{\nolinkurl{experiments/full35k/sample_audit.json}} records the full manifest SHA-256 digest. The follow-up evidence contains grouped decision counts, rank totals and threshold counts. Source images, caches and model weights stay outside Git. The derived evaluation data use the same CC BY-NC-SA 4.0 terms. The GitHub commit in Section~7 identifies the version of these files.
+We used the \href{https://huggingface.co/datasets/TheKernel01/Tiny-GenImage/tree/89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69}{\nolinkurl{TheKernel01/Tiny-GenImage}} mirror at revision \nolinkurl{89c4fe9efd0ebc7ce5c7641ef57d578ccd639c69}, accessed 6 November 2026. The mirror declares the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 licence. The derived evaluation data use the same terms. The \repositorylink{} repository provides the manifest, duplicate audit, baseline scores and follow-up evidence. The \href{https://github.com/C0nflu3nc3/RMT/blob/f107c2a3a5f70342654308baccb572bf04f454ed/experiments/full35k/sample_audit.json}{\nolinkurl{experiments/full35k/sample_audit.json}} file records the full manifest SHA-256 digest. The follow-up evidence contains grouped decision counts, rank totals and threshold counts. Source images, caches and model weights are stored outside Git. Section~7 gives the commit for the evaluation inputs.
 
 \Needspace{12\baselineskip}
 \section{Code Availability}
-The \repositorylink{} repository provides the code under the MIT licence. The evaluation inputs are unchanged from commit \href{https://github.com/C0nflu3nc3/RMT/commit/f107c2a3a5f70342654308baccb572bf04f454ed}{\texttt{f107c2a3a5f7}}. Use the current verification script for the baseline. The recorded baseline used Python 3.12.14, PyTorch 2.14.1+cpu and torchvision 0.29.1+cpu. Baseline training dependencies are in \nolinkurl{experiments/full35k/requirements.txt}. Install \nolinkurl{requirements-analysis.txt} to reproduce the analysis. Run these commands from the repository root.
-
-\noindent\begin{minipage}{\linewidth}
-\begin{verbatim}
-python experiments/resnet40/reproduce.py
-python reproduce_tables.py
-\end{verbatim}
-\end{minipage}
-
-The first command recalculates the follow-up results from public counts and rebuilds the tables and figures. The second verifies the archived CPU baseline. The follow-up histories record loss and validation F1. They contain no Python, PyTorch or device metadata.
+The \repositorylink{} repository provides the code under the MIT licence. Commit \href{https://github.com/C0nflu3nc3/RMT/commit/f107c2a3a5f70342654308baccb572bf04f454ed}{\texttt{f107c2a3a5f7}} identifies the evaluation inputs. Use commit \href{https://github.com/C0nflu3nc3/RMT/tree/375d581c124db19fc7dad40aa0d0f8a4cac52537}{\texttt{375d581c124d}} for the analysis scripts. Use Python 3.12 and install the packages in \nolinkurl{requirements-analysis.txt}. Run both commands from the repository root. Run \texttt{python experiments/resnet40/reproduce.py} to rebuild the follow-up results from the public counts. Run \texttt{python reproduce\_tables.py} to check the archived CPU baseline. The baseline script checks numerical exports and LaTeX tables byte for byte. It checks PNG pixels and warns if PDF bytes differ. The CPU baseline used Python 3.12.14, PyTorch 2.14.1+cpu and torchvision 0.29.1+cpu. Its training dependencies are in \nolinkurl{experiments/full35k/requirements.txt}. The follow-up logs record loss and validation F1. The Python version, PyTorch version and device for that run are unknown.
 \FloatBarrier
 
 \begin{thebibliography}{39}

@@ -43,4 +43,6 @@ Dataset: [Tiny-GenImage, pinned revision](https://huggingface.co/datasets/TheKer
 
 The baseline used one ResNet epoch and up to 40 CLIP-head epochs on CPU. The ResNet follow-up initializes a new Adam optimizer from the epoch-1 weights and uses a continuation script with CUDA as its default. The comparison covers one unseen generator. The mirror includes earlier pilot content and differences in source characteristics. Confidence intervals apply to the evaluated checkpoints.
 
-Code: [MIT](LICENSE). Dataset and pretrained-model licences apply separately.
+Code: [MIT](LICENSE). Pretrained-model licences apply separately.
+
+The Tiny-GenImage mirror declares the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) licence. The derived evaluation data use the same terms.
